@@ -1,0 +1,70 @@
+{
+  "dataset": "configs/datasets/tum_rgbd_paper_subset.json",
+  "dataset_name": "tum_rgbd_paper_subset",
+  "dataset_version": "0.1",
+  "stages": [
+    "clip",
+    "dinov2",
+    "figure",
+    "geometry",
+    "graph",
+    "labels",
+    "proposals"
+  ],
+  "num_runs": 1,
+  "runs": [
+    {
+      "scene_id": "tum_rgbd_freiburg1_desk",
+      "split": "val",
+      "view_count": 3,
+      "selected_images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png"
+      ],
+      "run_dir": "results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03",
+      "geometry_path": "results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/vggt_geometry.npz",
+      "proposals_path": "results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/sam_clip_dinov2_features.json",
+      "scene_graph_path": "results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/scene_graph.json",
+      "labeled_scene_graph_path": "results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/scene_graph_labeled.json",
+      "figure_path": "results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/scene_graph.png",
+      "commands": [
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/run_vggt_geometry.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/images --image-name frame_000001.png --image-name frame_000002.png --image-name frame_000003.png --output results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/vggt_geometry.npz --device cpu",
+          "output_path": "results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/vggt_geometry.npz",
+          "status": "planned"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/run_sam_proposals.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/images --image-name frame_000001.png --image-name frame_000002.png --image-name frame_000003.png --checkpoint models/sam_vit_b_01ec64.pth --model-type vit_b --max-image-side 1024 --points-per-side 12 --max-proposals-per-image 20 --output results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/sam_proposals.json",
+          "output_path": "results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/sam_proposals.json",
+          "status": "planned"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/extract_proposal_features.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/images --proposals results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/sam_proposals.json --output results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/sam_clip_features.json --backend clip --model-name openai/clip-vit-base-patch32 --device cpu",
+          "output_path": "results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/sam_clip_features.json",
+          "status": "planned"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/extract_proposal_features.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/images --proposals results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/sam_clip_features.json --output results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/sam_clip_dinov2_features.json --backend dinov2 --model-name facebook/dinov2-base --device cpu",
+          "output_path": "results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/sam_clip_dinov2_features.json",
+          "status": "planned"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/run_pipeline.py --scene-id tum_rgbd_freiburg1_desk --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/images --geometry results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/vggt_geometry.npz --proposals results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/sam_clip_dinov2_features.json --output results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/scene_graph.json",
+          "output_path": "results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/scene_graph.json",
+          "status": "planned"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/assign_open_vocab_labels.py --scene-graph results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/scene_graph.json --proposals results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/sam_clip_dinov2_features.json --labels configs/label_vocab/indoor_open_vocab.json --output results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/scene_graph_labeled.json --model-name openai/clip-vit-base-patch32 --device cpu --local-files-only",
+          "output_path": "results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/scene_graph_labeled.json",
+          "status": "planned"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/visualize_scene_graph.py results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/scene_graph_labeled.json --output results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/scene_graph.png",
+          "output_path": "results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/scene_graph.png",
+          "status": "planned"
+        }
+      ]
+    }
+  ]
+}

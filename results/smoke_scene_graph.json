@@ -1,0 +1,12 @@
+{
+  "scene_dir": "vggt_3d_scene_graph_project",
+  "num_images": 0,
+  "status": "scaffold_only",
+  "next_steps": [
+    "run VGGT and save geometry outputs",
+    "run SAM/SAM2 and save 2D masks",
+    "extract CLIP/DINOv2 features per mask",
+    "lift masks into 3D object candidates",
+    "build uncertainty-aware scene graph"
+  ]
+}

@@ -1,0 +1,3248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>tum_rgbd_freiburg1_desk2 annotation review</title>
+  <style>
+:root {
+  color-scheme: light;
+  --ink: #17202a;
+  --muted: #64707d;
+  --line: #d7dde4;
+  --panel: #ffffff;
+  --page: #f4f6f8;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.45;
+}
+main { max-width: 1280px; margin: 0 auto; padding: 28px; }
+h1 { margin: 0 0 8px; font-size: 28px; font-weight: 700; letter-spacing: 0; }
+h2 { margin: 28px 0 12px; font-size: 18px; letter-spacing: 0; }
+.summary {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 16px 0 24px;
+}
+.pill {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 14px;
+}
+.node {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+}
+.node-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: start;
+}
+.node-id { font-weight: 700; font-size: 16px; }
+.label {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 15px;
+  text-align: right;
+}
+.meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 12px;
+  margin: 10px 0;
+  font-size: 13px;
+}
+.meta span { color: var(--muted); }
+.scores {
+  color: var(--muted);
+  font-size: 13px;
+  min-height: 20px;
+}
+.review {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+  font-size: 13px;
+}
+.review div {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 8px;
+  min-height: 34px;
+}
+.review span {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+}
+.thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+.thumb {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #eef1f4;
+}
+.thumb img { display: block; width: 100%; height: 148px; object-fit: contain; background: #111; }
+.thumb div {
+  padding: 5px 7px;
+  color: var(--muted);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+details {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  display: table;
+}
+th, td {
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  padding: 7px 9px;
+  font-size: 13px;
+}
+th { color: var(--muted); font-weight: 600; background: #f9fafb; }
+tr:last-child td { border-bottom: 0; }
+@media (max-width: 720px) {
+  main { padding: 16px; }
+  .grid { grid-template-columns: 1fr; }
+  .meta, .review { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+  <main>
+    <h1>tum_rgbd_freiburg1_desk2 Annotation Review</h1>
+    <div class="summary">
+      <div class="pill">110 nodes</div>
+      <div class="pill">3564 predicted relations</div>
+      <div class="pill">151 proposals</div>
+      <div class="pill">150 thumbnails</div>
+    </div>
+    <section class="grid">
+      
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_001</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 8192</div>
+    <div><span>Uncertainty</span> 0.0327</div>
+    <div><span>Centroid</span> 0.186, 0.091, 0.728</div>
+    <div><span>3D extent</span> 0.690, 0.456, 0.570</div>
+    <div><span>Sources</span> 2</div>
+  </div>
+  <div class="scores">floor 0.0960, ceiling 0.0804, door 0.0708, bed 0.0694, cabinet 0.0689</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_001_01_frame_000001_sam_003.jpg" alt="frame_000001_sam_003"><div>frame_000001_sam_003</div></div><div class="thumb"><img src="thumbnails/object_001_02_frame_000005_sam_007.jpg" alt="frame_000005_sam_007"><div>frame_000005_sam_007</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000001_sam_003, frame_000005_sam_007
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_002</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 8192</div>
+    <div><span>Uncertainty</span> 0.0521</div>
+    <div><span>Centroid</span> 0.107, 0.349, 0.949</div>
+    <div><span>3D extent</span> 0.824, 0.352, 0.586</div>
+    <div><span>Sources</span> 2</div>
+  </div>
+  <div class="scores">floor 0.0807, bed 0.0679, door 0.0664, counter 0.0663, cabinet 0.0619</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_002_01_frame_000005_sam_001.jpg" alt="frame_000005_sam_001"><div>frame_000005_sam_001</div></div><div class="thumb"><img src="thumbnails/object_002_02_frame_000001_sam_002.jpg" alt="frame_000001_sam_002"><div>frame_000001_sam_002</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000001_sam_002, frame_000005_sam_001
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_003</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 3</div>
+    <div><span>Points</span> 8192</div>
+    <div><span>Uncertainty</span> 0.0113</div>
+    <div><span>Centroid</span> -0.227, 0.183, 0.660</div>
+    <div><span>3D extent</span> 0.338, 0.190, 0.270</div>
+    <div><span>Sources</span> 3</div>
+  </div>
+  <div class="scores">floor 0.0939, door 0.0831, cabinet 0.0756, counter 0.0755, ceiling 0.0743</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_003_01_frame_000001_sam_004.jpg" alt="frame_000001_sam_004"><div>frame_000001_sam_004</div></div><div class="thumb"><img src="thumbnails/object_003_02_frame_000005_sam_002.jpg" alt="frame_000005_sam_002"><div>frame_000005_sam_002</div></div><div class="thumb"><img src="thumbnails/object_003_03_frame_000004_sam_001.jpg" alt="frame_000004_sam_001"><div>frame_000004_sam_001</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000001_sam_004, frame_000004_sam_001, frame_000005_sam_002
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_004</div>
+    <div class="label">door</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 3</div>
+    <div><span>Points</span> 8192</div>
+    <div><span>Uncertainty</span> 0.0096</div>
+    <div><span>Centroid</span> -0.478, -0.048, 0.726</div>
+    <div><span>3D extent</span> 0.271, 0.315, 0.200</div>
+    <div><span>Sources</span> 3</div>
+  </div>
+  <div class="scores">door 0.0566, floor 0.0564, bed 0.0534, cabinet 0.0475, curtain 0.0465</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>door</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_004_01_frame_000005_sam_003.jpg" alt="frame_000005_sam_003"><div>frame_000005_sam_003</div></div><div class="thumb"><img src="thumbnails/object_004_02_frame_000001_sam_001.jpg" alt="frame_000001_sam_001"><div>frame_000001_sam_001</div></div><div class="thumb"><img src="thumbnails/object_004_03_frame_000007_sam_002.jpg" alt="frame_000007_sam_002"><div>frame_000007_sam_002</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000001_sam_001, frame_000005_sam_003, frame_000007_sam_002
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_005</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 3</div>
+    <div><span>Points</span> 8192</div>
+    <div><span>Uncertainty</span> 0.0087</div>
+    <div><span>Centroid</span> 0.247, -0.107, 0.738</div>
+    <div><span>3D extent</span> 0.333, 0.274, 0.401</div>
+    <div><span>Sources</span> 5</div>
+  </div>
+  <div class="scores">floor 0.1118, door 0.0831, ceiling 0.0803, sofa 0.0775, curtain 0.0720</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_005_01_frame_000001_sam_009.jpg" alt="frame_000001_sam_009"><div>frame_000001_sam_009</div></div><div class="thumb"><img src="thumbnails/object_005_02_frame_000002_sam_009.jpg" alt="frame_000002_sam_009"><div>frame_000002_sam_009</div></div><div class="thumb"><img src="thumbnails/object_005_03_frame_000003_sam_005.jpg" alt="frame_000003_sam_005"><div>frame_000003_sam_005</div></div><div class="thumb"><img src="thumbnails/object_005_04_frame_000002_sam_011.jpg" alt="frame_000002_sam_011"><div>frame_000002_sam_011</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000001_sam_009, frame_000002_sam_009, frame_000002_sam_011, frame_000003_sam_005, frame_000003_sam_012
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_006</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 4</div>
+    <div><span>Points</span> 8192</div>
+    <div><span>Uncertainty</span> 0.0082</div>
+    <div><span>Centroid</span> -0.187, -0.017, 0.858</div>
+    <div><span>3D extent</span> 0.175, 0.143, 0.172</div>
+    <div><span>Sources</span> 4</div>
+  </div>
+  <div class="scores">floor 0.0686, bed 0.0643, sofa 0.0579, counter 0.0516, door 0.0511</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_006_01_frame_000002_sam_005.jpg" alt="frame_000002_sam_005"><div>frame_000002_sam_005</div></div><div class="thumb"><img src="thumbnails/object_006_02_frame_000001_sam_011.jpg" alt="frame_000001_sam_011"><div>frame_000001_sam_011</div></div><div class="thumb"><img src="thumbnails/object_006_03_frame_000003_sam_002.jpg" alt="frame_000003_sam_002"><div>frame_000003_sam_002</div></div><div class="thumb"><img src="thumbnails/object_006_04_frame_000004_sam_009.jpg" alt="frame_000004_sam_009"><div>frame_000004_sam_009</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000001_sam_011, frame_000002_sam_005, frame_000003_sam_002, frame_000004_sam_009
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_007</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 3</div>
+    <div><span>Points</span> 8192</div>
+    <div><span>Uncertainty</span> 0.0181</div>
+    <div><span>Centroid</span> -0.436, -0.263, 1.171</div>
+    <div><span>3D extent</span> 0.348, 0.303, 0.600</div>
+    <div><span>Sources</span> 4</div>
+  </div>
+  <div class="scores">floor 0.0601, counter 0.0584, bed 0.0546, door 0.0535, ceiling 0.0519</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_007_01_frame_000001_sam_013.jpg" alt="frame_000001_sam_013"><div>frame_000001_sam_013</div></div><div class="thumb"><img src="thumbnails/object_007_02_frame_000002_sam_015.jpg" alt="frame_000002_sam_015"><div>frame_000002_sam_015</div></div><div class="thumb"><img src="thumbnails/object_007_03_frame_000006_sam_013.jpg" alt="frame_000006_sam_013"><div>frame_000006_sam_013</div></div><div class="thumb"><img src="thumbnails/object_007_04_frame_000002_sam_013.jpg" alt="frame_000002_sam_013"><div>frame_000002_sam_013</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000001_sam_013, frame_000002_sam_013, frame_000002_sam_015, frame_000006_sam_013
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_008</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 2407</div>
+    <div><span>Uncertainty</span> 0.0143</div>
+    <div><span>Centroid</span> -0.426, 0.105, 0.771</div>
+    <div><span>3D extent</span> 0.114, 0.094, 0.087</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0660, door 0.0604, bed 0.0600, curtain 0.0589, sofa 0.0563</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_008_01_frame_000001_sam_007.jpg" alt="frame_000001_sam_007"><div>frame_000001_sam_007</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000001_sam_007
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_009</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 4</div>
+    <div><span>Points</span> 7921</div>
+    <div><span>Uncertainty</span> 0.0080</div>
+    <div><span>Centroid</span> -0.124, -0.148, 1.025</div>
+    <div><span>3D extent</span> 0.225, 0.141, 0.182</div>
+    <div><span>Sources</span> 4</div>
+  </div>
+  <div class="scores">floor 0.0587, bed 0.0571, counter 0.0560, door 0.0557, curtain 0.0547</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_009_01_frame_000003_sam_006.jpg" alt="frame_000003_sam_006"><div>frame_000003_sam_006</div></div><div class="thumb"><img src="thumbnails/object_009_02_frame_000004_sam_008.jpg" alt="frame_000004_sam_008"><div>frame_000004_sam_008</div></div><div class="thumb"><img src="thumbnails/object_009_03_frame_000002_sam_008.jpg" alt="frame_000002_sam_008"><div>frame_000002_sam_008</div></div><div class="thumb"><img src="thumbnails/object_009_04_frame_000001_sam_006.jpg" alt="frame_000001_sam_006"><div>frame_000001_sam_006</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000001_sam_006, frame_000002_sam_008, frame_000003_sam_006, frame_000004_sam_008
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_010</div>
+    <div class="label">bed</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 3</div>
+    <div><span>Points</span> 3757</div>
+    <div><span>Uncertainty</span> 0.0038</div>
+    <div><span>Centroid</span> -0.445, 0.100, 0.777</div>
+    <div><span>3D extent</span> 0.111, 0.068, 0.083</div>
+    <div><span>Sources</span> 3</div>
+  </div>
+  <div class="scores">bed 0.0564, curtain 0.0558, door 0.0535, floor 0.0516, counter 0.0460</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>bed</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_010_01_frame_000001_sam_005.jpg" alt="frame_000001_sam_005"><div>frame_000001_sam_005</div></div><div class="thumb"><img src="thumbnails/object_010_02_frame_000005_sam_008.jpg" alt="frame_000005_sam_008"><div>frame_000005_sam_008</div></div><div class="thumb"><img src="thumbnails/object_010_03_frame_000006_sam_016.jpg" alt="frame_000006_sam_016"><div>frame_000006_sam_016</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000001_sam_005, frame_000005_sam_008, frame_000006_sam_016
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_011</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 1359</div>
+    <div><span>Uncertainty</span> 0.0285</div>
+    <div><span>Centroid</span> -0.000, 0.363, 1.052</div>
+    <div><span>3D extent</span> 0.139, 0.308, 0.427</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0750, bed 0.0648, door 0.0632, curtain 0.0603, ceiling 0.0557</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_011_01_frame_000001_sam_010.jpg" alt="frame_000001_sam_010"><div>frame_000001_sam_010</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000001_sam_010
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_012</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 2805</div>
+    <div><span>Uncertainty</span> 0.0116</div>
+    <div><span>Centroid</span> -0.415, 0.050, 0.766</div>
+    <div><span>3D extent</span> 0.219, 0.108, 0.099</div>
+    <div><span>Sources</span> 2</div>
+  </div>
+  <div class="scores">floor 0.0871, bed 0.0774, counter 0.0741, door 0.0738, curtain 0.0671</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_012_01_frame_000005_sam_006.jpg" alt="frame_000005_sam_006"><div>frame_000005_sam_006</div></div><div class="thumb"><img src="thumbnails/object_012_02_frame_000001_sam_008.jpg" alt="frame_000001_sam_008"><div>frame_000001_sam_008</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000001_sam_008, frame_000005_sam_006
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_013</div>
+    <div class="label">bed</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 724</div>
+    <div><span>Uncertainty</span> 0.0279</div>
+    <div><span>Centroid</span> -0.695, -0.507, 1.301</div>
+    <div><span>3D extent</span> 0.135, 0.215, 0.060</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">bed 0.0636, floor 0.0607, door 0.0539, cabinet 0.0523, counter 0.0504</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>bed</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_013_01_frame_000001_sam_012.jpg" alt="frame_000001_sam_012"><div>frame_000001_sam_012</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000001_sam_012
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_014</div>
+    <div class="label">cabinet</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0856</div>
+    <div><span>Centroid</span> 0.496, -0.731, 0.724</div>
+    <div><span>3D extent</span> 0.720, 0.378, 0.429</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">cabinet 0.0733, door 0.0722, curtain 0.0695, floor 0.0679, bed 0.0671</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>cabinet</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_014_01_frame_000002_sam_001.jpg" alt="frame_000002_sam_001"><div>frame_000002_sam_001</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000002_sam_001
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_015</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0601</div>
+    <div><span>Centroid</span> -0.355, -0.835, 1.015</div>
+    <div><span>3D extent</span> 0.475, 0.326, 0.379</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0737, bed 0.0670, door 0.0578, counter 0.0553, ceiling 0.0548</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_015_01_frame_000002_sam_003.jpg" alt="frame_000002_sam_003"><div>frame_000002_sam_003</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000002_sam_003
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_016</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 3</div>
+    <div><span>Points</span> 8192</div>
+    <div><span>Uncertainty</span> 0.0106</div>
+    <div><span>Centroid</span> 0.662, -0.034, 0.666</div>
+    <div><span>3D extent</span> 0.327, 0.254, 0.316</div>
+    <div><span>Sources</span> 3</div>
+  </div>
+  <div class="scores">floor 0.0825, curtain 0.0699, door 0.0661, ceiling 0.0639, counter 0.0620</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_016_01_frame_000003_sam_001.jpg" alt="frame_000003_sam_001"><div>frame_000003_sam_001</div></div><div class="thumb"><img src="thumbnails/object_016_02_frame_000004_sam_005.jpg" alt="frame_000004_sam_005"><div>frame_000004_sam_005</div></div><div class="thumb"><img src="thumbnails/object_016_03_frame_000002_sam_007.jpg" alt="frame_000002_sam_007"><div>frame_000002_sam_007</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000002_sam_007, frame_000003_sam_001, frame_000004_sam_005
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_017</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 2349</div>
+    <div><span>Uncertainty</span> 0.0085</div>
+    <div><span>Centroid</span> -0.172, 0.033, 0.806</div>
+    <div><span>3D extent</span> 0.163, 0.040, 0.023</div>
+    <div><span>Sources</span> 2</div>
+  </div>
+  <div class="scores">floor 0.0599, sofa 0.0565, bed 0.0553, cabinet 0.0530, curtain 0.0527</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_017_01_frame_000002_sam_010.jpg" alt="frame_000002_sam_010"><div>frame_000002_sam_010</div></div><div class="thumb"><img src="thumbnails/object_017_02_frame_000005_sam_011.jpg" alt="frame_000005_sam_011"><div>frame_000005_sam_011</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000002_sam_010, frame_000005_sam_011
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_018</div>
+    <div class="label">bed</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 1106</div>
+    <div><span>Uncertainty</span> 0.0164</div>
+    <div><span>Centroid</span> 0.719, -0.330, 0.725</div>
+    <div><span>3D extent</span> 0.141, 0.081, 0.088</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">bed 0.0909, floor 0.0847, counter 0.0839, sofa 0.0830, door 0.0780</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>bed</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_018_01_frame_000002_sam_016.jpg" alt="frame_000002_sam_016"><div>frame_000002_sam_016</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000002_sam_016
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_019</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 1045</div>
+    <div><span>Uncertainty</span> 0.0381</div>
+    <div><span>Centroid</span> 0.559, -0.173, 0.806</div>
+    <div><span>3D extent</span> 0.331, 0.068, 0.130</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0715, bed 0.0671, cabinet 0.0652, curtain 0.0602, door 0.0598</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_019_01_frame_000002_sam_014.jpg" alt="frame_000002_sam_014"><div>frame_000002_sam_014</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000002_sam_014
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_020</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 1804</div>
+    <div><span>Uncertainty</span> 0.0098</div>
+    <div><span>Centroid</span> -0.273, -0.221, 1.137</div>
+    <div><span>3D extent</span> 0.090, 0.137, 0.128</div>
+    <div><span>Sources</span> 2</div>
+  </div>
+  <div class="scores">floor 0.0741, ceiling 0.0646, door 0.0639, counter 0.0639, bed 0.0619</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_020_01_frame_000002_sam_012.jpg" alt="frame_000002_sam_012"><div>frame_000002_sam_012</div></div><div class="thumb"><img src="thumbnails/object_020_02_frame_000004_sam_014.jpg" alt="frame_000004_sam_014"><div>frame_000004_sam_014</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000002_sam_012, frame_000004_sam_014
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_021</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 3872</div>
+    <div><span>Uncertainty</span> 0.0056</div>
+    <div><span>Centroid</span> 0.395, 0.051, 0.593</div>
+    <div><span>3D extent</span> 0.054, 0.174, 0.091</div>
+    <div><span>Sources</span> 3</div>
+  </div>
+  <div class="scores">floor 0.0615, counter 0.0550, curtain 0.0527, door 0.0478, bed 0.0476</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_021_01_frame_000004_sam_007.jpg" alt="frame_000004_sam_007"><div>frame_000004_sam_007</div></div><div class="thumb"><img src="thumbnails/object_021_02_frame_000002_sam_006.jpg" alt="frame_000002_sam_006"><div>frame_000002_sam_006</div></div><div class="thumb"><img src="thumbnails/object_021_03_frame_000002_sam_002.jpg" alt="frame_000002_sam_002"><div>frame_000002_sam_002</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000002_sam_002, frame_000002_sam_006, frame_000004_sam_007
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_022</div>
+    <div class="label">curtain</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 621</div>
+    <div><span>Uncertainty</span> 0.0109</div>
+    <div><span>Centroid</span> 0.013, -0.680, 0.948</div>
+    <div><span>3D extent</span> 0.068, 0.073, 0.063</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">curtain 0.0673, ceiling 0.0627, floor 0.0588, sofa 0.0570, bed 0.0548</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>curtain</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_022_01_frame_000002_sam_004.jpg" alt="frame_000002_sam_004"><div>frame_000002_sam_004</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000002_sam_004
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_023</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0980</div>
+    <div><span>Centroid</span> 0.530, -0.747, 0.683</div>
+    <div><span>3D extent</span> 0.816, 0.466, 0.514</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0781, door 0.0723, ceiling 0.0680, bed 0.0677, curtain 0.0638</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_023_01_frame_000003_sam_003.jpg" alt="frame_000003_sam_003"><div>frame_000003_sam_003</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000003_sam_003
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_024</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0591</div>
+    <div><span>Centroid</span> -0.335, -0.856, 0.988</div>
+    <div><span>3D extent</span> 0.412, 0.389, 0.398</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0813, bed 0.0720, counter 0.0676, door 0.0673, curtain 0.0625</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_024_01_frame_000003_sam_004.jpg" alt="frame_000003_sam_004"><div>frame_000003_sam_004</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000003_sam_004
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_025</div>
+    <div class="label">bed</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0485</div>
+    <div><span>Centroid</span> -0.319, -0.774, 1.043</div>
+    <div><span>3D extent</span> 0.392, 0.211, 0.281</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">bed 0.0671, floor 0.0596, door 0.0575, sofa 0.0563, cabinet 0.0557</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>bed</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_025_01_frame_000003_sam_009.jpg" alt="frame_000003_sam_009"><div>frame_000003_sam_009</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000003_sam_009
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_026</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0428</div>
+    <div><span>Centroid</span> -0.351, -0.953, 0.921</div>
+    <div><span>3D extent</span> 0.378, 0.234, 0.268</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0766, curtain 0.0725, bed 0.0703, door 0.0679, counter 0.0651</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_026_01_frame_000003_sam_008.jpg" alt="frame_000003_sam_008"><div>frame_000003_sam_008</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000003_sam_008
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_027</div>
+    <div class="label">counter</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 495</div>
+    <div><span>Uncertainty</span> 0.0260</div>
+    <div><span>Centroid</span> 0.810, -0.784, 0.517</div>
+    <div><span>3D extent</span> 0.047, 0.207, 0.150</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">counter 0.0660, floor 0.0573, door 0.0508, curtain 0.0498, sofa 0.0466</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>counter</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_027_01_frame_000003_sam_007.jpg" alt="frame_000003_sam_007"><div>frame_000003_sam_007</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000003_sam_007
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_028</div>
+    <div class="label">counter</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 411</div>
+    <div><span>Uncertainty</span> 0.0135</div>
+    <div><span>Centroid</span> 0.062, -0.914, 0.720</div>
+    <div><span>3D extent</span> 0.034, 0.103, 0.080</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">counter 0.0550, floor 0.0472, curtain 0.0459, door 0.0432, cabinet 0.0405</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>counter</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_028_01_frame_000003_sam_011.jpg" alt="frame_000003_sam_011"><div>frame_000003_sam_011</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000003_sam_011
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_029</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 383</div>
+    <div><span>Uncertainty</span> 0.0220</div>
+    <div><span>Centroid</span> 0.516, -0.837, 0.621</div>
+    <div><span>3D extent</span> 0.036, 0.180, 0.133</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0471, counter 0.0428, door 0.0399, sofa 0.0372, curtain 0.0301</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_029_01_frame_000003_sam_010.jpg" alt="frame_000003_sam_010"><div>frame_000003_sam_010</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000003_sam_010
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_030</div>
+    <div class="label">sofa</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.1448</div>
+    <div><span>Centroid</span> 0.318, -0.640, 0.869</div>
+    <div><span>3D extent</span> 1.361, 0.258, 0.526</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">sofa 0.0581, cabinet 0.0566, curtain 0.0554, floor 0.0528, bed 0.0524</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>sofa</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_030_01_frame_000004_sam_006.jpg" alt="frame_000004_sam_006"><div>frame_000004_sam_006</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000004_sam_006
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_031</div>
+    <div class="label">bed</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.1123</div>
+    <div><span>Centroid</span> 0.098, 0.253, 0.891</div>
+    <div><span>3D extent</span> 0.564, 0.270, 0.550</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">bed 0.0852, floor 0.0837, door 0.0775, counter 0.0760, curtain 0.0751</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>bed</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_031_01_frame_000004_sam_003.jpg" alt="frame_000004_sam_003"><div>frame_000004_sam_003</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000004_sam_003
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_032</div>
+    <div class="label">door</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0840</div>
+    <div><span>Centroid</span> 0.524, -0.613, 0.792</div>
+    <div><span>3D extent</span> 0.716, 0.169, 0.319</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">door 0.0706, cabinet 0.0695, floor 0.0664, sofa 0.0658, curtain 0.0597</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>door</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_032_01_frame_000004_sam_004.jpg" alt="frame_000004_sam_004"><div>frame_000004_sam_004</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000004_sam_004
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_033</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0369</div>
+    <div><span>Centroid</span> 0.613, -0.147, 0.860</div>
+    <div><span>3D extent</span> 0.391, 0.147, 0.228</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0429, curtain 0.0409, door 0.0381, ceiling 0.0339, bed 0.0324</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_033_01_frame_000004_sam_012.jpg" alt="frame_000004_sam_012"><div>frame_000004_sam_012</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000004_sam_012
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_034</div>
+    <div class="label">door</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 7286</div>
+    <div><span>Uncertainty</span> 0.0305</div>
+    <div><span>Centroid</span> -0.372, -0.754, 1.109</div>
+    <div><span>3D extent</span> 0.823, 0.230, 0.351</div>
+    <div><span>Sources</span> 2</div>
+  </div>
+  <div class="scores">door 0.0668, cabinet 0.0666, curtain 0.0662, floor 0.0643, bed 0.0627</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>door</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_034_01_frame_000006_sam_001.jpg" alt="frame_000006_sam_001"><div>frame_000006_sam_001</div></div><div class="thumb"><img src="thumbnails/object_034_02_frame_000004_sam_002.jpg" alt="frame_000004_sam_002"><div>frame_000004_sam_002</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000004_sam_002, frame_000006_sam_001
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_035</div>
+    <div class="label">cabinet</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 1970</div>
+    <div><span>Uncertainty</span> 0.0286</div>
+    <div><span>Centroid</span> -0.240, -0.715, 1.077</div>
+    <div><span>3D extent</span> 0.224, 0.099, 0.128</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">cabinet 0.0719, curtain 0.0714, door 0.0713, floor 0.0665, sofa 0.0662</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>cabinet</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_035_01_frame_000004_sam_011.jpg" alt="frame_000004_sam_011"><div>frame_000004_sam_011</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000004_sam_011
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_036</div>
+    <div class="label">cabinet</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 1104</div>
+    <div><span>Uncertainty</span> 0.0160</div>
+    <div><span>Centroid</span> -0.417, -0.738, 1.136</div>
+    <div><span>3D extent</span> 0.155, 0.085, 0.069</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">cabinet 0.0625, floor 0.0611, door 0.0575, curtain 0.0518, sofa 0.0440</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>cabinet</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_036_01_frame_000004_sam_010.jpg" alt="frame_000004_sam_010"><div>frame_000004_sam_010</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000004_sam_010
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_037</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 782</div>
+    <div><span>Uncertainty</span> 0.0077</div>
+    <div><span>Centroid</span> 0.389, 0.115, 0.620</div>
+    <div><span>3D extent</span> 0.046, 0.067, 0.044</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0547, counter 0.0500, ceiling 0.0425, bed 0.0420, curtain 0.0420</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_037_01_frame_000004_sam_013.jpg" alt="frame_000004_sam_013"><div>frame_000004_sam_013</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000004_sam_013
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_038</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.1673</div>
+    <div><span>Centroid</span> -0.085, -0.437, 1.114</div>
+    <div><span>3D extent</span> 1.664, 0.539, 0.801</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0976, door 0.0929, sofa 0.0811, cabinet 0.0810, counter 0.0799</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_038_01_frame_000005_sam_005.jpg" alt="frame_000005_sam_005"><div>frame_000005_sam_005</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000005_sam_005
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_039</div>
+    <div class="label">curtain</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0208</div>
+    <div><span>Centroid</span> -0.310, 0.280, 0.552</div>
+    <div><span>3D extent</span> 0.197, 0.066, 0.075</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">curtain 0.0725, floor 0.0706, door 0.0611, ceiling 0.0558, bed 0.0549</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>curtain</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_039_01_frame_000005_sam_004.jpg" alt="frame_000005_sam_004"><div>frame_000005_sam_004</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000005_sam_004
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_040</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 3805</div>
+    <div><span>Uncertainty</span> 0.0261</div>
+    <div><span>Centroid</span> -0.186, -0.013, 0.855</div>
+    <div><span>3D extent</span> 0.184, 0.138, 0.157</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0736, bed 0.0670, curtain 0.0646, sofa 0.0639, wall 0.0598</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_040_01_frame_000005_sam_010.jpg" alt="frame_000005_sam_010"><div>frame_000005_sam_010</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000005_sam_010
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_041</div>
+    <div class="label">curtain</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 1468</div>
+    <div><span>Uncertainty</span> 0.0220</div>
+    <div><span>Centroid</span> -0.127, -0.144, 1.018</div>
+    <div><span>3D extent</span> 0.201, 0.103, 0.138</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">curtain 0.0820, cabinet 0.0631, counter 0.0585, floor 0.0564, ceiling 0.0561</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>curtain</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_041_01_frame_000005_sam_009.jpg" alt="frame_000005_sam_009"><div>frame_000005_sam_009</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000005_sam_009
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_042</div>
+    <div class="label">curtain</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0364</div>
+    <div><span>Centroid</span> -0.483, -0.050, 0.718</div>
+    <div><span>3D extent</span> 0.262, 0.297, 0.202</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">curtain 0.0656, sofa 0.0589, ceiling 0.0563, door 0.0562, floor 0.0557</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>curtain</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_042_01_frame_000006_sam_005.jpg" alt="frame_000006_sam_005"><div>frame_000006_sam_005</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000006_sam_005
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_043</div>
+    <div class="label">curtain</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0759</div>
+    <div><span>Centroid</span> -2.005, -0.575, 1.450</div>
+    <div><span>3D extent</span> 1.361, 0.901, 1.182</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">curtain 0.0864, floor 0.0828, ceiling 0.0763, door 0.0727, bed 0.0667</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>curtain</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_043_01_frame_000006_sam_007.jpg" alt="frame_000006_sam_007"><div>frame_000006_sam_007</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000006_sam_007
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_044</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0760</div>
+    <div><span>Centroid</span> -2.008, -0.579, 1.449</div>
+    <div><span>3D extent</span> 1.361, 0.900, 1.177</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0888, curtain 0.0856, ceiling 0.0766, bed 0.0713, door 0.0708</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_044_01_frame_000006_sam_004.jpg" alt="frame_000006_sam_004"><div>frame_000006_sam_004</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000006_sam_004
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_045</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 7011</div>
+    <div><span>Uncertainty</span> 0.0094</div>
+    <div><span>Centroid</span> -0.678, 0.305, 0.563</div>
+    <div><span>3D extent</span> 0.146, 0.127, 0.188</div>
+    <div><span>Sources</span> 2</div>
+  </div>
+  <div class="scores">floor 0.0672, bed 0.0600, door 0.0558, counter 0.0555, curtain 0.0544</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_045_01_frame_000006_sam_012.jpg" alt="frame_000006_sam_012"><div>frame_000006_sam_012</div></div><div class="thumb"><img src="thumbnails/object_045_02_frame_000007_sam_008.jpg" alt="frame_000007_sam_008"><div>frame_000007_sam_008</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000006_sam_012, frame_000007_sam_008
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_046</div>
+    <div class="label">bed</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 5754</div>
+    <div><span>Uncertainty</span> 0.0263</div>
+    <div><span>Centroid</span> -1.308, -0.502, 1.395</div>
+    <div><span>3D extent</span> 0.905, 0.556, 1.055</div>
+    <div><span>Sources</span> 2</div>
+  </div>
+  <div class="scores">bed 0.0766, floor 0.0736, curtain 0.0680, ceiling 0.0648, door 0.0640</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>bed</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_046_01_frame_000007_sam_005.jpg" alt="frame_000007_sam_005"><div>frame_000007_sam_005</div></div><div class="thumb"><img src="thumbnails/object_046_02_frame_000006_sam_002.jpg" alt="frame_000006_sam_002"><div>frame_000006_sam_002</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000006_sam_002, frame_000007_sam_005
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_047</div>
+    <div class="label">door</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 2129</div>
+    <div><span>Uncertainty</span> 0.0252</div>
+    <div><span>Centroid</span> -0.078, -0.683, 0.996</div>
+    <div><span>3D extent</span> 0.177, 0.191, 0.305</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">door 0.0723, curtain 0.0710, floor 0.0691, cabinet 0.0669, bed 0.0607</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>door</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_047_01_frame_000006_sam_017.jpg" alt="frame_000006_sam_017"><div>frame_000006_sam_017</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000006_sam_017
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_048</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 2086</div>
+    <div><span>Uncertainty</span> 0.0991</div>
+    <div><span>Centroid</span> -1.445, -0.894, 1.434</div>
+    <div><span>3D extent</span> 0.786, 0.213, 0.313</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0518, bed 0.0507, cabinet 0.0480, door 0.0471, sofa 0.0463</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_048_01_frame_000006_sam_003.jpg" alt="frame_000006_sam_003"><div>frame_000006_sam_003</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000006_sam_003
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_049</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 1686</div>
+    <div><span>Uncertainty</span> 0.0112</div>
+    <div><span>Centroid</span> -0.354, 0.271, 0.563</div>
+    <div><span>3D extent</span> 0.119, 0.060, 0.061</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0573, bed 0.0519, door 0.0464, counter 0.0457, sofa 0.0447</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_049_01_frame_000006_sam_006.jpg" alt="frame_000006_sam_006"><div>frame_000006_sam_006</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000006_sam_006
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_050</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 1012</div>
+    <div><span>Uncertainty</span> 0.0220</div>
+    <div><span>Centroid</span> -1.033, -0.790, 1.294</div>
+    <div><span>3D extent</span> 0.140, 0.165, 0.096</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0730, door 0.0664, counter 0.0643, ceiling 0.0621, curtain 0.0611</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_050_01_frame_000006_sam_011.jpg" alt="frame_000006_sam_011"><div>frame_000006_sam_011</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000006_sam_011
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_051</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 890</div>
+    <div><span>Uncertainty</span> 0.0094</div>
+    <div><span>Centroid</span> -0.479, 0.195, 0.670</div>
+    <div><span>3D extent</span> 0.090, 0.037, 0.028</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0681, bed 0.0654, curtain 0.0632, door 0.0617, counter 0.0600</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_051_01_frame_000006_sam_008.jpg" alt="frame_000006_sam_008"><div>frame_000006_sam_008</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000006_sam_008
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_052</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 1367</div>
+    <div><span>Uncertainty</span> 0.0091</div>
+    <div><span>Centroid</span> -0.584, 0.095, 0.663</div>
+    <div><span>3D extent</span> 0.077, 0.072, 0.118</div>
+    <div><span>Sources</span> 2</div>
+  </div>
+  <div class="scores">floor 0.0580, curtain 0.0552, counter 0.0489, cabinet 0.0482, bed 0.0468</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_052_01_frame_000006_sam_015.jpg" alt="frame_000006_sam_015"><div>frame_000006_sam_015</div></div><div class="thumb"><img src="thumbnails/object_052_02_frame_000007_sam_014.jpg" alt="frame_000007_sam_014"><div>frame_000007_sam_014</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000006_sam_015, frame_000007_sam_014
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_053</div>
+    <div class="label">counter</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 604</div>
+    <div><span>Uncertainty</span> 0.0220</div>
+    <div><span>Centroid</span> -1.581, -0.432, 1.485</div>
+    <div><span>3D extent</span> 1.055, 0.456, 1.104</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">counter 0.0517, floor 0.0495, ceiling 0.0448, curtain 0.0447, door 0.0413</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>counter</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_053_01_frame_000006_sam_010.jpg" alt="frame_000006_sam_010"><div>frame_000006_sam_010</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000006_sam_010
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_054</div>
+    <div class="label">door</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 520</div>
+    <div><span>Uncertainty</span> 0.0103</div>
+    <div><span>Centroid</span> -0.619, 0.206, 0.552</div>
+    <div><span>3D extent</span> 0.092, 0.061, 0.165</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">door 0.0624, floor 0.0604, bed 0.0586, counter 0.0581, curtain 0.0517</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>door</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_054_01_frame_000006_sam_014.jpg" alt="frame_000006_sam_014"><div>frame_000006_sam_014</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000006_sam_014
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_055</div>
+    <div class="label">curtain</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 2134</div>
+    <div><span>Uncertainty</span> 0.0102</div>
+    <div><span>Centroid</span> -0.616, 0.174, 0.660</div>
+    <div><span>3D extent</span> 0.142, 0.179, 0.223</div>
+    <div><span>Sources</span> 2</div>
+  </div>
+  <div class="scores">curtain 0.0604, floor 0.0597, door 0.0544, counter 0.0536, bed 0.0532</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>curtain</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_055_01_frame_000008_sam_011.jpg" alt="frame_000008_sam_011"><div>frame_000008_sam_011</div></div><div class="thumb"><img src="thumbnails/object_055_02_frame_000006_sam_009.jpg" alt="frame_000006_sam_009"><div>frame_000006_sam_009</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000006_sam_009, frame_000008_sam_011
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_056</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0585</div>
+    <div><span>Centroid</span> -0.734, 0.133, 0.432</div>
+    <div><span>3D extent</span> 0.930, 0.762, 1.338</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0741, wall 0.0615, curtain 0.0615, sofa 0.0614, counter 0.0576</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_056_01_frame_000007_sam_004.jpg" alt="frame_000007_sam_004"><div>frame_000007_sam_004</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000007_sam_004
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_057</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.1260</div>
+    <div><span>Centroid</span> -2.128, -0.610, 1.274</div>
+    <div><span>3D extent</span> 1.437, 1.349, 1.295</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0955, door 0.0876, curtain 0.0859, cabinet 0.0857, ceiling 0.0839</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_057_01_frame_000007_sam_015.jpg" alt="frame_000007_sam_015"><div>frame_000007_sam_015</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000007_sam_015
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_058</div>
+    <div class="label">curtain</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.1248</div>
+    <div><span>Centroid</span> -2.133, -0.609, 1.274</div>
+    <div><span>3D extent</span> 1.437, 1.142, 1.280</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">curtain 0.0934, floor 0.0849, ceiling 0.0839, door 0.0789, cabinet 0.0776</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>curtain</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_058_01_frame_000007_sam_013.jpg" alt="frame_000007_sam_013"><div>frame_000007_sam_013</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000007_sam_013
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_059</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0855</div>
+    <div><span>Centroid</span> -2.213, 0.435, 0.431</div>
+    <div><span>3D extent</span> 0.864, 0.788, 0.664</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0822, door 0.0721, curtain 0.0665, bed 0.0656, ceiling 0.0650</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_059_01_frame_000007_sam_006.jpg" alt="frame_000007_sam_006"><div>frame_000007_sam_006</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000007_sam_006
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_060</div>
+    <div class="label">cabinet</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0928</div>
+    <div><span>Centroid</span> -1.508, -0.991, 1.451</div>
+    <div><span>3D extent</span> 0.771, 0.358, 0.363</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">cabinet 0.0830, curtain 0.0803, door 0.0744, floor 0.0716, bed 0.0671</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>cabinet</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_060_01_frame_000007_sam_003.jpg" alt="frame_000007_sam_003"><div>frame_000007_sam_003</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000007_sam_003
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_061</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 3478</div>
+    <div><span>Uncertainty</span> 0.0452</div>
+    <div><span>Centroid</span> -1.011, 0.033, 0.475</div>
+    <div><span>3D extent</span> 0.253, 0.287, 0.290</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0771, bed 0.0709, sofa 0.0669, curtain 0.0661, door 0.0642</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_061_01_frame_000007_sam_007.jpg" alt="frame_000007_sam_007"><div>frame_000007_sam_007</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000007_sam_007
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_062</div>
+    <div class="label">curtain</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 2395</div>
+    <div><span>Uncertainty</span> 0.0409</div>
+    <div><span>Centroid</span> -2.434, 0.076, 0.113</div>
+    <div><span>3D extent</span> 0.106, 0.340, 0.331</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">curtain 0.0710, floor 0.0638, counter 0.0580, door 0.0533, ceiling 0.0521</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>curtain</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_062_01_frame_000007_sam_011.jpg" alt="frame_000007_sam_011"><div>frame_000007_sam_011</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000007_sam_011
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_063</div>
+    <div class="label">curtain</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 5208</div>
+    <div><span>Uncertainty</span> 0.0160</div>
+    <div><span>Centroid</span> -1.567, 0.298, 0.617</div>
+    <div><span>3D extent</span> 0.598, 0.258, 0.375</div>
+    <div><span>Sources</span> 2</div>
+  </div>
+  <div class="scores">curtain 0.0738, floor 0.0645, door 0.0612, sofa 0.0610, ceiling 0.0592</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>curtain</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_063_01_frame_000008_sam_006.jpg" alt="frame_000008_sam_006"><div>frame_000008_sam_006</div></div><div class="thumb"><img src="thumbnails/object_063_02_frame_000007_sam_001.jpg" alt="frame_000007_sam_001"><div>frame_000007_sam_001</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000007_sam_001, frame_000008_sam_006
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_064</div>
+    <div class="label">counter</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 1540</div>
+    <div><span>Uncertainty</span> 0.0182</div>
+    <div><span>Centroid</span> -0.971, 0.623, 0.162</div>
+    <div><span>3D extent</span> 0.306, 0.071, 0.089</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">counter 0.0520, bed 0.0505, floor 0.0461, door 0.0444, curtain 0.0436</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>counter</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_064_01_frame_000007_sam_009.jpg" alt="frame_000007_sam_009"><div>frame_000007_sam_009</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000007_sam_009
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_065</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 854</div>
+    <div><span>Uncertainty</span> 0.0092</div>
+    <div><span>Centroid</span> -0.868, 0.593, 0.227</div>
+    <div><span>3D extent</span> 0.039, 0.065, 0.075</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0883, counter 0.0805, bed 0.0785, door 0.0767, cabinet 0.0737</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_065_01_frame_000007_sam_010.jpg" alt="frame_000007_sam_010"><div>frame_000007_sam_010</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000007_sam_010
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_066</div>
+    <div class="label">curtain</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 663</div>
+    <div><span>Uncertainty</span> 0.0092</div>
+    <div><span>Centroid</span> -0.494, 0.115, 0.769</div>
+    <div><span>3D extent</span> 0.080, 0.055, 0.059</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">curtain 0.0553, floor 0.0537, counter 0.0530, bed 0.0463, door 0.0427</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>curtain</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_066_01_frame_000007_sam_016.jpg" alt="frame_000007_sam_016"><div>frame_000007_sam_016</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000007_sam_016
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_067</div>
+    <div class="label">counter</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 457</div>
+    <div><span>Uncertainty</span> 0.0091</div>
+    <div><span>Centroid</span> -0.883, 0.392, 0.434</div>
+    <div><span>3D extent</span> 0.193, 0.104, 0.154</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">counter 0.0601, floor 0.0587, door 0.0544, ceiling 0.0538, bed 0.0514</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>counter</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_067_01_frame_000007_sam_012.jpg" alt="frame_000007_sam_012"><div>frame_000007_sam_012</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000007_sam_012
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_068</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.1164</div>
+    <div><span>Centroid</span> -2.277, 0.605, 0.347</div>
+    <div><span>3D extent</span> 1.134, 1.053, 0.792</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0859, curtain 0.0803, door 0.0792, bed 0.0764, sofa 0.0739</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_068_01_frame_000008_sam_001.jpg" alt="frame_000008_sam_001"><div>frame_000008_sam_001</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000008_sam_001
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_069</div>
+    <div class="label">curtain</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.1790</div>
+    <div><span>Centroid</span> -1.846, 0.233, 0.697</div>
+    <div><span>3D extent</span> 1.168, 0.594, 0.754</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">curtain 0.0744, floor 0.0734, door 0.0685, sofa 0.0681, cabinet 0.0620</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>curtain</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_069_01_frame_000008_sam_009.jpg" alt="frame_000008_sam_009"><div>frame_000008_sam_009</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000008_sam_009
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_070</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0184</div>
+    <div><span>Centroid</span> -0.654, 0.488, 0.192</div>
+    <div><span>3D extent</span> 0.106, 0.159, 0.150</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.1019, ceiling 0.0857, sofa 0.0720, counter 0.0700, door 0.0695</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_070_01_frame_000008_sam_005.jpg" alt="frame_000008_sam_005"><div>frame_000008_sam_005</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000008_sam_005
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_071</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 7281</div>
+    <div><span>Uncertainty</span> 0.0084</div>
+    <div><span>Centroid</span> -0.402, 0.418, 0.374</div>
+    <div><span>3D extent</span> 0.163, 0.148, 0.184</div>
+    <div><span>Sources</span> 2</div>
+  </div>
+  <div class="scores">floor 0.0889, bed 0.0874, door 0.0806, curtain 0.0786, sofa 0.0742</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_071_01_frame_000008_sam_008.jpg" alt="frame_000008_sam_008"><div>frame_000008_sam_008</div></div><div class="thumb"><img src="thumbnails/object_071_02_frame_000009_sam_016.jpg" alt="frame_000009_sam_016"><div>frame_000009_sam_016</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000008_sam_008, frame_000009_sam_016
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_072</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0342</div>
+    <div><span>Centroid</span> -1.055, 0.207, 0.424</div>
+    <div><span>3D extent</span> 0.350, 0.251, 0.357</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0573, bed 0.0566, door 0.0539, sofa 0.0529, curtain 0.0501</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_072_01_frame_000008_sam_012.jpg" alt="frame_000008_sam_012"><div>frame_000008_sam_012</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000008_sam_012
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_073</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 8113</div>
+    <div><span>Uncertainty</span> 0.0117</div>
+    <div><span>Centroid</span> -0.968, 0.651, 0.118</div>
+    <div><span>3D extent</span> 0.222, 0.117, 0.196</div>
+    <div><span>Sources</span> 2</div>
+  </div>
+  <div class="scores">floor 0.0715, sofa 0.0703, counter 0.0675, bed 0.0616, door 0.0561</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_073_01_frame_000009_sam_008.jpg" alt="frame_000009_sam_008"><div>frame_000009_sam_008</div></div><div class="thumb"><img src="thumbnails/object_073_02_frame_000008_sam_007.jpg" alt="frame_000008_sam_007"><div>frame_000008_sam_007</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000008_sam_007, frame_000009_sam_008
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_074</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 7260</div>
+    <div><span>Uncertainty</span> 0.0074</div>
+    <div><span>Centroid</span> -0.721, 0.702, 0.056</div>
+    <div><span>3D extent</span> 0.168, 0.067, 0.120</div>
+    <div><span>Sources</span> 2</div>
+  </div>
+  <div class="scores">floor 0.0725, door 0.0683, curtain 0.0653, ceiling 0.0635, counter 0.0606</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_074_01_frame_000010_sam_027.jpg" alt="frame_000010_sam_027"><div>frame_000010_sam_027</div></div><div class="thumb"><img src="thumbnails/object_074_02_frame_000008_sam_004.jpg" alt="frame_000008_sam_004"><div>frame_000008_sam_004</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000008_sam_004, frame_000010_sam_027
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_075</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 2867</div>
+    <div><span>Uncertainty</span> 0.2420</div>
+    <div><span>Centroid</span> -1.663, 1.070, 0.144</div>
+    <div><span>3D extent</span> 1.720, 0.691, 0.378</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0702, curtain 0.0647, bed 0.0635, door 0.0627, ceiling 0.0563</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_075_01_frame_000008_sam_003.jpg" alt="frame_000008_sam_003"><div>frame_000008_sam_003</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000008_sam_003
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_076</div>
+    <div class="label">curtain</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 1613</div>
+    <div><span>Uncertainty</span> 0.0085</div>
+    <div><span>Centroid</span> -0.658, 0.699, 0.002</div>
+    <div><span>3D extent</span> 0.072, 0.058, 0.085</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">curtain 0.0642, ceiling 0.0636, counter 0.0627, floor 0.0607, door 0.0601</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>curtain</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_076_01_frame_000008_sam_002.jpg" alt="frame_000008_sam_002"><div>frame_000008_sam_002</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000008_sam_002
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_077</div>
+    <div class="label">door</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 1213</div>
+    <div><span>Uncertainty</span> 0.0134</div>
+    <div><span>Centroid</span> -0.709, 0.327, 0.536</div>
+    <div><span>3D extent</span> 0.107, 0.083, 0.137</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">door 0.0539, bed 0.0533, curtain 0.0528, floor 0.0501, sofa 0.0473</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>door</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_077_01_frame_000008_sam_010.jpg" alt="frame_000008_sam_010"><div>frame_000008_sam_010</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000008_sam_010
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_078</div>
+    <div class="label">counter</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 891</div>
+    <div><span>Uncertainty</span> 0.0083</div>
+    <div><span>Centroid</span> -0.651, 0.673, 0.089</div>
+    <div><span>3D extent</span> 0.088, 0.026, 0.034</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">counter 0.0554, floor 0.0554, curtain 0.0541, bed 0.0526, door 0.0499</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>counter</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_078_01_frame_000008_sam_013.jpg" alt="frame_000008_sam_013"><div>frame_000008_sam_013</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000008_sam_013
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_079</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 619</div>
+    <div><span>Uncertainty</span> 0.1375</div>
+    <div><span>Centroid</span> -1.989, 0.280, 0.656</div>
+    <div><span>3D extent</span> 0.616, 0.321, 0.240</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0529, counter 0.0449, door 0.0444, cabinet 0.0401, curtain 0.0390</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_079_01_frame_000008_sam_014.jpg" alt="frame_000008_sam_014"><div>frame_000008_sam_014</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000008_sam_014
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_080</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0711</div>
+    <div><span>Centroid</span> -0.336, 0.825, 0.553</div>
+    <div><span>3D extent</span> 0.892, 0.794, 0.979</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0885, cabinet 0.0837, ceiling 0.0809, counter 0.0794, bed 0.0788</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_080_01_frame_000009_sam_005.jpg" alt="frame_000009_sam_005"><div>frame_000009_sam_005</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000009_sam_005
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_081</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0717</div>
+    <div><span>Centroid</span> -0.335, 0.824, 0.553</div>
+    <div><span>3D extent</span> 0.412, 0.562, 0.855</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.1022, cabinet 0.0890, ceiling 0.0867, curtain 0.0847, door 0.0800</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_081_01_frame_000009_sam_004.jpg" alt="frame_000009_sam_004"><div>frame_000009_sam_004</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000009_sam_004
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_082</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 8192</div>
+    <div><span>Uncertainty</span> 0.0271</div>
+    <div><span>Centroid</span> -0.302, 0.850, 0.561</div>
+    <div><span>3D extent</span> 0.454, 0.606, 0.873</div>
+    <div><span>Sources</span> 2</div>
+  </div>
+  <div class="scores">floor 0.0989, door 0.0801, cabinet 0.0795, curtain 0.0788, ceiling 0.0768</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_082_01_frame_000009_sam_001.jpg" alt="frame_000009_sam_001"><div>frame_000009_sam_001</div></div><div class="thumb"><img src="thumbnails/object_082_02_frame_000010_sam_002.jpg" alt="frame_000010_sam_002"><div>frame_000010_sam_002</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000009_sam_001, frame_000010_sam_002
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_083</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 2</div>
+    <div><span>Points</span> 8192</div>
+    <div><span>Uncertainty</span> 0.0082</div>
+    <div><span>Centroid</span> -0.539, 0.612, 0.149</div>
+    <div><span>3D extent</span> 0.260, 0.129, 0.172</div>
+    <div><span>Sources</span> 4</div>
+  </div>
+  <div class="scores">floor 0.0860, door 0.0804, bed 0.0785, ceiling 0.0748, sofa 0.0712</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_083_01_frame_000009_sam_010.jpg" alt="frame_000009_sam_010"><div>frame_000009_sam_010</div></div><div class="thumb"><img src="thumbnails/object_083_02_frame_000010_sam_004.jpg" alt="frame_000010_sam_004"><div>frame_000010_sam_004</div></div><div class="thumb"><img src="thumbnails/object_083_03_frame_000010_sam_022.jpg" alt="frame_000010_sam_022"><div>frame_000010_sam_022</div></div><div class="thumb"><img src="thumbnails/object_083_04_frame_000010_sam_017.jpg" alt="frame_000010_sam_017"><div>frame_000010_sam_017</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000009_sam_010, frame_000010_sam_004, frame_000010_sam_017, frame_000010_sam_022
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_084</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0181</div>
+    <div><span>Centroid</span> -0.662, 0.491, 0.186</div>
+    <div><span>3D extent</span> 0.133, 0.166, 0.162</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0932, sofa 0.0651, ceiling 0.0629, counter 0.0611, door 0.0601</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_084_01_frame_000009_sam_013.jpg" alt="frame_000009_sam_013"><div>frame_000009_sam_013</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000009_sam_013
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_085</div>
+    <div class="label">door</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0148</div>
+    <div><span>Centroid</span> -0.634, 0.701, 0.006</div>
+    <div><span>3D extent</span> 0.124, 0.072, 0.058</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">door 0.0643, counter 0.0623, floor 0.0604, ceiling 0.0565, bed 0.0562</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>door</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_085_01_frame_000009_sam_002.jpg" alt="frame_000009_sam_002"><div>frame_000009_sam_002</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000009_sam_002
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_086</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 2975</div>
+    <div><span>Uncertainty</span> 0.0295</div>
+    <div><span>Centroid</span> -0.455, 0.764, 0.146</div>
+    <div><span>3D extent</span> 0.074, 0.283, 0.291</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0761, bed 0.0718, door 0.0716, curtain 0.0649, counter 0.0609</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_086_01_frame_000009_sam_003.jpg" alt="frame_000009_sam_003"><div>frame_000009_sam_003</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000009_sam_003
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_087</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 2517</div>
+    <div><span>Uncertainty</span> 0.0173</div>
+    <div><span>Centroid</span> -1.012, 0.639, 0.140</div>
+    <div><span>3D extent</span> 0.134, 0.103, 0.164</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0876, bed 0.0719, sofa 0.0679, counter 0.0632, door 0.0623</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_087_01_frame_000009_sam_012.jpg" alt="frame_000009_sam_012"><div>frame_000009_sam_012</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000009_sam_012
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_088</div>
+    <div class="label">bed</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 2221</div>
+    <div><span>Uncertainty</span> 0.0177</div>
+    <div><span>Centroid</span> -0.686, 0.317, 0.538</div>
+    <div><span>3D extent</span> 0.142, 0.089, 0.202</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">bed 0.0606, door 0.0553, curtain 0.0550, cabinet 0.0536, ceiling 0.0530</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>bed</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_088_01_frame_000009_sam_007.jpg" alt="frame_000009_sam_007"><div>frame_000009_sam_007</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000009_sam_007
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_089</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 1700</div>
+    <div><span>Uncertainty</span> 0.1665</div>
+    <div><span>Centroid</span> -0.975, 1.132, 0.111</div>
+    <div><span>3D extent</span> 0.627, 0.605, 0.389</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0595, door 0.0501, bed 0.0494, curtain 0.0492, counter 0.0482</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_089_01_frame_000009_sam_015.jpg" alt="frame_000009_sam_015"><div>frame_000009_sam_015</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000009_sam_015
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_090</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 1217</div>
+    <div><span>Uncertainty</span> 0.0101</div>
+    <div><span>Centroid</span> -1.105, 0.628, 0.165</div>
+    <div><span>3D extent</span> 0.053, 0.071, 0.097</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0688, bed 0.0623, counter 0.0590, door 0.0574, ceiling 0.0520</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_090_01_frame_000009_sam_011.jpg" alt="frame_000009_sam_011"><div>frame_000009_sam_011</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000009_sam_011
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_091</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 1018</div>
+    <div><span>Uncertainty</span> 0.0096</div>
+    <div><span>Centroid</span> -0.811, 0.599, 0.216</div>
+    <div><span>3D extent</span> 0.072, 0.046, 0.073</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0670, bed 0.0656, sofa 0.0618, curtain 0.0617, ceiling 0.0603</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_091_01_frame_000009_sam_018.jpg" alt="frame_000009_sam_018"><div>frame_000009_sam_018</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000009_sam_018
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_092</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 615</div>
+    <div><span>Uncertainty</span> 0.0053</div>
+    <div><span>Centroid</span> -0.683, 0.474, 0.169</div>
+    <div><span>3D extent</span> 0.041, 0.034, 0.020</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0697, curtain 0.0611, cabinet 0.0611, bed 0.0594, ceiling 0.0564</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_092_01_frame_000009_sam_017.jpg" alt="frame_000009_sam_017"><div>frame_000009_sam_017</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000009_sam_017
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_093</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 583</div>
+    <div><span>Uncertainty</span> 0.0078</div>
+    <div><span>Centroid</span> -0.972, 0.436, 0.390</div>
+    <div><span>3D extent</span> 0.091, 0.058, 0.099</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0457, curtain 0.0449, door 0.0420, counter 0.0419, bed 0.0406</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_093_01_frame_000009_sam_009.jpg" alt="frame_000009_sam_009"><div>frame_000009_sam_009</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000009_sam_009
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_094</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 513</div>
+    <div><span>Uncertainty</span> 0.0069</div>
+    <div><span>Centroid</span> -0.964, 0.675, 0.088</div>
+    <div><span>3D extent</span> 0.047, 0.037, 0.046</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0571, counter 0.0565, curtain 0.0498, door 0.0497, ceiling 0.0455</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_094_01_frame_000009_sam_014.jpg" alt="frame_000009_sam_014"><div>frame_000009_sam_014</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000009_sam_014
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_095</div>
+    <div class="label">door</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 391</div>
+    <div><span>Uncertainty</span> 0.0103</div>
+    <div><span>Centroid</span> -0.679, 0.318, 0.543</div>
+    <div><span>3D extent</span> 0.055, 0.060, 0.057</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">door 0.0494, curtain 0.0492, counter 0.0484, sofa 0.0472, floor 0.0468</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>door</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_095_01_frame_000009_sam_006.jpg" alt="frame_000009_sam_006"><div>frame_000009_sam_006</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000009_sam_006
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_096</div>
+    <div class="label">bed</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.1729</div>
+    <div><span>Centroid</span> -0.699, 1.049, 0.391</div>
+    <div><span>3D extent</span> 1.280, 0.851, 0.839</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">bed 0.0544, door 0.0511, cabinet 0.0506, floor 0.0472, counter 0.0388</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>bed</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_096_01_frame_000010_sam_031.jpg" alt="frame_000010_sam_031"><div>frame_000010_sam_031</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000010_sam_031
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_097</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0267</div>
+    <div><span>Centroid</span> -0.503, 0.506, 0.273</div>
+    <div><span>3D extent</span> 0.226, 0.119, 0.169</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.1036, cabinet 0.0816, door 0.0789, ceiling 0.0777, sofa 0.0642</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_097_01_frame_000010_sam_005.jpg" alt="frame_000010_sam_005"><div>frame_000010_sam_005</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000010_sam_005
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_098</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0251</div>
+    <div><span>Centroid</span> -0.954, 0.656, 0.113</div>
+    <div><span>3D extent</span> 0.238, 0.133, 0.154</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0916, box 0.0750, door 0.0719, plant 0.0702, cabinet 0.0683</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_098_01_frame_000010_sam_021.jpg" alt="frame_000010_sam_021"><div>frame_000010_sam_021</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000010_sam_021
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_099</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0183</div>
+    <div><span>Centroid</span> -0.671, 0.492, 0.181</div>
+    <div><span>3D extent</span> 0.194, 0.268, 0.207</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0978, bed 0.0900, sofa 0.0849, counter 0.0793, door 0.0777</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_099_01_frame_000010_sam_009.jpg" alt="frame_000010_sam_009"><div>frame_000010_sam_009</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000010_sam_009
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_100</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0256</div>
+    <div><span>Centroid</span> -0.522, 0.378, 0.413</div>
+    <div><span>3D extent</span> 0.151, 0.196, 0.225</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0954, ceiling 0.0748, door 0.0680, curtain 0.0648, cabinet 0.0601</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_100_01_frame_000010_sam_006.jpg" alt="frame_000010_sam_006"><div>frame_000010_sam_006</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000010_sam_006
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_101</div>
+    <div class="label">sofa</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0149</div>
+    <div><span>Centroid</span> -0.674, 0.479, 0.175</div>
+    <div><span>3D extent</span> 0.113, 0.157, 0.128</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">sofa 0.0821, floor 0.0728, ceiling 0.0711, counter 0.0580, door 0.0556</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>sofa</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_101_01_frame_000010_sam_028.jpg" alt="frame_000010_sam_028"><div>frame_000010_sam_028</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000010_sam_028
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_102</div>
+    <div class="label">curtain</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0154</div>
+    <div><span>Centroid</span> -0.641, 0.703, 0.005</div>
+    <div><span>3D extent</span> 0.129, 0.081, 0.063</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">curtain 0.0682, floor 0.0655, counter 0.0633, door 0.0624, bed 0.0600</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>curtain</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_102_01_frame_000010_sam_001.jpg" alt="frame_000010_sam_001"><div>frame_000010_sam_001</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000010_sam_001
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_103</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0149</div>
+    <div><span>Centroid</span> -0.600, 0.668, 0.089</div>
+    <div><span>3D extent</span> 0.164, 0.061, 0.094</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0983, door 0.0826, cabinet 0.0796, ceiling 0.0765, counter 0.0685</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_103_01_frame_000010_sam_029.jpg" alt="frame_000010_sam_029"><div>frame_000010_sam_029</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000010_sam_029
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_104</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 4096</div>
+    <div><span>Uncertainty</span> 0.0211</div>
+    <div><span>Centroid</span> -1.161, 0.616, 0.174</div>
+    <div><span>3D extent</span> 0.203, 0.142, 0.196</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0791, bed 0.0746, sofa 0.0697, curtain 0.0655, ceiling 0.0621</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_104_01_frame_000010_sam_011.jpg" alt="frame_000010_sam_011"><div>frame_000010_sam_011</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000010_sam_011
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_105</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 3672</div>
+    <div><span>Uncertainty</span> 0.0181</div>
+    <div><span>Centroid</span> -1.017, 0.642, 0.134</div>
+    <div><span>3D extent</span> 0.166, 0.101, 0.128</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0787, door 0.0763, bottle 0.0629, bed 0.0601, wall 0.0581</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_105_01_frame_000010_sam_030.jpg" alt="frame_000010_sam_030"><div>frame_000010_sam_030</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000010_sam_030
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_106</div>
+    <div class="label">bed</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 3521</div>
+    <div><span>Uncertainty</span> 0.0145</div>
+    <div><span>Centroid</span> -0.771, 0.528, 0.212</div>
+    <div><span>3D extent</span> 0.094, 0.102, 0.058</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">bed 0.0628, sofa 0.0569, counter 0.0539, curtain 0.0532, pillow 0.0524</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>bed</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_106_01_frame_000010_sam_007.jpg" alt="frame_000010_sam_007"><div>frame_000010_sam_007</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000010_sam_007
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_107</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 3191</div>
+    <div><span>Uncertainty</span> 0.0194</div>
+    <div><span>Centroid</span> -1.181, 0.599, 0.185</div>
+    <div><span>3D extent</span> 0.187, 0.097, 0.156</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0676, sofa 0.0619, bed 0.0609, counter 0.0590, ceiling 0.0492</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_107_01_frame_000010_sam_023.jpg" alt="frame_000010_sam_023"><div>frame_000010_sam_023</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000010_sam_023
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_108</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 3024</div>
+    <div><span>Uncertainty</span> 0.0133</div>
+    <div><span>Centroid</span> -0.734, 0.648, 0.119</div>
+    <div><span>3D extent</span> 0.113, 0.067, 0.098</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0420, counter 0.0398, bed 0.0393, door 0.0369, ceiling 0.0361</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_108_01_frame_000010_sam_026.jpg" alt="frame_000010_sam_026"><div>frame_000010_sam_026</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000010_sam_026
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_109</div>
+    <div class="label">floor</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 2036</div>
+    <div><span>Uncertainty</span> 0.0095</div>
+    <div><span>Centroid</span> -0.655, 0.639, 0.137</div>
+    <div><span>3D extent</span> 0.072, 0.046, 0.061</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">floor 0.0827, curtain 0.0819, ceiling 0.0792, counter 0.0738, sofa 0.0736</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>floor</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_109_01_frame_000010_sam_025.jpg" alt="frame_000010_sam_025"><div>frame_000010_sam_025</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000010_sam_025
+  </details>
+</article>
+
+<article class="node">
+  <div class="node-head">
+    <div class="node-id">object_110</div>
+    <div class="label">curtain</div>
+  </div>
+  <div class="meta">
+    <div><span>Views</span> 1</div>
+    <div><span>Points</span> 2017</div>
+    <div><span>Uncertainty</span> 0.0086</div>
+    <div><span>Centroid</span> -0.719, 0.655, 0.104</div>
+    <div><span>3D extent</span> 0.078, 0.051, 0.068</div>
+    <div><span>Sources</span> 1</div>
+  </div>
+  <div class="scores">curtain 0.0454, floor 0.0446, sofa 0.0442, counter 0.0386, ceiling 0.0368</div>
+  <div class="review">
+    <div><span>review_label</span></div>
+    <div><span>keep</span></div>
+    <div><span>predicted_label</span>curtain</div>
+  </div>
+  <div class="thumbs">
+    <div class="thumb"><img src="thumbnails/object_110_01_frame_000010_sam_015.jpg" alt="frame_000010_sam_015"><div>frame_000010_sam_015</div></div>
+  </div>
+  <details>
+    <summary>proposal ids</summary>
+    frame_000010_sam_015
+  </details>
+</article>
+
+    </section>
+    
+<h2>Relation Triplets</h2>
+<table>
+  <thead>
+    <tr><th>Subject</th><th>Relation</th><th>Object</th><th>Count</th><th>Keep</th></tr>
+  </thead>
+  <tbody><tr><td>bed</td><td>above</td><td>bed</td><td>7</td><td></td></tr><tr><td>bed</td><td>above</td><td>cabinet</td><td>2</td><td></td></tr><tr><td>bed</td><td>above</td><td>counter</td><td>7</td><td></td></tr><tr><td>bed</td><td>above</td><td>curtain</td><td>11</td><td></td></tr><tr><td>bed</td><td>above</td><td>door</td><td>7</td><td></td></tr><tr><td>bed</td><td>above</td><td>floor</td><td>80</td><td></td></tr><tr><td>bed</td><td>above</td><td>sofa</td><td>4</td><td></td></tr><tr><td>bed</td><td>behind</td><td>curtain</td><td>1</td><td></td></tr><tr><td>bed</td><td>behind</td><td>floor</td><td>5</td><td></td></tr><tr><td>bed</td><td>below</td><td>bed</td><td>7</td><td></td></tr><tr><td>bed</td><td>below</td><td>curtain</td><td>7</td><td></td></tr><tr><td>bed</td><td>below</td><td>door</td><td>6</td><td></td></tr><tr><td>bed</td><td>below</td><td>floor</td><td>32</td><td></td></tr><tr><td>bed</td><td>below</td><td>sofa</td><td>1</td><td></td></tr><tr><td>bed</td><td>in_front_of</td><td>cabinet</td><td>2</td><td></td></tr><tr><td>bed</td><td>in_front_of</td><td>counter</td><td>1</td><td></td></tr><tr><td>bed</td><td>in_front_of</td><td>door</td><td>1</td><td></td></tr><tr><td>bed</td><td>in_front_of</td><td>floor</td><td>5</td><td></td></tr><tr><td>bed</td><td>left_of</td><td>curtain</td><td>1</td><td></td></tr><tr><td>bed</td><td>left_of</td><td>floor</td><td>4</td><td></td></tr><tr><td>bed</td><td>near</td><td>cabinet</td><td>2</td><td></td></tr><tr><td>bed</td><td>near</td><td>counter</td><td>5</td><td></td></tr><tr><td>bed</td><td>near</td><td>curtain</td><td>8</td><td></td></tr><tr><td>bed</td><td>near</td><td>door</td><td>8</td><td></td></tr><tr><td>bed</td><td>near</td><td>floor</td><td>44</td><td></td></tr><tr><td>bed</td><td>near</td><td>sofa</td><td>1</td><td></td></tr><tr><td>bed</td><td>right_of</td><td>curtain</td><td>1</td><td></td></tr><tr><td>bed</td><td>right_of</td><td>floor</td><td>10</td><td></td></tr><tr><td>cabinet</td><td>above</td><td>counter</td><td>3</td><td></td></tr><tr><td>cabinet</td><td>above</td><td>curtain</td><td>2</td><td></td></tr><tr><td>cabinet</td><td>above</td><td>door</td><td>1</td><td></td></tr><tr><td>cabinet</td><td>above</td><td>floor</td><td>5</td><td></td></tr><tr><td>cabinet</td><td>above</td><td>sofa</td><td>1</td><td></td></tr><tr><td>cabinet</td><td>behind</td><td>bed</td><td>2</td><td></td></tr><tr><td>cabinet</td><td>behind</td><td>counter</td><td>1</td><td></td></tr><tr><td>cabinet</td><td>behind</td><td>curtain</td><td>1</td><td></td></tr><tr><td>cabinet</td><td>behind</td><td>floor</td><td>6</td><td></td></tr><tr><td>cabinet</td><td>below</td><td>bed</td><td>2</td><td></td></tr><tr><td>cabinet</td><td>below</td><td>curtain</td><td>1</td><td></td></tr><tr><td>cabinet</td><td>below</td><td>door</td><td>1</td><td></td></tr><tr><td>cabinet</td><td>below</td><td>floor</td><td>4</td><td></td></tr><tr><td>cabinet</td><td>left_of</td><td>floor</td><td>1</td><td></td></tr><tr><td>cabinet</td><td>near</td><td>bed</td><td>2</td><td></td></tr><tr><td>cabinet</td><td>near</td><td>cabinet</td><td>2</td><td></td></tr><tr><td>cabinet</td><td>near</td><td>curtain</td><td>1</td><td></td></tr><tr><td>cabinet</td><td>near</td><td>door</td><td>4</td><td></td></tr><tr><td>cabinet</td><td>near</td><td>floor</td><td>10</td><td></td></tr><tr><td>cabinet</td><td>near</td><td>sofa</td><td>1</td><td></td></tr><tr><td>cabinet</td><td>right_of</td><td>counter</td><td>1</td><td></td></tr><tr><td>cabinet</td><td>right_of</td><td>curtain</td><td>1</td><td></td></tr><tr><td>cabinet</td><td>right_of</td><td>floor</td><td>1</td><td></td></tr><tr><td>counter</td><td>above</td><td>counter</td><td>2</td><td></td></tr><tr><td>counter</td><td>above</td><td>curtain</td><td>6</td><td></td></tr><tr><td>counter</td><td>above</td><td>door</td><td>2</td><td></td></tr><tr><td>counter</td><td>above</td><td>floor</td><td>18</td><td></td></tr><tr><td>counter</td><td>behind</td><td>bed</td><td>1</td><td></td></tr><tr><td>counter</td><td>behind</td><td>floor</td><td>2</td><td></td></tr><tr><td>counter</td><td>below</td><td>bed</td><td>7</td><td></td></tr><tr><td>counter</td><td>below</td><td>cabinet</td><td>3</td><td></td></tr><tr><td>counter</td><td>below</td><td>counter</td><td>2</td><td></td></tr><tr><td>counter</td><td>below</td><td>curtain</td><td>6</td><td></td></tr><tr><td>counter</td><td>below</td><td>door</td><td>10</td><td></td></tr><tr><td>counter</td><td>below</td><td>floor</td><td>33</td><td></td></tr><tr><td>counter</td><td>below</td><td>sofa</td><td>2</td><td></td></tr><tr><td>counter</td><td>in_front_of</td><td>cabinet</td><td>1</td><td></td></tr><tr><td>counter</td><td>in_front_of</td><td>floor</td><td>2</td><td></td></tr><tr><td>counter</td><td>left_of</td><td>cabinet</td><td>1</td><td></td></tr><tr><td>counter</td><td>left_of</td><td>door</td><td>1</td><td></td></tr><tr><td>counter</td><td>left_of</td><td>floor</td><td>6</td><td></td></tr><tr><td>counter</td><td>near</td><td>bed</td><td>5</td><td></td></tr><tr><td>counter</td><td>near</td><td>counter</td><td>2</td><td></td></tr><tr><td>counter</td><td>near</td><td>curtain</td><td>5</td><td></td></tr><tr><td>counter</td><td>near</td><td>door</td><td>4</td><td></td></tr><tr><td>counter</td><td>near</td><td>floor</td><td>46</td><td></td></tr><tr><td>counter</td><td>near</td><td>sofa</td><td>3</td><td></td></tr><tr><td>counter</td><td>right_of</td><td>curtain</td><td>1</td><td></td></tr><tr><td>counter</td><td>right_of</td><td>floor</td><td>4</td><td></td></tr><tr><td>curtain</td><td>above</td><td>bed</td><td>7</td><td></td></tr><tr><td>curtain</td><td>above</td><td>cabinet</td><td>1</td><td></td></tr><tr><td>curtain</td><td>above</td><td>counter</td><td>6</td><td></td></tr></tbody>
+</table>
+
+  </main>
+</body>
+</html>

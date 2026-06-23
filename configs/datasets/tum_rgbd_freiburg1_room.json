@@ -1,0 +1,43 @@
+{
+  "name": "tum_rgbd_sparse_view_subset",
+  "version": "0.1",
+  "root": ".",
+  "sparse_view_counts": [
+    3,
+    5,
+    8,
+    10
+  ],
+  "metadata": {
+    "stage": "paper_experiments",
+    "dataset_root": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark",
+    "dataset_label": "TUM_RGBD",
+    "images_subdir": "images",
+    "view_stride": 1
+  },
+  "scenes": [
+    {
+      "scene_id": "tum_rgbd_freiburg1_room",
+      "split": "val",
+      "scene_dir": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "source_scene_dir": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,1237 @@
+{
+  "name": "tum_rgbd_freiburg1_desk2_pseudo_reference_annotations",
+  "version": "0.1",
+  "source_scene_graph": "results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk2/views_10/scene_graph_labeled.json",
+  "notes": "Prediction-derived pseudo reference. Edit object counts and relation counts after manual review before treating this as ground truth.",
+  "scenes": [
+    {
+      "scene_id": "tum_rgbd_freiburg1_desk2",
+      "objects": [
+        {
+          "label": "bed",
+          "count": 9
+        },
+        {
+          "label": "cabinet",
+          "count": 4
+        },
+        {
+          "label": "counter",
+          "count": 6
+        },
+        {
+          "label": "curtain",
+          "count": 14
+        },
+        {
+          "label": "door",
+          "count": 8
+        },
+        {
+          "label": "floor",
+          "count": 67
+        },
+        {
+          "label": "sofa",
+          "count": 2
+        }
+      ],
+      "relations": [
+        {
+          "subject_label": "bed",
+          "relation": "above",
+          "object_label": "bed",
+          "count": 7
+        },
+        {
+          "subject_label": "bed",
+          "relation": "above",
+          "object_label": "cabinet",
+          "count": 2
+        },
+        {
+          "subject_label": "bed",
+          "relation": "above",
+          "object_label": "counter",
+          "count": 7
+        },
+        {
+          "subject_label": "bed",
+          "relation": "above",
+          "object_label": "curtain",
+          "count": 11
+        },
+        {
+          "subject_label": "bed",
+          "relation": "above",
+          "object_label": "door",
+          "count": 7
+        },
+        {
+          "subject_label": "bed",
+          "relation": "above",
+          "object_label": "floor",
+          "count": 80
+        },
+        {
+          "subject_label": "bed",
+          "relation": "above",
+          "object_label": "sofa",
+          "count": 4
+        },
+        {
+          "subject_label": "bed",
+          "relation": "behind",
+          "object_label": "curtain",
+          "count": 1
+        },
+        {
+          "subject_label": "bed",
+          "relation": "behind",
+          "object_label": "floor",
+          "count": 5
+        },
+        {
+          "subject_label": "bed",
+          "relation": "below",
+          "object_label": "bed",
+          "count": 7
+        },
+        {
+          "subject_label": "bed",
+          "relation": "below",
+          "object_label": "curtain",
+          "count": 7
+        },
+        {
+          "subject_label": "bed",
+          "relation": "below",
+          "object_label": "door",
+          "count": 6
+        },
+        {
+          "subject_label": "bed",
+          "relation": "below",
+          "object_label": "floor",
+          "count": 32
+        },
+        {
+          "subject_label": "bed",
+          "relation": "below",
+          "object_label": "sofa",
+          "count": 1
+        },
+        {
+          "subject_label": "bed",
+          "relation": "in_front_of",
+          "object_label": "cabinet",
+          "count": 2
+        },
+        {
+          "subject_label": "bed",
+          "relation": "in_front_of",
+          "object_label": "counter",
+          "count": 1
+        },
+        {
+          "subject_label": "bed",
+          "relation": "in_front_of",
+          "object_label": "door",
+          "count": 1
+        },
+        {
+          "subject_label": "bed",
+          "relation": "in_front_of",
+          "object_label": "floor",
+          "count": 5
+        },
+        {
+          "subject_label": "bed",
+          "relation": "left_of",
+          "object_label": "curtain",
+          "count": 1
+        },
+        {
+          "subject_label": "bed",
+          "relation": "left_of",
+          "object_label": "floor",
+          "count": 4
+        },
+        {
+          "subject_label": "bed",
+          "relation": "near",
+          "object_label": "cabinet",
+          "count": 2
+        },
+        {
+          "subject_label": "bed",
+          "relation": "near",
+          "object_label": "counter",
+          "count": 5
+        },
+        {
+          "subject_label": "bed",
+          "relation": "near",
+          "object_label": "curtain",
+          "count": 8
+        },
+        {
+          "subject_label": "bed",
+          "relation": "near",
+          "object_label": "door",
+          "count": 8
+        },
+        {
+          "subject_label": "bed",
+          "relation": "near",
+          "object_label": "floor",
+          "count": 44
+        },
+        {
+          "subject_label": "bed",
+          "relation": "near",
+          "object_label": "sofa",
+          "count": 1
+        },
+        {
+          "subject_label": "bed",
+          "relation": "right_of",
+          "object_label": "curtain",
+          "count": 1
+        },
+        {
+          "subject_label": "bed",
+          "relation": "right_of",
+          "object_label": "floor",
+          "count": 10
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "above",
+          "object_label": "counter",
+          "count": 3
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "above",
+          "object_label": "curtain",
+          "count": 2
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "above",
+          "object_label": "door",
+          "count": 1
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "above",
+          "object_label": "floor",
+          "count": 5
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "above",
+          "object_label": "sofa",
+          "count": 1
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "behind",
+          "object_label": "bed",
+          "count": 2
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "behind",
+          "object_label": "counter",
+          "count": 1
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "behind",
+          "object_label": "curtain",
+          "count": 1
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "behind",
+          "object_label": "floor",
+          "count": 6
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "below",
+          "object_label": "bed",
+          "count": 2
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "below",
+          "object_label": "curtain",
+          "count": 1
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "below",
+          "object_label": "door",
+          "count": 1
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "below",
+          "object_label": "floor",
+          "count": 4
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "left_of",
+          "object_label": "floor",
+          "count": 1
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "near",
+          "object_label": "bed",
+          "count": 2
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "near",
+          "object_label": "cabinet",
+          "count": 2
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "near",
+          "object_label": "curtain",
+          "count": 1
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "near",
+          "object_label": "door",
+          "count": 4
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "near",
+          "object_label": "floor",
+          "count": 10
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "near",
+          "object_label": "sofa",
+          "count": 1
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "right_of",
+          "object_label": "counter",
+          "count": 1
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "right_of",
+          "object_label": "curtain",
+          "count": 1
+        },
+        {
+          "subject_label": "cabinet",
+          "relation": "right_of",
+          "object_label": "floor",
+          "count": 1
+        },
+        {
+          "subject_label": "counter",
+          "relation": "above",
+          "object_label": "counter",
+          "count": 2
+        },
+        {
+          "subject_label": "counter",
+          "relation": "above",
+          "object_label": "curtain",
+          "count": 6
+        },
+        {
+          "subject_label": "counter",
+          "relation": "above",
+          "object_label": "door",
+          "count": 2
+        },
+        {
+          "subject_label": "counter",
+          "relation": "above",
+          "object_label": "floor",
+          "count": 18
+        },
+        {
+          "subject_label": "counter",
+          "relation": "behind",
+          "object_label": "bed",
+          "count": 1
+        },
+        {
+          "subject_label": "counter",
+          "relation": "behind",
+          "object_label": "floor",
+          "count": 2
+        },
+        {
+          "subject_label": "counter",
+          "relation": "below",
+          "object_label": "bed",
+          "count": 7
+        },
+        {
+          "subject_label": "counter",
+          "relation": "below",
+          "object_label": "cabinet",
+          "count": 3
+        },
+        {
+          "subject_label": "counter",
+          "relation": "below",
+          "object_label": "counter",
+          "count": 2
+        },
+        {
+          "subject_label": "counter",
+          "relation": "below",
+          "object_label": "curtain",
+          "count": 6
+        },
+        {
+          "subject_label": "counter",
+          "relation": "below",
+          "object_label": "door",
+          "count": 10
+        },
+        {
+          "subject_label": "counter",
+          "relation": "below",
+          "object_label": "floor",
+          "count": 33
+        },
+        {
+          "subject_label": "counter",
+          "relation": "below",
+          "object_label": "sofa",
+          "count": 2
+        },
+        {
+          "subject_label": "counter",
+          "relation": "in_front_of",
+          "object_label": "cabinet",
+          "count": 1
+        },
+        {
+          "subject_label": "counter",
+          "relation": "in_front_of",
+          "object_label": "floor",
+          "count": 2
+        },
+        {
+          "subject_label": "counter",
+          "relation": "left_of",
+          "object_label": "cabinet",
+          "count": 1
+        },
+        {
+          "subject_label": "counter",
+          "relation": "left_of",
+          "object_label": "door",
+          "count": 1
+        },
+        {
+          "subject_label": "counter",
+          "relation": "left_of",
+          "object_label": "floor",
+          "count": 6
+        },
+        {
+          "subject_label": "counter",
+          "relation": "near",
+          "object_label": "bed",
+          "count": 5
+        },
+        {
+          "subject_label": "counter",
+          "relation": "near",
+          "object_label": "counter",
+          "count": 2
+        },
+        {
+          "subject_label": "counter",
+          "relation": "near",
+          "object_label": "curtain",
+          "count": 5
+        },
+        {
+          "subject_label": "counter",
+          "relation": "near",
+          "object_label": "door",
+          "count": 4
+        },
+        {
+          "subject_label": "counter",
+          "relation": "near",
+          "object_label": "floor",
+          "count": 46
+        },
+        {
+          "subject_label": "counter",
+          "relation": "near",
+          "object_label": "sofa",
+          "count": 3
+        },
+        {
+          "subject_label": "counter",
+          "relation": "right_of",
+          "object_label": "curtain",
+          "count": 1
+        },
+        {
+          "subject_label": "counter",
+          "relation": "right_of",
+          "object_label": "floor",
+          "count": 4
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "above",
+          "object_label": "bed",
+          "count": 7
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "above",
+          "object_label": "cabinet",
+          "count": 1
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "above",
+          "object_label": "counter",
+          "count": 6
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "above",
+          "object_label": "curtain",
+          "count": 7
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "above",
+          "object_label": "door",
+          "count": 6
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "above",
+          "object_label": "floor",
+          "count": 75
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "above",
+          "object_label": "sofa",
+          "count": 4
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "behind",
+          "object_label": "curtain",
+          "count": 1
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "behind",
+          "object_label": "floor",
+          "count": 7
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "below",
+          "object_label": "bed",
+          "count": 11
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "below",
+          "object_label": "cabinet",
+          "count": 2
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "below",
+          "object_label": "counter",
+          "count": 6
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "below",
+          "object_label": "curtain",
+          "count": 7
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "below",
+          "object_label": "door",
+          "count": 12
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "below",
+          "object_label": "floor",
+          "count": 72
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "in_front_of",
+          "object_label": "bed",
+          "count": 1
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "in_front_of",
+          "object_label": "cabinet",
+          "count": 1
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "in_front_of",
+          "object_label": "curtain",
+          "count": 1
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "in_front_of",
+          "object_label": "door",
+          "count": 1
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "in_front_of",
+          "object_label": "floor",
+          "count": 2
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "left_of",
+          "object_label": "bed",
+          "count": 1
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "left_of",
+          "object_label": "cabinet",
+          "count": 1
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "left_of",
+          "object_label": "counter",
+          "count": 1
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "left_of",
+          "object_label": "floor",
+          "count": 8
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "near",
+          "object_label": "bed",
+          "count": 8
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "near",
+          "object_label": "cabinet",
+          "count": 1
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "near",
+          "object_label": "counter",
+          "count": 5
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "near",
+          "object_label": "curtain",
+          "count": 20
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "near",
+          "object_label": "door",
+          "count": 13
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "near",
+          "object_label": "floor",
+          "count": 93
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "near",
+          "object_label": "sofa",
+          "count": 4
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "right_of",
+          "object_label": "bed",
+          "count": 1
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "right_of",
+          "object_label": "door",
+          "count": 2
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "right_of",
+          "object_label": "floor",
+          "count": 8
+        },
+        {
+          "subject_label": "door",
+          "relation": "above",
+          "object_label": "bed",
+          "count": 6
+        },
+        {
+          "subject_label": "door",
+          "relation": "above",
+          "object_label": "cabinet",
+          "count": 1
+        },
+        {
+          "subject_label": "door",
+          "relation": "above",
+          "object_label": "counter",
+          "count": 10
+        },
+        {
+          "subject_label": "door",
+          "relation": "above",
+          "object_label": "curtain",
+          "count": 12
+        },
+        {
+          "subject_label": "door",
+          "relation": "above",
+          "object_label": "door",
+          "count": 6
+        },
+        {
+          "subject_label": "door",
+          "relation": "above",
+          "object_label": "floor",
+          "count": 84
+        },
+        {
+          "subject_label": "door",
+          "relation": "above",
+          "object_label": "sofa",
+          "count": 5
+        },
+        {
+          "subject_label": "door",
+          "relation": "behind",
+          "object_label": "bed",
+          "count": 1
+        },
+        {
+          "subject_label": "door",
+          "relation": "behind",
+          "object_label": "curtain",
+          "count": 1
+        },
+        {
+          "subject_label": "door",
+          "relation": "behind",
+          "object_label": "floor",
+          "count": 16
+        },
+        {
+          "subject_label": "door",
+          "relation": "below",
+          "object_label": "bed",
+          "count": 7
+        },
+        {
+          "subject_label": "door",
+          "relation": "below",
+          "object_label": "cabinet",
+          "count": 1
+        },
+        {
+          "subject_label": "door",
+          "relation": "below",
+          "object_label": "counter",
+          "count": 2
+        },
+        {
+          "subject_label": "door",
+          "relation": "below",
+          "object_label": "curtain",
+          "count": 6
+        },
+        {
+          "subject_label": "door",
+          "relation": "below",
+          "object_label": "door",
+          "count": 6
+        },
+        {
+          "subject_label": "door",
+          "relation": "below",
+          "object_label": "floor",
+          "count": 42
+        },
+        {
+          "subject_label": "door",
+          "relation": "left_of",
+          "object_label": "curtain",
+          "count": 2
+        },
+        {
+          "subject_label": "door",
+          "relation": "left_of",
+          "object_label": "floor",
+          "count": 3
+        },
+        {
+          "subject_label": "door",
+          "relation": "near",
+          "object_label": "bed",
+          "count": 8
+        },
+        {
+          "subject_label": "door",
+          "relation": "near",
+          "object_label": "cabinet",
+          "count": 4
+        },
+        {
+          "subject_label": "door",
+          "relation": "near",
+          "object_label": "counter",
+          "count": 4
+        },
+        {
+          "subject_label": "door",
+          "relation": "near",
+          "object_label": "curtain",
+          "count": 13
+        },
+        {
+          "subject_label": "door",
+          "relation": "near",
+          "object_label": "door",
+          "count": 10
+        },
+        {
+          "subject_label": "door",
+          "relation": "near",
+          "object_label": "floor",
+          "count": 51
+        },
+        {
+          "subject_label": "door",
+          "relation": "near",
+          "object_label": "sofa",
+          "count": 2
+        },
+        {
+          "subject_label": "door",
+          "relation": "right_of",
+          "object_label": "counter",
+          "count": 1
+        },
+        {
+          "subject_label": "door",
+          "relation": "right_of",
+          "object_label": "floor",
+          "count": 4
+        },
+        {
+          "subject_label": "floor",
+          "relation": "above",
+          "object_label": "bed",
+          "count": 32
+        },
+        {
+          "subject_label": "floor",
+          "relation": "above",
+          "object_label": "cabinet",
+          "count": 4
+        },
+        {
+          "subject_label": "floor",
+          "relation": "above",
+          "object_label": "counter",
+          "count": 33
+        },
+        {
+          "subject_label": "floor",
+          "relation": "above",
+          "object_label": "curtain",
+          "count": 72
+        },
+        {
+          "subject_label": "floor",
+          "relation": "above",
+          "object_label": "door",
+          "count": 42
+        },
+        {
+          "subject_label": "floor",
+          "relation": "above",
+          "object_label": "floor",
+          "count": 389
+        },
+        {
+          "subject_label": "floor",
+          "relation": "above",
+          "object_label": "sofa",
+          "count": 17
+        },
+        {
+          "subject_label": "floor",
+          "relation": "behind",
+          "object_label": "bed",
+          "count": 5
+        },
+        {
+          "subject_label": "floor",
+          "relation": "behind",
+          "object_label": "counter",
+          "count": 2
+        },
+        {
+          "subject_label": "floor",
+          "relation": "behind",
+          "object_label": "curtain",
+          "count": 2
+        },
+        {
+          "subject_label": "floor",
+          "relation": "behind",
+          "object_label": "floor",
+          "count": 30
+        },
+        {
+          "subject_label": "floor",
+          "relation": "below",
+          "object_label": "bed",
+          "count": 80
+        },
+        {
+          "subject_label": "floor",
+          "relation": "below",
+          "object_label": "cabinet",
+          "count": 5
+        },
+        {
+          "subject_label": "floor",
+          "relation": "below",
+          "object_label": "counter",
+          "count": 18
+        },
+        {
+          "subject_label": "floor",
+          "relation": "below",
+          "object_label": "curtain",
+          "count": 75
+        },
+        {
+          "subject_label": "floor",
+          "relation": "below",
+          "object_label": "door",
+          "count": 84
+        },
+        {
+          "subject_label": "floor",
+          "relation": "below",
+          "object_label": "floor",
+          "count": 389
+        },
+        {
+          "subject_label": "floor",
+          "relation": "below",
+          "object_label": "sofa",
+          "count": 5
+        },
+        {
+          "subject_label": "floor",
+          "relation": "in_front_of",
+          "object_label": "bed",
+          "count": 5
+        },
+        {
+          "subject_label": "floor",
+          "relation": "in_front_of",
+          "object_label": "cabinet",
+          "count": 6
+        },
+        {
+          "subject_label": "floor",
+          "relation": "in_front_of",
+          "object_label": "counter",
+          "count": 2
+        },
+        {
+          "subject_label": "floor",
+          "relation": "in_front_of",
+          "object_label": "curtain",
+          "count": 7
+        },
+        {
+          "subject_label": "floor",
+          "relation": "in_front_of",
+          "object_label": "door",
+          "count": 16
+        },
+        {
+          "subject_label": "floor",
+          "relation": "in_front_of",
+          "object_label": "floor",
+          "count": 30
+        },
+        {
+          "subject_label": "floor",
+          "relation": "in_front_of",
+          "object_label": "sofa",
+          "count": 4
+        },
+        {
+          "subject_label": "floor",
+          "relation": "left_of",
+          "object_label": "bed",
+          "count": 10
+        },
+        {
+          "subject_label": "floor",
+          "relation": "left_of",
+          "object_label": "cabinet",
+          "count": 1
+        },
+        {
+          "subject_label": "floor",
+          "relation": "left_of",
+          "object_label": "counter",
+          "count": 4
+        },
+        {
+          "subject_label": "floor",
+          "relation": "left_of",
+          "object_label": "curtain",
+          "count": 8
+        },
+        {
+          "subject_label": "floor",
+          "relation": "left_of",
+          "object_label": "door",
+          "count": 4
+        },
+        {
+          "subject_label": "floor",
+          "relation": "left_of",
+          "object_label": "floor",
+          "count": 85
+        },
+        {
+          "subject_label": "floor",
+          "relation": "left_of",
+          "object_label": "sofa",
+          "count": 6
+        },
+        {
+          "subject_label": "floor",
+          "relation": "near",
+          "object_label": "bed",
+          "count": 44
+        },
+        {
+          "subject_label": "floor",
+          "relation": "near",
+          "object_label": "cabinet",
+          "count": 10
+        },
+        {
+          "subject_label": "floor",
+          "relation": "near",
+          "object_label": "counter",
+          "count": 46
+        },
+        {
+          "subject_label": "floor",
+          "relation": "near",
+          "object_label": "curtain",
+          "count": 93
+        },
+        {
+          "subject_label": "floor",
+          "relation": "near",
+          "object_label": "door",
+          "count": 51
+        },
+        {
+          "subject_label": "floor",
+          "relation": "near",
+          "object_label": "floor",
+          "count": 444
+        },
+        {
+          "subject_label": "floor",
+          "relation": "near",
+          "object_label": "sofa",
+          "count": 17
+        },
+        {
+          "subject_label": "floor",
+          "relation": "right_of",
+          "object_label": "bed",
+          "count": 4
+        },
+        {
+          "subject_label": "floor",
+          "relation": "right_of",
+          "object_label": "cabinet",
+          "count": 1
+        },
+        {
+          "subject_label": "floor",
+          "relation": "right_of",
+          "object_label": "counter",
+          "count": 6
+        },
+        {
+          "subject_label": "floor",
+          "relation": "right_of",
+          "object_label": "curtain",
+          "count": 8
+        },
+        {
+          "subject_label": "floor",
+          "relation": "right_of",
+          "object_label": "door",
+          "count": 3
+        },
+        {
+          "subject_label": "floor",
+          "relation": "right_of",
+          "object_label": "floor",
+          "count": 85
+        },
+        {
+          "subject_label": "sofa",
+          "relation": "above",
+          "object_label": "bed",
+          "count": 1
+        },
+        {
+          "subject_label": "sofa",
+          "relation": "above",
+          "object_label": "counter",
+          "count": 2
+        },
+        {
+          "subject_label": "sofa",
+          "relation": "above",
+          "object_label": "floor",
+          "count": 5
+        },
+        {
+          "subject_label": "sofa",
+          "relation": "behind",
+          "object_label": "floor",
+          "count": 4
+        },
+        {
+          "subject_label": "sofa",
+          "relation": "below",
+          "object_label": "bed",
+          "count": 4
+        },
+        {
+          "subject_label": "sofa",
+          "relation": "below",
+          "object_label": "cabinet",
+          "count": 1
+        },
+        {
+          "subject_label": "sofa",
+          "relation": "below",
+          "object_label": "curtain",
+          "count": 4
+        },
+        {
+          "subject_label": "sofa",
+          "relation": "below",
+          "object_label": "door",
+          "count": 5
+        },
+        {
+          "subject_label": "sofa",
+          "relation": "below",
+          "object_label": "floor",
+          "count": 17
+        },
+        {
+          "subject_label": "sofa",
+          "relation": "near",
+          "object_label": "bed",
+          "count": 1
+        },
+        {
+          "subject_label": "sofa",
+          "relation": "near",
+          "object_label": "cabinet",
+          "count": 1
+        },
+        {
+          "subject_label": "sofa",
+          "relation": "near",
+          "object_label": "counter",
+          "count": 3
+        },
+        {
+          "subject_label": "sofa",
+          "relation": "near",
+          "object_label": "curtain",
+          "count": 4
+        },
+        {
+          "subject_label": "sofa",
+          "relation": "near",
+          "object_label": "door",
+          "count": 2
+        },
+        {
+          "subject_label": "sofa",
+          "relation": "near",
+          "object_label": "floor",
+          "count": 17
+        },
+        {
+          "subject_label": "sofa",
+          "relation": "right_of",
+          "object_label": "floor",
+          "count": 6
+        }
+      ]
+    }
+  ]
+}

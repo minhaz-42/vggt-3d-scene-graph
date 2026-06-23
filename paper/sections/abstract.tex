@@ -1,0 +1,21 @@
+We present a sparse-view pipeline for constructing language-grounded 3D scene graphs
+from casually captured RGB images. Feed-forward geometry models can now predict
+cameras, depth, and world-point maps without per-scene optimization, while 2D
+foundation models provide class-agnostic masks and open-vocabulary descriptors.
+However, these outputs remain view-local: they do not directly identify persistent
+objects, expose uncertain geometric evidence, or produce relation-bearing scene
+structure. Our method bridges this gap by lifting SAM proposals into VGGT world-point
+maps, attaching CLIP and DINOv2 descriptors, scoring lifted candidates with confidence
+and compactness uncertainty, fusing cross-view candidates into object nodes, and
+exporting open-vocabulary labels and spatial relations. The graph representation keeps
+symbolic predictions together with source views, proposal support, 3D point samples,
+and uncertainty values, making the output inspectable and reviewable. We evaluate the
+pipeline on a five-sequence TUM RGB-D sparse-view benchmark with 20 runs across 3, 5,
+8, and 10 input views. Averaged over scenes, moving from 3 to 10 views increases lifted
+proposals from 54.0 to 173.6, fused objects from 31.8 to 72.2, multi-view objects from
+11.8 to 28.2, and inferred relations from 585.2 to 2104.0. Against checked references
+initialized from the 10-view graphs, non-reference object-label F1 improves from 0.622
+to 0.914 and relation-triplet F1 from 0.434 to 0.799 between 3 and 8 views. These
+reference-consistency scores measure sparse-view recovery rather than dense-scene
+recognition accuracy, establishing a reproducible graph construction baseline and a
+concrete path from predicted graphs to object-relation review.

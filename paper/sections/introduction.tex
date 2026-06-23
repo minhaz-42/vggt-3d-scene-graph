@@ -1,0 +1,57 @@
+\section{Introduction}
+
+Reconstructing a scene and explaining a scene are related but different goals. Modern
+geometry pipelines can recover camera motion, depth, points, surfaces, or radiance
+fields, yet downstream applications often require object-level statements: which
+pixels across views depict the same object, where that object is in 3D, and how it is
+spatially related to other objects. A robot or mixed-reality system, for example,
+benefits more from a statement such as ``the monitor is on the desk'' than from an
+unlabeled collection of points. This need is especially acute when the input is small:
+a few casual RGB views rather than a calibrated RGB-D stream, dense video, or already
+optimized map.
+
+Classical structure-from-motion and SLAM systems remain powerful when overlap,
+calibration, and optimization time are available~\cite{schonberger2016sfm,campos2021orbslam3}.
+Recent feed-forward geometry models have changed the starting point by predicting
+camera parameters, depth, and point maps directly from one or more
+images~\cite{wang2024dust3r,leroy2024mast3r,wang2025vggt}. At the same time, 2D
+foundation models provide strong class-agnostic masks, language-aligned embeddings,
+and robust self-supervised descriptors through SAM, CLIP, and
+DINOv2~\cite{kirillov2023segment,radford2021clip,oquab2023dinov2}. These components
+make sparse-view semantic 3D reasoning plausible, but they do not by themselves define
+an object-level graph. Masks are local to individual images, repeated instances may
+have similar descriptors, and feed-forward geometry is least reliable near occlusions,
+thin structures, textureless regions, and large viewpoint changes.
+
+The key observation in this work is that sparse-view scene graph construction can be
+posed as evidence-preserving fusion over lifted 2D proposals. Rather than optimizing a
+new scene representation, we use VGGT world-point maps as a 2D-to-3D lookup table,
+lift SAM masks into candidate 3D object fragments, attach CLIP and DINOv2 descriptors,
+and merge compatible candidates across views. Each fused node retains its source
+proposals, view support, point samples, feature descriptor, open-vocabulary label, and
+uncertainty. Spatial predicates are then inferred over the fused object set. This
+design keeps the expensive perception models frozen while making the graph reasoning
+stage explicit, auditable, and easy to ablate.
+
+The resulting setting differs from open-vocabulary 3D graph systems that assume posed
+RGB-D video, a dense point cloud, or a prebuilt map~\cite{gu2024conceptgraphs}. Our
+target is a lower-input regime: sparse RGB views processed by feed-forward geometry.
+We evaluate the system on five public TUM RGB-D sequences under 3/5/8/10-view
+protocols, report structural graph statistics for all 20 runs, and evaluate
+sparse-view recovery against checked references initialized from each 10-view graph.
+The references are not a substitute for independently authored dense ground truth, but
+they provide a reproducible measurement path for object labels and relation triplets.
+
+Our contributions are:
+\begin{itemize}
+    \item a sparse-RGB 3D scene graph pipeline that combines VGGT geometry, SAM
+    proposals, and CLIP+DINOv2 proposal descriptors without per-scene optimization;
+    \item an uncertainty-aware lifting representation that stores confidence,
+    compactness, view support, source proposals, and point evidence for each object
+    candidate;
+    \item a cross-view object fusion and spatial-relation inference procedure that
+    produces open-vocabulary object-relation graphs; and
+    \item a five-sequence TUM RGB-D sparse-view protocol with generated tables,
+    qualitative figures, annotation packets, and checked reference-consistency
+    metrics~\cite{sturm2012tumrgbd}.
+\end{itemize}

@@ -1,0 +1,243 @@
+{
+  "dataset": "configs/datasets/tum_rgbd_freiburg1_room.json",
+  "dataset_name": "tum_rgbd_sparse_view_subset",
+  "dataset_version": "0.1",
+  "stages": [
+    "clip",
+    "dinov2",
+    "figure",
+    "geometry",
+    "graph",
+    "labels",
+    "proposals"
+  ],
+  "num_runs": 4,
+  "runs": [
+    {
+      "scene_id": "tum_rgbd_freiburg1_room",
+      "split": "val",
+      "view_count": 3,
+      "selected_images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png"
+      ],
+      "run_dir": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03",
+      "geometry_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/vggt_geometry.npz",
+      "proposals_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/sam_clip_dinov2_features.json",
+      "scene_graph_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/scene_graph.json",
+      "labeled_scene_graph_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/scene_graph_labeled.json",
+      "figure_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/scene_graph.png",
+      "commands": [
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/run_vggt_geometry.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --image-name frame_000001.png --image-name frame_000002.png --image-name frame_000003.png --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/vggt_geometry.npz --device cpu",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/vggt_geometry.npz",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/run_sam_proposals.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --image-name frame_000001.png --image-name frame_000002.png --image-name frame_000003.png --checkpoint models/sam_vit_b_01ec64.pth --model-type vit_b --max-image-side 1024 --points-per-side 12 --max-proposals-per-image 20 --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/sam_proposals.json",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/sam_proposals.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/extract_proposal_features.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --proposals results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/sam_proposals.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/sam_clip_features.json --backend clip --model-name openai/clip-vit-base-patch32 --device cpu",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/sam_clip_features.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/extract_proposal_features.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --proposals results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/sam_clip_features.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/sam_clip_dinov2_features.json --backend dinov2 --model-name facebook/dinov2-base --device cpu",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/sam_clip_dinov2_features.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/run_pipeline.py --scene-id tum_rgbd_freiburg1_room --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --geometry results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/vggt_geometry.npz --proposals results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/sam_clip_dinov2_features.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/scene_graph.json",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/scene_graph.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/assign_open_vocab_labels.py --scene-graph results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/scene_graph.json --proposals results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/sam_clip_dinov2_features.json --labels configs/label_vocab/indoor_open_vocab.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/scene_graph_labeled.json --model-name openai/clip-vit-base-patch32 --device cpu --local-files-only",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/scene_graph_labeled.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/visualize_scene_graph.py results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/scene_graph_labeled.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/scene_graph.png",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/scene_graph.png",
+          "status": "skipped_existing"
+        }
+      ]
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg1_room",
+      "split": "val",
+      "view_count": 5,
+      "selected_images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png"
+      ],
+      "run_dir": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05",
+      "geometry_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/vggt_geometry.npz",
+      "proposals_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/sam_clip_dinov2_features.json",
+      "scene_graph_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/scene_graph.json",
+      "labeled_scene_graph_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/scene_graph_labeled.json",
+      "figure_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/scene_graph.png",
+      "commands": [
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/run_vggt_geometry.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --image-name frame_000001.png --image-name frame_000002.png --image-name frame_000003.png --image-name frame_000004.png --image-name frame_000005.png --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/vggt_geometry.npz --device cpu",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/vggt_geometry.npz",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/run_sam_proposals.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --image-name frame_000001.png --image-name frame_000002.png --image-name frame_000003.png --image-name frame_000004.png --image-name frame_000005.png --checkpoint models/sam_vit_b_01ec64.pth --model-type vit_b --max-image-side 1024 --points-per-side 12 --max-proposals-per-image 20 --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/sam_proposals.json",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/sam_proposals.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/extract_proposal_features.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --proposals results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/sam_proposals.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/sam_clip_features.json --backend clip --model-name openai/clip-vit-base-patch32 --device cpu",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/sam_clip_features.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/extract_proposal_features.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --proposals results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/sam_clip_features.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/sam_clip_dinov2_features.json --backend dinov2 --model-name facebook/dinov2-base --device cpu",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/sam_clip_dinov2_features.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/run_pipeline.py --scene-id tum_rgbd_freiburg1_room --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --geometry results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/vggt_geometry.npz --proposals results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/sam_clip_dinov2_features.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/scene_graph.json",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/scene_graph.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/assign_open_vocab_labels.py --scene-graph results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/scene_graph.json --proposals results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/sam_clip_dinov2_features.json --labels configs/label_vocab/indoor_open_vocab.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/scene_graph_labeled.json --model-name openai/clip-vit-base-patch32 --device cpu --local-files-only",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/scene_graph_labeled.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/visualize_scene_graph.py results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/scene_graph_labeled.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/scene_graph.png",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/scene_graph.png",
+          "status": "skipped_existing"
+        }
+      ]
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg1_room",
+      "split": "val",
+      "view_count": 8,
+      "selected_images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png"
+      ],
+      "run_dir": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08",
+      "geometry_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/vggt_geometry.npz",
+      "proposals_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/sam_clip_dinov2_features.json",
+      "scene_graph_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/scene_graph.json",
+      "labeled_scene_graph_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/scene_graph_labeled.json",
+      "figure_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/scene_graph.png",
+      "commands": [
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/run_vggt_geometry.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --image-name frame_000001.png --image-name frame_000002.png --image-name frame_000003.png --image-name frame_000004.png --image-name frame_000005.png --image-name frame_000006.png --image-name frame_000007.png --image-name frame_000008.png --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/vggt_geometry.npz --device cpu",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/vggt_geometry.npz",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/run_sam_proposals.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --image-name frame_000001.png --image-name frame_000002.png --image-name frame_000003.png --image-name frame_000004.png --image-name frame_000005.png --image-name frame_000006.png --image-name frame_000007.png --image-name frame_000008.png --checkpoint models/sam_vit_b_01ec64.pth --model-type vit_b --max-image-side 1024 --points-per-side 12 --max-proposals-per-image 20 --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/sam_proposals.json",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/sam_proposals.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/extract_proposal_features.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --proposals results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/sam_proposals.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/sam_clip_features.json --backend clip --model-name openai/clip-vit-base-patch32 --device cpu",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/sam_clip_features.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/extract_proposal_features.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --proposals results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/sam_clip_features.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/sam_clip_dinov2_features.json --backend dinov2 --model-name facebook/dinov2-base --device cpu",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/sam_clip_dinov2_features.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/run_pipeline.py --scene-id tum_rgbd_freiburg1_room --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --geometry results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/vggt_geometry.npz --proposals results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/sam_clip_dinov2_features.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/scene_graph.json",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/scene_graph.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/assign_open_vocab_labels.py --scene-graph results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/scene_graph.json --proposals results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/sam_clip_dinov2_features.json --labels configs/label_vocab/indoor_open_vocab.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/scene_graph_labeled.json --model-name openai/clip-vit-base-patch32 --device cpu --local-files-only",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/scene_graph_labeled.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/visualize_scene_graph.py results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/scene_graph_labeled.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/scene_graph.png",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/scene_graph.png",
+          "status": "skipped_existing"
+        }
+      ]
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg1_room",
+      "split": "val",
+      "view_count": 10,
+      "selected_images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "run_dir": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10",
+      "geometry_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/vggt_geometry.npz",
+      "proposals_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/sam_clip_dinov2_features.json",
+      "scene_graph_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/scene_graph.json",
+      "labeled_scene_graph_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/scene_graph_labeled.json",
+      "figure_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/scene_graph.png",
+      "commands": [
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/run_vggt_geometry.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --image-name frame_000001.png --image-name frame_000002.png --image-name frame_000003.png --image-name frame_000004.png --image-name frame_000005.png --image-name frame_000006.png --image-name frame_000007.png --image-name frame_000008.png --image-name frame_000009.png --image-name frame_000010.png --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/vggt_geometry.npz --device cpu",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/vggt_geometry.npz",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/run_sam_proposals.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --image-name frame_000001.png --image-name frame_000002.png --image-name frame_000003.png --image-name frame_000004.png --image-name frame_000005.png --image-name frame_000006.png --image-name frame_000007.png --image-name frame_000008.png --image-name frame_000009.png --image-name frame_000010.png --checkpoint models/sam_vit_b_01ec64.pth --model-type vit_b --max-image-side 1024 --points-per-side 12 --max-proposals-per-image 20 --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/sam_proposals.json",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/sam_proposals.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/extract_proposal_features.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --proposals results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/sam_proposals.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/sam_clip_features.json --backend clip --model-name openai/clip-vit-base-patch32 --device cpu",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/sam_clip_features.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/extract_proposal_features.py --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --proposals results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/sam_clip_features.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/sam_clip_dinov2_features.json --backend dinov2 --model-name facebook/dinov2-base --device cpu",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/sam_clip_dinov2_features.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/run_pipeline.py --scene-id tum_rgbd_freiburg1_room --scene-dir /Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images --geometry results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/vggt_geometry.npz --proposals results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/sam_clip_dinov2_features.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/scene_graph.json",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/scene_graph.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/assign_open_vocab_labels.py --scene-graph results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/scene_graph.json --proposals results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/sam_clip_dinov2_features.json --labels configs/label_vocab/indoor_open_vocab.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/scene_graph_labeled.json --model-name openai/clip-vit-base-patch32 --device cpu --local-files-only",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/scene_graph_labeled.json",
+          "status": "skipped_existing"
+        },
+        {
+          "command": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/.venv/bin/python scripts/visualize_scene_graph.py results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/scene_graph_labeled.json --output results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/scene_graph.png",
+          "output_path": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/scene_graph.png",
+          "status": "skipped_existing"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+path,scene_id,num_nodes,num_relations,num_candidate_nodes,multi_view_nodes,multi_view_ratio,mean_uncertainty,relation_density,proposal_feature_backends,object_label_precision,object_label_recall,object_label_f1,relation_triplet_precision,relation_triplet_recall,relation_triplet_f1
+results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_03/scene_graph_labeled.json,tum_rgbd_freiburg1_room,27,466,58,18,0.666667,0.014525,0.663818,"clip,dinov2",1.0,0.84375,0.915254,0.935622,0.685535,0.791289
+results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_05/scene_graph_labeled.json,tum_rgbd_freiburg1_room,32,628,98,24,0.75,0.014585,0.633065,"clip,dinov2",0.96875,0.96875,0.96875,0.882166,0.871069,0.876582
+results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_08/scene_graph_labeled.json,tum_rgbd_freiburg1_room,30,580,158,26,0.866667,0.011999,0.666667,"clip,dinov2",1.0,0.9375,0.967742,0.937931,0.855346,0.894737
+results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/scene_graph_labeled.json,tum_rgbd_freiburg1_room,32,636,198,28,0.875,0.011513,0.641129,"clip,dinov2",1.0,1.0,1.0,1.0,1.0,1.0

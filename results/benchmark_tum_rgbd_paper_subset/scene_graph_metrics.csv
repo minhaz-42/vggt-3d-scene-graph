@@ -1,0 +1,2 @@
+path,scene_id,num_nodes,num_relations,num_candidate_nodes,multi_view_nodes,multi_view_ratio,mean_uncertainty,relation_density,proposal_feature_backends
+results/benchmark_tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/views_03/scene_graph_labeled.json,tum_rgbd_freiburg1_desk,33,602,56,13,0.393939,0.032715,0.570076,"clip,dinov2"

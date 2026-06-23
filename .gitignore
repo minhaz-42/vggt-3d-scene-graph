@@ -1,0 +1,24 @@
+# Python env / caches
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Large model checkpoints (re-downloaded in setup; see docs/colab_run.md)
+models/
+
+# Raw benchmark images (re-downloaded deterministically via scripts/download_tum_rgbd_subset.py)
+data/
+
+# Regenerable heavy result binaries (geometry point maps, feature dumps)
+*.npz
+*.npy
+results/example_scene/
+results/benchmark_dryrun/
+results/**/sam_proposals.json
+results/**/sam_clip_features.json
+results/**/sam_clip_dinov2_features.json
+
+# Keep lightweight result artifacts under version control:
+#   scene_graph(_labeled).json, scene_graph.png, *.csv, benchmark_index.json,
+#   sparse_view_splits.json, annotation packets.

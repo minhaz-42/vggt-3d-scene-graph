@@ -1,0 +1,148 @@
+{
+  "name": "tum_rgbd_paper_subset",
+  "version": "0.1",
+  "root": ".",
+  "sparse_view_counts": [
+    3,
+    5,
+    8,
+    10
+  ],
+  "metadata": {
+    "stage": "paper_experiments",
+    "dataset": "TUM_RGBD",
+    "source_repo": "voviktyl/TUM_RGBD-SLAM",
+    "dataset_root": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset",
+    "sample_mode": "stride",
+    "start_index": 0,
+    "frame_stride": 10,
+    "num_frames_per_scene": 10
+  },
+  "scenes": [
+    {
+      "scene_id": "tum_rgbd_freiburg1_room",
+      "split": "val",
+      "scene_dir": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg1_room/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg1_room",
+        "source_repo": "voviktyl/TUM_RGBD-SLAM",
+        "source_scene_dir": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg1_room",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg1_desk",
+      "split": "val",
+      "scene_dir": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg1_desk",
+        "source_repo": "voviktyl/TUM_RGBD-SLAM",
+        "source_scene_dir": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg1_desk2",
+      "split": "val",
+      "scene_dir": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk2/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg1_desk2",
+        "source_repo": "voviktyl/TUM_RGBD-SLAM",
+        "source_scene_dir": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg1_desk2",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg2_xyz",
+      "split": "val",
+      "scene_dir": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg2_xyz/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg2_xyz",
+        "source_repo": "voviktyl/TUM_RGBD-SLAM",
+        "source_scene_dir": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg2_xyz",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg3_long_office_household",
+      "split": "val",
+      "scene_dir": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg3_long_office_household/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg3_long_office_household",
+        "source_repo": "voviktyl/TUM_RGBD-SLAM",
+        "source_scene_dir": "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg3_long_office_household",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    }
+  ]
+}

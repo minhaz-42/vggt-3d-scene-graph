@@ -1,0 +1,92 @@
+\section{Results}
+\label{sec:results}
+
+\subsection{TUM RGB-D Validation}
+
+Table~\ref{tab:tum_rgbd_sparse_view} summarizes the 3/5/8/10-view validation run on
+\texttt{freiburg1\_room}. The run exercises the complete path from RGB frames to VGGT
+geometry, SAM proposals, CLIP+DINOv2 descriptors, object fusion, open-vocabulary
+labels, and spatial relations. As the view count increases, lifted proposals increase
+from 58 to 198, multi-view object support increases from 18 to 28 nodes, and mean
+uncertainty decreases from 0.014525 to 0.011513. This establishes the expected
+single-scene behavior before moving to the five-sequence benchmark.
+
+\input{tables/tum_rgbd_sparse_view}
+
+\subsection{Component Ablation}
+
+Table~\ref{tab:local_ablation} compares local variants on the development scene. With
+the number of lifted candidates fixed, moving from geometry-only OpenCV proposals to
+feature-aware fusion lowers mean uncertainty and increases multi-view support. Replacing
+OpenCV proposals with SAM masks produces more fused objects and relations, and adding
+DINOv2 to CLIP yields the richest graph among the tested variants. This ablation is
+local rather than a full benchmark, but it supports the design choice of combining
+class-agnostic mask proposals with complementary language-aligned and self-supervised
+features.
+
+\input{tables/local_ablation}
+
+\subsection{Benchmark Results}
+
+Table~\ref{tab:tum_rgbd_paper_subset_by_view} reports the five-sequence sparse-view
+benchmark. It contains 20 runs: five scenes evaluated at 3, 5, 8, and 10 input views
+with the same VGGT, SAM, CLIP+DINOv2, labeling, fusion, and relation inference code.
+Averaged over scenes, increasing the view count from 3 to 10 raises lifted object
+candidates from 54.0 to 173.6, fused object nodes from 31.8 to 72.2, multi-view object
+nodes from 11.8 to 28.2, and inferred spatial relations from 585.2 to 2104.0. The
+growth in multi-view nodes is important: additional views do not merely add isolated
+proposals, but increase the number of objects supported by evidence from multiple
+images. The structural counts measure graph coverage; label and relation consistency
+are evaluated separately below.
+
+\input{tables/tum_rgbd_paper_subset_by_view}
+
+Table~\ref{tab:tum_rgbd_paper_subset_results} gives the per-scene breakdown. The full
+run outputs are stored under
+\texttt{results/benchmark\_tum\_rgbd\_paper\_subset/}; aggregate statistics are exported
+to \texttt{sparse\_view\_scene\_graph\_summary.csv} and proxy metrics to
+\texttt{sparse\_view\_scene\_graph\_metrics.csv}. Checked reference-consistency
+metrics are exported to \texttt{sparse\_view\_checked\_metrics.csv}.
+
+\input{tables/tum_rgbd_paper_subset_results}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/tum_rgbd_paper_subset_qualitative}
+\caption{Qualitative examples from the TUM RGB-D benchmark subset. Each row shows one
+input RGB frame and the corresponding 10-view fused 3D scene graph visualization. Node
+colors encode uncertainty and edge overlays show inferred near relations.}
+\label{fig:tum_rgbd_paper_subset_qualitative}
+\end{figure}
+
+Figure~\ref{fig:tum_rgbd_paper_subset_qualitative} shows representative qualitative
+outputs from the benchmark. The examples show sparse RGB observations converted into
+fused 3D object nodes, uncertainty-colored graph visualizations, and relation overlays.
+They also illustrate why uncertainty is retained in the exported graph: sparse-view
+nodes and edges can remain ambiguous even when the overall graph is coherent, and the
+uncertainty field provides a practical signal for review.
+
+\subsection{Checked Reference-Consistency Metrics}
+
+For the five-scene benchmark, each 10-view graph is converted into a
+prediction-seeded annotation draft and checked through the review CSV/JSON path. We
+compare the 3/5/8-view outputs against those checked reference sets and include the
+10-view row as a reference construction check.
+Table~\ref{tab:tum_rgbd_paper_subset_checked_by_view} summarizes the five-scene
+average. Object-label F1 improves from 0.622 at 3 views to 0.751 at 5 views and 0.914
+at 8 views. Labeled relation-triplet F1 improves from 0.434 to 0.561 and 0.799 over
+the same view counts. Precision is high even at 3 views, while recall rises
+substantially with more views; the main sparse-view failure mode is therefore missing
+objects and relation triplets rather than producing many inconsistent labels.
+
+\input{tables/tum_rgbd_paper_subset_checked_by_view}
+
+Table~\ref{tab:tum_rgbd_paper_subset_checked_results} gives the per-scene consistency
+scores. The hardest case is \texttt{freiburg1\_desk2}, where relation-triplet F1 is
+0.206 at 3 views and 0.616 at 8 views, reflecting the difficulty of recovering a dense
+relation set from sparse inputs. The strongest 8-view relation score is on
+\texttt{freiburg1\_room} at 0.929, which is also the scene used during development.
+This spread shows that the aggregate trend is not caused by one sequence while keeping
+the failure modes visible.
+
+\input{tables/tum_rgbd_paper_subset_checked_results}

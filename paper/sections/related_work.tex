@@ -1,0 +1,52 @@
+\section{Related Work}
+\label{sec:related_work}
+
+\paragraph{Feed-forward sparse-view geometry.}
+Multi-view reconstruction and SLAM classically rely on correspondence, triangulation,
+bundle adjustment, and calibrated or densely overlapping observations. COLMAP remains a
+standard reference for incremental structure from motion~\cite{schonberger2016sfm},
+while ORB-SLAM3 demonstrates the strength of optimized visual and visual-inertial SLAM
+for coherent streams~\cite{campos2021orbslam3}. Feed-forward 3D models reduce this
+dependence on per-scene optimization. DUSt3R casts reconstruction as point-map
+prediction from unconstrained images~\cite{wang2024dust3r}; MASt3R adds 3D-aware dense
+matching~\cite{leroy2024mast3r}; and VGGT predicts camera parameters, depth, point
+maps, confidence, and tracks from one or many views~\cite{wang2025vggt}. These models
+provide the geometric substrate for our work. We use VGGT as a frozen source of
+pixel-aligned 3D evidence, but our output is not a reconstruction: it is an
+object-relation graph grounded in that geometry.
+
+\paragraph{Open-vocabulary 2D and 3D semantics.}
+Our 2D proposal and feature stack builds on SAM for class-agnostic masks,
+CLIP for language-aligned visual embeddings, and DINOv2 for robust self-supervised
+appearance descriptors~\cite{kirillov2023segment,radford2021clip,oquab2023dinov2}.
+In 3D, open-vocabulary scene understanding has been explored by lifting, distilling,
+or optimizing foundation-model features into point clouds, maps, masks, and neural
+scene representations. NeRF introduced continuous radiance fields for view
+synthesis~\cite{mildenhall2020nerf}; LERF embeds language features into radiance
+fields for open-ended 3D queries~\cite{kerr2023lerf}; and 3D Gaussian Splatting has
+become a common explicit substrate for fast scene representations~\cite{kerbl2023gaussian}.
+OpenScene learns open-vocabulary point features aligned with image and text
+embeddings~\cite{peng2023openscene}; ConceptFusion builds queryable 3D maps by fusing
+pixel-aligned open-set features~\cite{jatavallabhula2023conceptfusion}; OpenMask3D
+aggregates CLIP features over class-agnostic 3D instance masks~\cite{takmaz2023openmask3d};
+CUA-O3D studies cross-modal and uncertainty-aware agglomeration for open-vocabulary
+3D scene understanding~\cite{li2025cuao3d}; and OpenSplat3D performs open-vocabulary
+3D instance segmentation in a Gaussian Splatting representation~\cite{piekenbrinck2025opensplat3d}.
+These methods motivate foundation-feature fusion in 3D. Our contribution is
+complementary: we construct explicit object-relation graphs from sparse RGB views
+without assuming a completed 3D map or optimizing a per-scene radiance field.
+
+\paragraph{3D scene graphs.}
+3D scene graphs organize object instances and their relationships as structured
+representations for reasoning about scenes. Early work proposed unified graphs spanning
+objects, spaces, cameras, and semantic or spatial relationships~\cite{armeni2019scenegraph}.
+3DSSG introduced a large-scale dataset and learned prediction framework for semantic
+scene graphs from 3D indoor reconstructions~\cite{wald2020threedssg}. RGB-D resources
+such as ScanNet further show the value of richly annotated reconstructed scenes for
+indoor understanding~\cite{dai2017scannet}. ConceptGraphs is closest to our output
+space: it builds open-vocabulary 3D scene graphs from posed RGB-D sequences by fusing
+2D foundation-model outputs into object nodes and relations~\cite{gu2024conceptgraphs}.
+We share the object-relation motivation, but relax the input assumption. Instead of
+requiring a depth stream, posed RGB-D map, or completed 3D reconstruction, we lift
+sparse-view 2D proposals through feed-forward VGGT point maps and build object
+identities through cross-view geometric and semantic fusion.

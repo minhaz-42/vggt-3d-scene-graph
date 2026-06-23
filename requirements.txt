@@ -1,0 +1,13 @@
+numpy<2
+scipy
+pandas
+scikit-learn
+networkx
+pydantic
+pillow
+opencv-python<4.12
+matplotlib
+tqdm
+torch
+torchvision
+huggingface_hub

@@ -1,0 +1,28 @@
+{
+  "name": "scene_graph_annotation_template",
+  "version": "0.1",
+  "notes": "Use this format for benchmark ground truth, VLM pseudo-labels, or manual spot-check labels.",
+  "scenes": [
+    {
+      "scene_id": "replace_with_scene_id",
+      "objects": [
+        {
+          "label": "chair",
+          "count": 2
+        },
+        {
+          "label": "table",
+          "count": 1
+        }
+      ],
+      "relations": [
+        {
+          "subject_label": "chair",
+          "relation": "near",
+          "object_label": "table",
+          "count": 2
+        }
+      ]
+    }
+  ]
+}

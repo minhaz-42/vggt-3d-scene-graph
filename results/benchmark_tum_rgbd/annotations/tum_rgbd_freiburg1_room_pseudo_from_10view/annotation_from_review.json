@@ -1,0 +1,438 @@
+{
+  "name": "tum_rgbd_freiburg1_room_review_draft_or_partial",
+  "version": "0.1",
+  "source_scene_graph": "results/benchmark_tum_rgbd/tum_rgbd_freiburg1_room/views_10/scene_graph_labeled.json",
+  "notes": "Built from reviewed CSV sheets. If generated without --require-reviewed, blank review fields fall back to predicted labels and predicted relation counts.",
+  "scenes": [
+    {
+      "scene_id": "tum_rgbd_freiburg1_room",
+      "objects": [
+        {
+          "label": "bed",
+          "count": 3
+        },
+        {
+          "label": "counter",
+          "count": 3
+        },
+        {
+          "label": "curtain",
+          "count": 4
+        },
+        {
+          "label": "floor",
+          "count": 22
+        }
+      ],
+      "relations": [
+        {
+          "subject_label": "bed",
+          "relation": "above",
+          "object_label": "bed",
+          "count": 2
+        },
+        {
+          "subject_label": "bed",
+          "relation": "above",
+          "object_label": "curtain",
+          "count": 2
+        },
+        {
+          "subject_label": "bed",
+          "relation": "above",
+          "object_label": "floor",
+          "count": 21
+        },
+        {
+          "subject_label": "bed",
+          "relation": "behind",
+          "object_label": "counter",
+          "count": 1
+        },
+        {
+          "subject_label": "bed",
+          "relation": "behind",
+          "object_label": "floor",
+          "count": 1
+        },
+        {
+          "subject_label": "bed",
+          "relation": "below",
+          "object_label": "bed",
+          "count": 2
+        },
+        {
+          "subject_label": "bed",
+          "relation": "below",
+          "object_label": "counter",
+          "count": 1
+        },
+        {
+          "subject_label": "bed",
+          "relation": "below",
+          "object_label": "curtain",
+          "count": 1
+        },
+        {
+          "subject_label": "bed",
+          "relation": "below",
+          "object_label": "floor",
+          "count": 10
+        },
+        {
+          "subject_label": "bed",
+          "relation": "left_of",
+          "object_label": "floor",
+          "count": 5
+        },
+        {
+          "subject_label": "bed",
+          "relation": "near",
+          "object_label": "bed",
+          "count": 2
+        },
+        {
+          "subject_label": "bed",
+          "relation": "near",
+          "object_label": "counter",
+          "count": 2
+        },
+        {
+          "subject_label": "bed",
+          "relation": "near",
+          "object_label": "curtain",
+          "count": 3
+        },
+        {
+          "subject_label": "bed",
+          "relation": "near",
+          "object_label": "floor",
+          "count": 9
+        },
+        {
+          "subject_label": "bed",
+          "relation": "right_of",
+          "object_label": "floor",
+          "count": 2
+        },
+        {
+          "subject_label": "counter",
+          "relation": "above",
+          "object_label": "bed",
+          "count": 1
+        },
+        {
+          "subject_label": "counter",
+          "relation": "above",
+          "object_label": "curtain",
+          "count": 1
+        },
+        {
+          "subject_label": "counter",
+          "relation": "above",
+          "object_label": "floor",
+          "count": 22
+        },
+        {
+          "subject_label": "counter",
+          "relation": "below",
+          "object_label": "floor",
+          "count": 1
+        },
+        {
+          "subject_label": "counter",
+          "relation": "in_front_of",
+          "object_label": "bed",
+          "count": 1
+        },
+        {
+          "subject_label": "counter",
+          "relation": "in_front_of",
+          "object_label": "curtain",
+          "count": 1
+        },
+        {
+          "subject_label": "counter",
+          "relation": "in_front_of",
+          "object_label": "floor",
+          "count": 3
+        },
+        {
+          "subject_label": "counter",
+          "relation": "near",
+          "object_label": "bed",
+          "count": 2
+        },
+        {
+          "subject_label": "counter",
+          "relation": "near",
+          "object_label": "counter",
+          "count": 2
+        },
+        {
+          "subject_label": "counter",
+          "relation": "near",
+          "object_label": "curtain",
+          "count": 4
+        },
+        {
+          "subject_label": "counter",
+          "relation": "near",
+          "object_label": "floor",
+          "count": 6
+        },
+        {
+          "subject_label": "counter",
+          "relation": "right_of",
+          "object_label": "floor",
+          "count": 2
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "above",
+          "object_label": "bed",
+          "count": 1
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "above",
+          "object_label": "curtain",
+          "count": 2
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "above",
+          "object_label": "floor",
+          "count": 15
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "behind",
+          "object_label": "counter",
+          "count": 1
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "behind",
+          "object_label": "floor",
+          "count": 2
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "below",
+          "object_label": "bed",
+          "count": 2
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "below",
+          "object_label": "counter",
+          "count": 1
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "below",
+          "object_label": "curtain",
+          "count": 2
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "below",
+          "object_label": "floor",
+          "count": 16
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "left_of",
+          "object_label": "floor",
+          "count": 3
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "near",
+          "object_label": "bed",
+          "count": 3
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "near",
+          "object_label": "counter",
+          "count": 4
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "near",
+          "object_label": "floor",
+          "count": 14
+        },
+        {
+          "subject_label": "curtain",
+          "relation": "right_of",
+          "object_label": "floor",
+          "count": 1
+        },
+        {
+          "subject_label": "floor",
+          "relation": "above",
+          "object_label": "bed",
+          "count": 10
+        },
+        {
+          "subject_label": "floor",
+          "relation": "above",
+          "object_label": "counter",
+          "count": 1
+        },
+        {
+          "subject_label": "floor",
+          "relation": "above",
+          "object_label": "curtain",
+          "count": 16
+        },
+        {
+          "subject_label": "floor",
+          "relation": "above",
+          "object_label": "floor",
+          "count": 104
+        },
+        {
+          "subject_label": "floor",
+          "relation": "behind",
+          "object_label": "counter",
+          "count": 3
+        },
+        {
+          "subject_label": "floor",
+          "relation": "behind",
+          "object_label": "floor",
+          "count": 3
+        },
+        {
+          "subject_label": "floor",
+          "relation": "below",
+          "object_label": "bed",
+          "count": 21
+        },
+        {
+          "subject_label": "floor",
+          "relation": "below",
+          "object_label": "counter",
+          "count": 22
+        },
+        {
+          "subject_label": "floor",
+          "relation": "below",
+          "object_label": "curtain",
+          "count": 15
+        },
+        {
+          "subject_label": "floor",
+          "relation": "below",
+          "object_label": "floor",
+          "count": 104
+        },
+        {
+          "subject_label": "floor",
+          "relation": "in_front_of",
+          "object_label": "bed",
+          "count": 1
+        },
+        {
+          "subject_label": "floor",
+          "relation": "in_front_of",
+          "object_label": "curtain",
+          "count": 2
+        },
+        {
+          "subject_label": "floor",
+          "relation": "in_front_of",
+          "object_label": "floor",
+          "count": 3
+        },
+        {
+          "subject_label": "floor",
+          "relation": "left_of",
+          "object_label": "bed",
+          "count": 2
+        },
+        {
+          "subject_label": "floor",
+          "relation": "left_of",
+          "object_label": "counter",
+          "count": 2
+        },
+        {
+          "subject_label": "floor",
+          "relation": "left_of",
+          "object_label": "curtain",
+          "count": 1
+        },
+        {
+          "subject_label": "floor",
+          "relation": "left_of",
+          "object_label": "floor",
+          "count": 8
+        },
+        {
+          "subject_label": "floor",
+          "relation": "near",
+          "object_label": "bed",
+          "count": 9
+        },
+        {
+          "subject_label": "floor",
+          "relation": "near",
+          "object_label": "counter",
+          "count": 6
+        },
+        {
+          "subject_label": "floor",
+          "relation": "near",
+          "object_label": "curtain",
+          "count": 14
+        },
+        {
+          "subject_label": "floor",
+          "relation": "near",
+          "object_label": "floor",
+          "count": 96
+        },
+        {
+          "subject_label": "floor",
+          "relation": "right_of",
+          "object_label": "bed",
+          "count": 5
+        },
+        {
+          "subject_label": "floor",
+          "relation": "right_of",
+          "object_label": "curtain",
+          "count": 3
+        },
+        {
+          "subject_label": "floor",
+          "relation": "right_of",
+          "object_label": "floor",
+          "count": 8
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "generated_by": "scripts/build_annotations_from_review.py",
+    "review_state": "review_draft_or_partial",
+    "node_review": "results/benchmark_tum_rgbd/annotations/tum_rgbd_freiburg1_room_pseudo_from_10view/node_review.csv",
+    "relation_review": "results/benchmark_tum_rgbd/annotations/tum_rgbd_freiburg1_room_pseudo_from_10view/relation_review.csv",
+    "node_rows": 32,
+    "kept_node_rows": 32,
+    "dropped_node_rows": 0,
+    "missing_node_review_label": 32,
+    "missing_node_keep": 32,
+    "relation_rows": 65,
+    "kept_relation_rows": 65,
+    "dropped_relation_rows": 0,
+    "missing_relation_review_count": 65,
+    "missing_relation_keep": 65,
+    "relation_count_total": 636
+  }
+}

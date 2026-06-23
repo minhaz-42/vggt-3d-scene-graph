@@ -1,0 +1,117 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand*\HyPL@Entry[1]{}
+\HyPL@Entry{0<</S/D>>}
+\citation{schonberger2016sfm,campos2021orbslam3}
+\citation{wang2024dust3r,leroy2024mast3r,wang2025vggt}
+\citation{kirillov2023segment,radford2021clip,oquab2023dinov2}
+\citation{gu2024conceptgraphs}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}{section.1}\protected@file@percent }
+\citation{sturm2012tumrgbd}
+\citation{schonberger2016sfm}
+\citation{campos2021orbslam3}
+\citation{wang2024dust3r}
+\citation{leroy2024mast3r}
+\citation{wang2025vggt}
+\citation{kirillov2023segment}
+\citation{radford2021clip}
+\citation{oquab2023dinov2}
+\citation{mildenhall2020nerf}
+\citation{kerr2023lerf}
+\citation{kerbl2023gaussian}
+\citation{peng2023openscene}
+\citation{jatavallabhula2023conceptfusion}
+\citation{takmaz2023openmask3d}
+\citation{li2025cuao3d}
+\citation{piekenbrinck2025opensplat3d}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{3}{section.2}\protected@file@percent }
+\newlabel{sec:related_work}{{2}{3}{Related Work}{section.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{Feed-forward sparse-view geometry.}{3}{section*.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Open-vocabulary 2D and 3D semantics.}{3}{section*.2}\protected@file@percent }
+\citation{armeni2019scenegraph}
+\citation{wald2020threedssg}
+\citation{dai2017scannet}
+\citation{gu2024conceptgraphs}
+\@writefile{toc}{\contentsline {paragraph}{3D scene graphs.}{4}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Method}{4}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Problem Setup}{4}{subsection.3.1}\protected@file@percent }
+\citation{wang2025vggt}
+\citation{schonberger2016sfm,mildenhall2020nerf,kerbl2023gaussian}
+\citation{kirillov2023segment}
+\citation{radford2021clip,oquab2023dinov2}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Architecture of the proposed sparse-view 3D scene graph system. The figure shows the actual artifacts passed between stages: sparse RGB frames, patch and camera tokens, frozen VGGT camera/depth/world-point/confidence outputs, SAM masks, CLIP+DINOv2 proposal descriptors, lifted 3D candidate point sets, uncertainty scores, association edges, fused objects, open-vocabulary labels, relation predicates, and the exported scene graph $\mathcal  {G}=(\mathcal  {O},\mathcal  {R})$.}}{5}{figure.1}\protected@file@percent }
+\newlabel{fig:method_pipeline}{{1}{5}{Architecture of the proposed sparse-view 3D scene graph system. The figure shows the actual artifacts passed between stages: sparse RGB frames, patch and camera tokens, frozen VGGT camera/depth/world-point/confidence outputs, SAM masks, CLIP+DINOv2 proposal descriptors, lifted 3D candidate point sets, uncertainty scores, association edges, fused objects, open-vocabulary labels, relation predicates, and the exported scene graph $\mathcal {G}=(\mathcal {O},\mathcal {R})$}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Sparse-View Geometry}{5}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}2D Proposals and Features}{6}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Mask-Aware 3D Lifting}{6}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Graph Fusion}{6}{subsection.3.5}\protected@file@percent }
+\citation{radford2021clip}
+\citation{sturm2012tumrgbd}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces TUM RGB-D paper subset prepared for sparse-view benchmarking. Each sequence contains 10 selected RGB frames and is evaluated with 3, 5, 8, and 10 input views.}}{7}{table.1}\protected@file@percent }
+\newlabel{tab:tum_rgbd_paper_subset_plan}{{1}{7}{TUM RGB-D paper subset prepared for sparse-view benchmarking. Each sequence contains 10 selected RGB frames and is evaluated with 3, 5, 8, and 10 input views}{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Relation Inference and Labeling}{7}{subsection.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Experiments}{7}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Datasets}{7}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Sparse-View Protocol}{7}{subsection.4.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Benchmark and annotation protocol. Panel (a) lays out the full five-scene by four-view-count matrix, with each cell representing one graph output and its object and relation counts; these 20 outputs feed the sparse-view table and view-count metric curve. Panel (b) shows how each 10-view graph becomes a prediction-seeded draft, annotation review packet, checked CSV/JSON files, reviewed label and relation decisions, and final object-label and relation-triplet metrics.}}{8}{figure.2}\protected@file@percent }
+\newlabel{fig:evaluation_protocol}{{2}{8}{Benchmark and annotation protocol. Panel (a) lays out the full five-scene by four-view-count matrix, with each cell representing one graph output and its object and relation counts; these 20 outputs feed the sparse-view table and view-count metric curve. Panel (b) shows how each 10-view graph becomes a prediction-seeded draft, annotation review packet, checked CSV/JSON files, reviewed label and relation decisions, and final object-label and relation-triplet metrics}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Comparison Scope}{8}{subsection.4.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Sparse-view curve on TUM RGB-D \texttt  {freiburg1\_room}.}}{9}{table.2}\protected@file@percent }
+\newlabel{tab:tum_rgbd_sparse_view}{{2}{9}{Sparse-view curve on TUM RGB-D \texttt {freiburg1\_room}}{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Metrics}{9}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Results}{9}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}TUM RGB-D Validation}{9}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Benchmark Results}{9}{subsection.5.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Average sparse-view scene graph statistics over the five-scene TUM RGB-D paper subset.}}{10}{table.3}\protected@file@percent }
+\newlabel{tab:tum_rgbd_paper_subset_by_view}{{3}{10}{Average sparse-view scene graph statistics over the five-scene TUM RGB-D paper subset}{table.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces TUM RGB-D paper-subset sparse-view scene graph results.}}{10}{table.4}\protected@file@percent }
+\newlabel{tab:tum_rgbd_paper_subset_results}{{4}{10}{TUM RGB-D paper-subset sparse-view scene graph results}{table.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Average checked-annotation results over the five-scene TUM RGB-D paper subset.}}{11}{table.5}\protected@file@percent }
+\newlabel{tab:tum_rgbd_paper_subset_checked_by_view}{{5}{11}{Average checked-annotation results over the five-scene TUM RGB-D paper subset}{table.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Paper-Subset Checked Annotation Metrics}{11}{subsection.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Discussion}{11}{section.6}\protected@file@percent }
+\citation{armeni2019scenegraph,wald2020threedssg,gu2024conceptgraphs}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces TUM RGB-D paper-subset results against checked prediction-seeded annotations.}}{12}{table.6}\protected@file@percent }
+\newlabel{tab:tum_rgbd_paper_subset_checked_results}{{6}{12}{TUM RGB-D paper-subset results against checked prediction-seeded annotations}{table.6}{}}
+\bibstyle{elsarticle-num}
+\bibdata{references}
+\bibcite{schonberger2016sfm}{{1}{}{{}}{{}}}
+\bibcite{campos2021orbslam3}{{2}{}{{}}{{}}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{13}{section.7}\protected@file@percent }
+\bibcite{wang2024dust3r}{{3}{}{{}}{{}}}
+\bibcite{leroy2024mast3r}{{4}{}{{}}{{}}}
+\bibcite{wang2025vggt}{{5}{}{{}}{{}}}
+\bibcite{kirillov2023segment}{{6}{}{{}}{{}}}
+\bibcite{radford2021clip}{{7}{}{{}}{{}}}
+\bibcite{oquab2023dinov2}{{8}{}{{}}{{}}}
+\bibcite{gu2024conceptgraphs}{{9}{}{{}}{{}}}
+\bibcite{sturm2012tumrgbd}{{10}{}{{}}{{}}}
+\bibcite{mildenhall2020nerf}{{11}{}{{}}{{}}}
+\bibcite{kerr2023lerf}{{12}{}{{}}{{}}}
+\bibcite{kerbl2023gaussian}{{13}{}{{}}{{}}}
+\bibcite{peng2023openscene}{{14}{}{{}}{{}}}
+\bibcite{jatavallabhula2023conceptfusion}{{15}{}{{}}{{}}}
+\bibcite{takmaz2023openmask3d}{{16}{}{{}}{{}}}
+\bibcite{li2025cuao3d}{{17}{}{{}}{{}}}
+\bibcite{piekenbrinck2025opensplat3d}{{18}{}{{}}{{}}}
+\bibcite{armeni2019scenegraph}{{19}{}{{}}{{}}}
+\bibcite{wald2020threedssg}{{20}{}{{}}{{}}}
+\bibcite{dai2017scannet}{{21}{}{{}}{{}}}
+\providecommand\NAT@force@numbers{}\NAT@force@numbers
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Qualitative examples from the TUM RGB-D paper subset. Each row shows one input RGB frame and the corresponding 10-view fused 3D scene graph visualization. Node colors encode uncertainty and edge overlays show inferred near relations.}}{17}{figure.3}\protected@file@percent }
+\newlabel{fig:tum_rgbd_paper_subset_qualitative}{{3}{17}{Qualitative examples from the TUM RGB-D paper subset. Each row shows one input RGB frame and the corresponding 10-view fused 3D scene graph visualization. Node colors encode uncertainty and edge overlays show inferred near relations}{figure.3}{}}
+\gdef \@abspage@last{17}

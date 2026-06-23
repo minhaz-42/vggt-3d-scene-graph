@@ -1,0 +1,150 @@
+{
+  "packet_index": "results/benchmark_tum_rgbd_paper_subset/annotations/annotation_packet_index.json",
+  "packet_count": 5,
+  "ready_packet_count": 5,
+  "node_rows_total": 361,
+  "node_rows_complete": 361,
+  "relation_rows_total": 716,
+  "relation_rows_complete": 716,
+  "total_rows": 1077,
+  "complete_rows": 1077,
+  "completion_percent": 100.0,
+  "recommended_first_scene": "",
+  "packets": [
+    {
+      "scene_id": "tum_rgbd_freiburg1_room",
+      "packet_dir": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg1_room_pseudo_from_10view",
+      "annotation_review_html": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg1_room_pseudo_from_10view/annotation_review.html",
+      "node_review_csv": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg1_room_pseudo_from_10view/node_review.csv",
+      "relation_review_csv": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg1_room_pseudo_from_10view/relation_review.csv",
+      "annotation_checked_json": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg1_room_pseudo_from_10view/annotation_checked.json",
+      "annotation_checked_exists": true,
+      "nodes": {
+        "total": 80,
+        "complete": 80,
+        "missing_keep": 0,
+        "missing_review_label": 0,
+        "dropped": 0
+      },
+      "relations": {
+        "total": 186,
+        "complete": 186,
+        "missing_keep": 0,
+        "missing_review_count": 0,
+        "dropped": 0
+      },
+      "total_rows": 266,
+      "complete_rows": 266,
+      "completion_percent": 100.0,
+      "ready_for_checked_json": true
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg1_desk",
+      "packet_dir": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg1_desk_pseudo_from_10view",
+      "annotation_review_html": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg1_desk_pseudo_from_10view/annotation_review.html",
+      "node_review_csv": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg1_desk_pseudo_from_10view/node_review.csv",
+      "relation_review_csv": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg1_desk_pseudo_from_10view/relation_review.csv",
+      "annotation_checked_json": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg1_desk_pseudo_from_10view/annotation_checked.json",
+      "annotation_checked_exists": true,
+      "nodes": {
+        "total": 81,
+        "complete": 81,
+        "missing_keep": 0,
+        "missing_review_label": 0,
+        "dropped": 0
+      },
+      "relations": {
+        "total": 127,
+        "complete": 127,
+        "missing_keep": 0,
+        "missing_review_count": 0,
+        "dropped": 0
+      },
+      "total_rows": 208,
+      "complete_rows": 208,
+      "completion_percent": 100.0,
+      "ready_for_checked_json": true
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg1_desk2",
+      "packet_dir": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg1_desk2_pseudo_from_10view",
+      "annotation_review_html": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg1_desk2_pseudo_from_10view/annotation_review.html",
+      "node_review_csv": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg1_desk2_pseudo_from_10view/node_review.csv",
+      "relation_review_csv": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg1_desk2_pseudo_from_10view/relation_review.csv",
+      "annotation_checked_json": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg1_desk2_pseudo_from_10view/annotation_checked.json",
+      "annotation_checked_exists": true,
+      "nodes": {
+        "total": 110,
+        "complete": 110,
+        "missing_keep": 0,
+        "missing_review_label": 0,
+        "dropped": 0
+      },
+      "relations": {
+        "total": 199,
+        "complete": 199,
+        "missing_keep": 0,
+        "missing_review_count": 0,
+        "dropped": 0
+      },
+      "total_rows": 309,
+      "complete_rows": 309,
+      "completion_percent": 100.0,
+      "ready_for_checked_json": true
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg2_xyz",
+      "packet_dir": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg2_xyz_pseudo_from_10view",
+      "annotation_review_html": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg2_xyz_pseudo_from_10view/annotation_review.html",
+      "node_review_csv": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg2_xyz_pseudo_from_10view/node_review.csv",
+      "relation_review_csv": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg2_xyz_pseudo_from_10view/relation_review.csv",
+      "annotation_checked_json": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg2_xyz_pseudo_from_10view/annotation_checked.json",
+      "annotation_checked_exists": true,
+      "nodes": {
+        "total": 47,
+        "complete": 47,
+        "missing_keep": 0,
+        "missing_review_label": 0,
+        "dropped": 0
+      },
+      "relations": {
+        "total": 108,
+        "complete": 108,
+        "missing_keep": 0,
+        "missing_review_count": 0,
+        "dropped": 0
+      },
+      "total_rows": 155,
+      "complete_rows": 155,
+      "completion_percent": 100.0,
+      "ready_for_checked_json": true
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg3_long_office_household",
+      "packet_dir": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg3_long_office_household_pseudo_from_10view",
+      "annotation_review_html": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg3_long_office_household_pseudo_from_10view/annotation_review.html",
+      "node_review_csv": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg3_long_office_household_pseudo_from_10view/node_review.csv",
+      "relation_review_csv": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg3_long_office_household_pseudo_from_10view/relation_review.csv",
+      "annotation_checked_json": "results/benchmark_tum_rgbd_paper_subset/annotations/tum_rgbd_freiburg3_long_office_household_pseudo_from_10view/annotation_checked.json",
+      "annotation_checked_exists": true,
+      "nodes": {
+        "total": 43,
+        "complete": 43,
+        "missing_keep": 0,
+        "missing_review_label": 0,
+        "dropped": 0
+      },
+      "relations": {
+        "total": 96,
+        "complete": 96,
+        "missing_keep": 0,
+        "missing_review_count": 0,
+        "dropped": 0
+      },
+      "total_rows": 139,
+      "complete_rows": 139,
+      "completion_percent": 100.0,
+      "ready_for_checked_json": true
+    }
+  ]
+}

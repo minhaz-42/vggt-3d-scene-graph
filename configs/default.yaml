@@ -1,0 +1,35 @@
+project:
+  name: vggt_3d_scene_graph
+  seed: 7
+
+data:
+  scene_dir: data/benchmark/tum_rgbd_freiburg1_room/images
+  image_glob: "*.png"
+  max_views: 10
+
+geometry:
+  backend: vggt
+  use_point_tracks: true
+  min_depth_confidence: 0.2
+
+proposals:
+  mask_backend: sam
+  feature_backends:
+    - clip
+    - dinov2
+  min_mask_area: 128
+
+graph:
+  semantic_similarity_weight: 0.45
+  geometry_overlap_weight: 0.30
+  view_consistency_weight: 0.15
+  uncertainty_weight: 0.10
+  merge_threshold: 0.65
+  relation_distance_threshold: 0.25
+
+evaluation:
+  sparse_views:
+    - 3
+    - 5
+    - 8
+    - 10

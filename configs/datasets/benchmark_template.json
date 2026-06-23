@@ -1,0 +1,36 @@
+{
+  "name": "sparse_view_benchmark_template",
+  "version": "0.1",
+  "root": "../..",
+  "sparse_view_counts": [3, 5, 8, 10],
+  "metadata": {
+    "stage": "paper_experiments",
+    "candidate_datasets": ["ScanNet++", "ARKitScenes"],
+    "required_per_scene_outputs": [
+      "RGB view folder",
+      "VGGT geometry npz/json",
+      "SAM or SAM2 proposal json",
+      "Optional labels or pseudo-labels for evaluation"
+    ]
+  },
+  "scenes": [
+    {
+      "scene_id": "replace_with_scene_id",
+      "split": "train_or_val_or_test",
+      "scene_dir": "data/benchmark/replace_with_scene_id/images",
+      "images": [
+        "frame_000001.jpg",
+        "frame_000020.jpg",
+        "frame_000040.jpg"
+      ],
+      "geometry_path": "results/benchmark/replace_with_scene_id/vggt_geometry.npz",
+      "proposals_path": "results/benchmark/replace_with_scene_id/sam_proposals.json",
+      "metadata": {
+        "dataset": "ScanNet++ or ARKitScenes",
+        "room_type": "optional",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    }
+  ]
+}

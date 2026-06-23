@@ -1,0 +1,8 @@
+# Optional heavy dependencies for paper experiments.
+# Install only when you are ready to run model-backed proposal/feature extraction.
+
+transformers
+accelerate
+safetensors
+timm
+segment-anything @ git+https://github.com/facebookresearch/segment-anything.git

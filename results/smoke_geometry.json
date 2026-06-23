@@ -1,0 +1,25 @@
+{
+  "image_paths": [
+    "frame_000001.png",
+    "frame_000002.png"
+  ],
+  "array_keys": [
+    "confidence",
+    "depth"
+  ],
+  "array_shapes": {
+    "depth": [
+      1,
+      2,
+      4,
+      4
+    ],
+    "confidence": [
+      1,
+      2,
+      4,
+      4
+    ]
+  },
+  "backend": "smoke"
+}

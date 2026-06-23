@@ -1,0 +1,97 @@
+{
+  "image_paths": [
+    "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg2_xyz/images/frame_000001.png",
+    "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg2_xyz/images/frame_000002.png",
+    "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_paper_subset/tum_rgbd_freiburg2_xyz/images/frame_000003.png"
+  ],
+  "array_keys": [
+    "camera_extrinsics",
+    "camera_intrinsics",
+    "depth",
+    "depth_conf",
+    "images",
+    "pose_enc",
+    "pose_enc_list.0",
+    "pose_enc_list.1",
+    "pose_enc_list.2",
+    "pose_enc_list.3",
+    "world_points",
+    "world_points_conf"
+  ],
+  "array_shapes": {
+    "pose_enc": [
+      1,
+      3,
+      9
+    ],
+    "pose_enc_list.0": [
+      1,
+      3,
+      9
+    ],
+    "pose_enc_list.1": [
+      1,
+      3,
+      9
+    ],
+    "pose_enc_list.2": [
+      1,
+      3,
+      9
+    ],
+    "pose_enc_list.3": [
+      1,
+      3,
+      9
+    ],
+    "depth": [
+      1,
+      3,
+      392,
+      518,
+      1
+    ],
+    "depth_conf": [
+      1,
+      3,
+      392,
+      518
+    ],
+    "world_points": [
+      1,
+      3,
+      392,
+      518,
+      3
+    ],
+    "world_points_conf": [
+      1,
+      3,
+      392,
+      518
+    ],
+    "images": [
+      1,
+      3,
+      3,
+      392,
+      518
+    ],
+    "camera_extrinsics": [
+      1,
+      3,
+      3,
+      4
+    ],
+    "camera_intrinsics": [
+      1,
+      3,
+      3,
+      3
+    ]
+  },
+  "backend": "vggt",
+  "model_name": "facebook/VGGT-1B",
+  "device": "cpu",
+  "num_views": 3
+}

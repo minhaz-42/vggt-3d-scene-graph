@@ -1,0 +1,102 @@
+{
+  "image_paths": [
+    "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images/frame_000001.png",
+    "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images/frame_000002.png",
+    "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images/frame_000003.png",
+    "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images/frame_000004.png",
+    "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images/frame_000005.png",
+    "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images/frame_000006.png",
+    "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images/frame_000007.png",
+    "/Users/tanvir/Desktop/Journal/vggt_3d_scene_graph_project/data/benchmark/tum_rgbd_freiburg1_room/images/frame_000008.png"
+  ],
+  "array_keys": [
+    "camera_extrinsics",
+    "camera_intrinsics",
+    "depth",
+    "depth_conf",
+    "images",
+    "pose_enc",
+    "pose_enc_list.0",
+    "pose_enc_list.1",
+    "pose_enc_list.2",
+    "pose_enc_list.3",
+    "world_points",
+    "world_points_conf"
+  ],
+  "array_shapes": {
+    "pose_enc": [
+      1,
+      8,
+      9
+    ],
+    "pose_enc_list.0": [
+      1,
+      8,
+      9
+    ],
+    "pose_enc_list.1": [
+      1,
+      8,
+      9
+    ],
+    "pose_enc_list.2": [
+      1,
+      8,
+      9
+    ],
+    "pose_enc_list.3": [
+      1,
+      8,
+      9
+    ],
+    "depth": [
+      1,
+      8,
+      392,
+      518,
+      1
+    ],
+    "depth_conf": [
+      1,
+      8,
+      392,
+      518
+    ],
+    "world_points": [
+      1,
+      8,
+      392,
+      518,
+      3
+    ],
+    "world_points_conf": [
+      1,
+      8,
+      392,
+      518
+    ],
+    "images": [
+      1,
+      8,
+      3,
+      392,
+      518
+    ],
+    "camera_extrinsics": [
+      1,
+      8,
+      3,
+      4
+    ],
+    "camera_intrinsics": [
+      1,
+      8,
+      3,
+      3
+    ]
+  },
+  "backend": "vggt",
+  "model_name": "facebook/VGGT-1B",
+  "device": "cpu",
+  "num_views": 8
+}

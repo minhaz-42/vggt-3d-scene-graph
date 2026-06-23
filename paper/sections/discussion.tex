@@ -1,0 +1,39 @@
+\section{Discussion}
+\label{sec:discussion}
+
+The experiments support the central premise of this paper: feed-forward geometry and
+2D foundation-model semantics can be connected into an explicit sparse-view 3D scene
+graph without optimizing a complete scene representation. The five-sequence benchmark
+shows that the same implementation runs across several indoor sequences and produces
+more object and relation evidence as additional views are provided. The checked
+reference-consistency curves further show that the graph outputs become closer to the
+10-view references in both object labels and relation triplets, with the strongest gain
+coming from improved recall.
+
+The main limitation is evaluation scope. The reported F1 values are measured against
+checked annotations initialized from the 10-view prediction, so they measure
+sparse-view recovery relative to a higher-view graph rather than absolute recognition
+against independently authored dense-scene labels. The 10-view row is therefore a
+reference construction check, not a separate performance result. A second limitation is
+relation expressivity: the current predicates are inferred from centroid and distance
+rules. These rules are inspectable and easy to audit, but they cannot capture the full
+range of support, containment, functional, or activity relations studied in richer 3D
+scene graph settings~\cite{armeni2019scenegraph,wald2020threedssg,gu2024conceptgraphs}.
+
+These limitations point to a clear next stage. The generated review packets expose RGB
+thumbnails, projected object crops, object labels, relation triplets, and uncertainty
+values for each scene. Expanding this review from prediction-seeded references to
+independently authored annotations would turn the current consistency analysis into
+standard object-label and relation-triplet evaluation. The same annotations would also
+support a learned relation module, allowing the present rule-based predicates to be
+replaced once sufficient object-relation supervision is available.
+
+\section{Conclusion}
+
+We presented an uncertainty-aware sparse-view 3D scene graph pipeline that combines
+feed-forward VGGT geometry with SAM proposals, CLIP+DINOv2 descriptors, object fusion,
+open-vocabulary labeling, and spatial relation inference. The accompanying benchmark
+tooling turns public RGB-D sequences into graph outputs, paper tables, qualitative
+figures, checked sparse-view reference scores, and review packets. The result is a
+reproducible baseline for moving from sparse RGB captures to inspectable
+language-grounded 3D object-relation graphs.

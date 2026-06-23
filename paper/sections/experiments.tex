@@ -1,0 +1,62 @@
+\section{Experiments}
+\label{sec:experiments}
+
+\subsection{Datasets}
+
+We evaluate on public TUM RGB-D indoor sequences~\cite{sturm2012tumrgbd}. The
+\texttt{freiburg1\_room} sequence is used as a development validation scene, and the
+main benchmark uses the five sequences listed in
+Table~\ref{tab:tum_rgbd_paper_subset_plan}. Each sequence contributes 10 selected RGB
+frames. Although the source benchmark includes depth, our pipeline consumes only RGB
+frames; the RGB-D benchmark is used because it provides public, recognizable indoor
+scenes and reproducible sequence identifiers. For every scene, we store the selected
+view lists, VGGT geometry outputs, SAM proposal files, CLIP+DINOv2 descriptors, graph
+outputs, generated figures, and checked prediction-seeded object and relation
+references.
+
+\input{tables/tum_rgbd_paper_subset_plan}
+
+\subsection{Sparse-View Protocol}
+
+For each benchmark scene, we evaluate 3, 5, 8, and 10 input views. The benchmark runner
+creates one output directory per scene and view count, then executes geometry
+extraction, proposal generation, descriptor extraction, graph construction,
+open-vocabulary labeling, metric export, and figure generation. The same code path is
+used for single-scene validation and multi-scene experiments. Figure~\ref{fig:evaluation_protocol}
+shows two complementary evaluation paths: structural summaries from all 20 sparse-view
+runs, and a review path that turns the 10-view predictions into checked references for
+object-label and relation-triplet consistency.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/evaluation_protocol}
+\caption{Benchmark and annotation protocol. Panel (a) lays out the full five-scene by
+four-view-count matrix, with each cell representing one graph output and its object and
+relation counts; these 20 outputs feed the sparse-view table and view-count metric
+curve. Panel (b) shows how each 10-view graph becomes a prediction-seeded draft,
+annotation review packet, checked CSV/JSON files, reviewed label and relation
+decisions, and reference-consistency object-label and relation-triplet metrics.}
+\label{fig:evaluation_protocol}
+\end{figure}
+
+\subsection{Comparison Scope}
+
+The main benchmark reports the full VGGT+SAM+CLIP+DINOv2 pipeline under a controlled
+sparse-view protocol. We also include a local component ablation on the development
+scene to separate the effects of proposal source and descriptor choice. Direct external
+comparison is nontrivial because many open-vocabulary 3D scene graph systems assume
+posed RGB-D streams, dense point clouds, or reconstructed maps. We therefore position
+the benchmark as a reproducible sparse-RGB graph construction baseline and report the
+input assumptions explicitly.
+
+\subsection{Metrics}
+
+For every run, we report structural and reliability-oriented summaries: object count,
+relation count, multi-view object count, multi-view ratio, mean uncertainty, and
+relation density. For the five-scene benchmark, we also report object-label precision,
+recall, and F1, plus labeled relation-triplet precision, recall, and F1 against checked
+prediction-seeded reference sets. Because each reference set is initialized from the
+10-view graph for the same scene, these scores measure checked sparse-view recovery
+consistency rather than independent full-scene accuracy. The 10-view row is therefore a
+reference construction check; the substantive comparison is the 3/5/8-view recovery
+curve against the checked 10-view reference.
