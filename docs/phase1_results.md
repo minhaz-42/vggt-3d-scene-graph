@@ -39,6 +39,19 @@ comparison is measured against a baseline-derived reference — circular.
 2. **Circular pseudo-reference** — cannot fairly test "proposed vs baseline" when the GT is
    the baseline's own prediction.
 
+## Recalibration (wired, pending re-run)
+
+Root cause 1 (near-zero range) is now addressed: `build_geometry_fusion_graph` gained a
+`--uncertainty-normalize {none,rank,minmax}` knob. `rank` (empirical CDF per scene) spreads the
+signal from mean 0.04 → mean 0.50 (and activates the bridge veto: 77/193 nodes exceed
+`bridge_tau` vs 0 before). The Colab notebook now runs `proposed` with
+`--uncertainty-normalize rank --uncertainty-weight 0.3 --feature-uncertainty-weight 0.3
+--bridge-tau 0.85` (moderate: ~104 objects on desk-v10 vs 81 baseline, not the degenerate ~142
+the default weight gives). `none` still reproduces the null result above; `graph-fusion` is
+byte-identical (reproduction anchor intact). The next GPU run tests whether rank-normalized
+`proposed` beats the `fixed-shrink` control on labeled F1. Root cause 2 (circular reference)
+is still open.
+
 ## Next steps before any uncertainty claim
 
 1. Recalibrate uncertainty for real dynamic range (per-scene normalization), or use a

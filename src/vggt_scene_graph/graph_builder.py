@@ -67,6 +67,30 @@ def connected_components_as_clusters(graph: nx.Graph) -> list[list[str]]:
     return [list(component) for component in nx.connected_components(graph)]
 
 
+def _normalized_uncertainties(node_list: list[ObjectNode], mode: str) -> dict[str, float]:
+    """Map each node's raw uncertainty to a per-scene-normalized value in [0, 1].
+
+    Raw VGGT-confidence uncertainty has tiny dynamic range (mean ~0.04), so the modulation
+    barely engages. ``rank`` (empirical CDF) and ``minmax`` spread it across [0, 1] so the
+    relatively-most-uncertain nodes in a scene are gated hardest. ``none`` keeps the raw value.
+    """
+    raw = [float(getattr(node, "uncertainty", 0.0) or 0.0) for node in node_list]
+    n = len(raw)
+    if mode == "none" or n == 0:
+        norm = raw
+    elif mode == "minmax":
+        lo, hi = min(raw), max(raw)
+        norm = [0.0] * n if hi <= lo else [(value - lo) / (hi - lo) for value in raw]
+    elif mode == "rank":
+        norm = [
+            (sum(1 for w in raw if w < value) + 0.5 * sum(1 for w in raw if w == value)) / n
+            for value in raw
+        ]
+    else:
+        raise ValueError(f"Unknown uncertainty_normalize mode: {mode!r} (expected none|rank|minmax).")
+    return {node.node_id: norm[index] for index, node in enumerate(node_list)}
+
+
 def build_geometry_fusion_graph(
     nodes: Iterable[ObjectNode],
     distance_threshold: float = 0.15,
@@ -77,6 +101,7 @@ def build_geometry_fusion_graph(
     uncertainty_weight: float = 0.0,
     feature_uncertainty_weight: float = 0.0,
     uncertainty_agg: str = "max",
+    uncertainty_normalize: str = "none",
     min_shrink: float = 0.1,
     max_feature_threshold: float = 0.99,
     bridge_tau: float = 1.0,
@@ -98,6 +123,9 @@ def build_geometry_fusion_graph(
             raise ValueError("uncertainty_weight and feature_uncertainty_weight must be >= 0 to preserve gate monotonicity")
         if not (0.0 < min_shrink <= 1.0):
             raise ValueError(f"min_shrink must be in (0, 1], got {min_shrink}")
+    node_uncertainty = _normalized_uncertainties(
+        node_list, uncertainty_normalize if use_uncertainty else "none"
+    )
     graph = nx.Graph()
 
     for node in node_list:
@@ -114,8 +142,8 @@ def build_geometry_fusion_graph(
             eff_feature_threshold = feature_similarity_threshold
             veto = False
             if use_uncertainty:
-                u_left = float(getattr(left, "uncertainty", 0.0) or 0.0)
-                u_right = float(getattr(right, "uncertainty", 0.0) or 0.0)
+                u_left = node_uncertainty[left.node_id]
+                u_right = node_uncertainty[right.node_id]
                 u_pair = max(u_left, u_right) if uncertainty_agg == "max" else 0.5 * (u_left + u_right)
                 u_pair = min(max(u_pair, 0.0), 1.0)
                 shrink = max(1.0 - uncertainty_weight * u_pair, min_shrink)
@@ -231,6 +259,7 @@ def fuse_object_nodes(
     uncertainty_weight: float = 0.0,
     feature_uncertainty_weight: float = 0.0,
     uncertainty_agg: str = "max",
+    uncertainty_normalize: str = "none",
     min_shrink: float = 0.1,
     max_feature_threshold: float = 0.99,
     bridge_tau: float = 1.0,
@@ -264,6 +293,7 @@ def fuse_object_nodes(
             uncertainty_weight=uncertainty_weight,
             feature_uncertainty_weight=feature_uncertainty_weight,
             uncertainty_agg=uncertainty_agg,
+            uncertainty_normalize=uncertainty_normalize,
             min_shrink=min_shrink,
             max_feature_threshold=max_feature_threshold,
             bridge_tau=bridge_tau,

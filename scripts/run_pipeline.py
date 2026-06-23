@@ -47,6 +47,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--uncertainty-weight", type=float, default=0.5)
     parser.add_argument("--feature-uncertainty-weight", type=float, default=1.0)
     parser.add_argument("--uncertainty-agg", choices=["max", "mean"], default="max")
+    parser.add_argument(
+        "--uncertainty-normalize",
+        choices=["none", "rank", "minmax"],
+        default="none",
+        help="Per-scene normalization of node uncertainty before modulation. 'rank'/'minmax' "
+        "give the low-range raw signal real dynamic range; 'none' uses the raw value.",
+    )
     parser.add_argument("--uncertainty-min-shrink", type=float, default=0.1)
     parser.add_argument("--uncertainty-max-feature-threshold", type=float, default=0.99)
     parser.add_argument("--bridge-tau", type=float, default=0.6)
@@ -118,6 +125,7 @@ def main() -> None:
         uncertainty_weight=args.uncertainty_weight,
         feature_uncertainty_weight=args.feature_uncertainty_weight,
         uncertainty_agg=args.uncertainty_agg,
+        uncertainty_normalize=args.uncertainty_normalize,
         min_shrink=args.uncertainty_min_shrink,
         max_feature_threshold=args.uncertainty_max_feature_threshold,
         bridge_tau=args.bridge_tau,
@@ -145,6 +153,7 @@ def main() -> None:
         "uncertainty_weight": args.uncertainty_weight,
         "feature_uncertainty_weight": args.feature_uncertainty_weight,
         "uncertainty_agg": args.uncertainty_agg,
+        "uncertainty_normalize": args.uncertainty_normalize,
         "uncertainty_min_shrink": args.uncertainty_min_shrink,
         "uncertainty_max_feature_threshold": args.uncertainty_max_feature_threshold,
         "bridge_tau": args.bridge_tau,

@@ -47,6 +47,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--uncertainty-weight", type=float, default=0.5)
     parser.add_argument("--feature-uncertainty-weight", type=float, default=1.0)
     parser.add_argument("--uncertainty-agg", choices=["max", "mean"], default="max")
+    parser.add_argument("--uncertainty-normalize", choices=["none", "rank", "minmax"], default="none")
     parser.add_argument("--uncertainty-min-shrink", type=float, default=0.1)
     parser.add_argument("--uncertainty-max-feature-threshold", type=float, default=0.99)
     parser.add_argument("--bridge-tau", type=float, default=0.6)
@@ -266,6 +267,8 @@ def main() -> None:
                         str(args.feature_uncertainty_weight),
                         "--uncertainty-agg",
                         args.uncertainty_agg,
+                        "--uncertainty-normalize",
+                        args.uncertainty_normalize,
                         "--uncertainty-min-shrink",
                         str(args.uncertainty_min_shrink),
                         "--uncertainty-max-feature-threshold",
