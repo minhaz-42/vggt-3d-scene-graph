@@ -26,13 +26,16 @@ scope, or fine-grained read access to this repo). The notebook prompts for it wi
 ```python
 import getpass
 TOKEN = getpass.getpass("GitHub token: ")
-USER, REPO = "minhaz-42", "vggt-3d-scene-graph"
-!git clone https://{USER}:{TOKEN}@github.com/{USER}/{REPO}.git
+USER, REPO, BRANCH = "minhaz-42", "vggt-3d-scene-graph", "phase1-uncertainty-fusion"
+!git clone -b {BRANCH} https://{USER}:{TOKEN}@github.com/{USER}/{REPO}.git
 %cd {REPO}
 del TOKEN
 ```
 
-If you later make the repo public, just `git clone https://github.com/minhaz-42/vggt-3d-scene-graph.git` with no token.
+The Phase 1 variant code (uncertainty-aware fusion + the variant sweep) lives on the
+`phase1-uncertainty-fusion` branch, so clone that branch. Once it is merged to `main` (or if
+the repo is made public), drop the token and `-b`:
+`git clone https://github.com/minhaz-42/vggt-3d-scene-graph.git`.
 
 ## 2. Install dependencies
 
