@@ -51,6 +51,7 @@ def _quality_row(path: Path, payload: dict[str, Any]) -> dict[str, object]:
     return {
         "path": str(path),
         "scene_id": payload.get("scene_id"),
+        "variant": pipeline.get("variant", "graph-fusion"),
         "num_nodes": len(nodes),
         "num_relations": len(relations),
         "num_candidate_nodes": pipeline.get("num_candidate_nodes"),

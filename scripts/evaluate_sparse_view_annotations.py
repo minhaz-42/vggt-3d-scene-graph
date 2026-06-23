@@ -36,7 +36,21 @@ def parse_args() -> argparse.Namespace:
         help="Annotation JSON inside each packet, e.g. annotation_draft.json or annotation_checked.json.",
     )
     parser.add_argument("--scene-id", action="append", default=[], help="Optional scene id filter.")
+    parser.add_argument(
+        "--variant",
+        action="append",
+        default=[],
+        choices=["2d-only", "geometry-only", "semantic-lifting", "graph-fusion", "proposed", "fixed-shrink"],
+        help="Fusion variant(s) to evaluate. Repeat for several. Defaults to graph-fusion. "
+        "Non-default variants are read from <results-root>/variants/<variant>/.",
+    )
     return parser.parse_args()
+
+
+def _variant_graph_path(results_root: Path, variant: str, scene_id: str, view_count: int) -> Path:
+    """Resolve a labeled scene graph path, mirroring run_benchmark.py's per-variant layout."""
+    base = results_root if variant == "graph-fusion" else results_root / "variants" / variant
+    return base / scene_id / f"views_{view_count:02d}" / "scene_graph_labeled.json"
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -120,11 +134,26 @@ def _evaluate_graph(
     *,
     view_count: int,
     reference_view_count: int,
+    variant: str = "graph-fusion",
 ) -> dict[str, object]:
     graph_payload = _load_json(graph_path)
+    # Guard against silently scoring the wrong variant's graph: the labeled graph's stamped
+    # variant must match what we think we are evaluating. Legacy graph-fusion graphs predate
+    # the stamp (pipeline.variant is None), which is only acceptable for the graph-fusion case.
+    stamped = graph_payload.get("pipeline", {}).get("variant")
+    if stamped is not None and stamped != variant:
+        raise ValueError(
+            f"Variant mismatch: evaluating {variant!r} but {graph_path} is stamped {stamped!r}."
+        )
+    if stamped is None and variant != "graph-fusion":
+        raise ValueError(
+            f"Refusing to score {variant!r} from an un-stamped graph at {graph_path} "
+            "(looks like a legacy graph-fusion artifact)."
+        )
     annotation_payload = _load_json(annotation_path)
     annotations = _annotation_by_scene(annotation_payload)
     row = _quality_row(graph_path, graph_payload, view_count)
+    row["variant"] = variant
     scene_id = str(graph_payload.get("scene_id"))
     scene_annotation = annotations.get(scene_id)
     if not scene_annotation:
@@ -169,30 +198,33 @@ def main() -> None:
     if not view_counts:
         raise SystemExit("Provide --view-counts or use a dataset manifest with sparse_view_counts.")
 
+    variants = args.variant or ["graph-fusion"]
     rows: list[dict[str, object]] = []
-    for scene in manifest.get("scenes", []):
-        scene_id = str(scene.get("scene_id", ""))
-        if selected_scene_ids and scene_id not in selected_scene_ids:
-            continue
-        annotation_path = (
-            args.annotations_root
-            / _packet_name(scene_id, args.packet_mode, args.reference_view_count)
-            / args.annotation_file_name
-        )
-        if not annotation_path.exists():
-            raise FileNotFoundError(f"Missing annotation file: {annotation_path}")
-        for view_count in view_counts:
-            graph_path = args.results_root / scene_id / f"views_{view_count:02d}" / "scene_graph_labeled.json"
-            if not graph_path.exists():
-                raise FileNotFoundError(f"Missing scene graph: {graph_path}")
-            rows.append(
-                _evaluate_graph(
-                    graph_path,
-                    annotation_path,
-                    view_count=view_count,
-                    reference_view_count=args.reference_view_count,
-                )
+    for variant in variants:
+        for scene in manifest.get("scenes", []):
+            scene_id = str(scene.get("scene_id", ""))
+            if selected_scene_ids and scene_id not in selected_scene_ids:
+                continue
+            annotation_path = (
+                args.annotations_root
+                / _packet_name(scene_id, args.packet_mode, args.reference_view_count)
+                / args.annotation_file_name
             )
+            if not annotation_path.exists():
+                raise FileNotFoundError(f"Missing annotation file: {annotation_path}")
+            for view_count in view_counts:
+                graph_path = _variant_graph_path(args.results_root, variant, scene_id, view_count)
+                if not graph_path.exists():
+                    raise FileNotFoundError(f"Missing scene graph: {graph_path}")
+                rows.append(
+                    _evaluate_graph(
+                        graph_path,
+                        annotation_path,
+                        view_count=view_count,
+                        reference_view_count=args.reference_view_count,
+                        variant=variant,
+                    )
+                )
 
     if selected_scene_ids:
         missing = sorted(selected_scene_ids - {str(row["scene_id"]) for row in rows})

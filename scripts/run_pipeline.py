@@ -33,6 +33,24 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--relation-near-threshold", type=float, default=0.35)
     parser.add_argument("--relation-max-distance", type=float, default=0.75)
     parser.add_argument("--include-point-sample", type=int, default=0)
+    parser.add_argument(
+        "--variant",
+        default="graph-fusion",
+        choices=["2d-only", "geometry-only", "semantic-lifting", "graph-fusion", "proposed", "fixed-shrink"],
+        help="Fusion variant for baselines/ablations. Default reproduces the original pipeline.",
+    )
+    parser.add_argument(
+        "--use-uncertainty",
+        action="store_true",
+        help="Enable uncertainty-aware fusion (only consulted when --variant proposed).",
+    )
+    parser.add_argument("--uncertainty-weight", type=float, default=0.5)
+    parser.add_argument("--feature-uncertainty-weight", type=float, default=1.0)
+    parser.add_argument("--uncertainty-agg", choices=["max", "mean"], default="max")
+    parser.add_argument("--uncertainty-min-shrink", type=float, default=0.1)
+    parser.add_argument("--uncertainty-max-feature-threshold", type=float, default=0.99)
+    parser.add_argument("--bridge-tau", type=float, default=0.6)
+    parser.add_argument("--fixed-shrink", type=float, default=1.0)
     return parser.parse_args()
 
 
@@ -95,6 +113,15 @@ def main() -> None:
         distance_threshold=args.fusion_distance,
         feature_similarity_threshold=args.fusion_feature_threshold,
         max_points_per_fused_node=args.max_points_per_fused_node,
+        variant=args.variant,
+        use_uncertainty=args.use_uncertainty,
+        uncertainty_weight=args.uncertainty_weight,
+        feature_uncertainty_weight=args.feature_uncertainty_weight,
+        uncertainty_agg=args.uncertainty_agg,
+        min_shrink=args.uncertainty_min_shrink,
+        max_feature_threshold=args.uncertainty_max_feature_threshold,
+        bridge_tau=args.bridge_tau,
+        fixed_shrink=args.fixed_shrink,
     )
     relations = infer_relations(
         fused_nodes,
@@ -113,6 +140,15 @@ def main() -> None:
         "num_candidate_nodes": len(candidate_nodes),
         "num_fused_nodes": len(fused_nodes),
         "num_relations": len(relations),
+        "variant": args.variant,
+        "use_uncertainty": args.use_uncertainty or args.variant == "proposed",
+        "uncertainty_weight": args.uncertainty_weight,
+        "feature_uncertainty_weight": args.feature_uncertainty_weight,
+        "uncertainty_agg": args.uncertainty_agg,
+        "uncertainty_min_shrink": args.uncertainty_min_shrink,
+        "uncertainty_max_feature_threshold": args.uncertainty_max_feature_threshold,
+        "bridge_tau": args.bridge_tau,
+        "fixed_shrink": args.fixed_shrink,
         "min_point_confidence": args.min_point_confidence,
         "fusion_distance": args.fusion_distance,
         "fusion_feature_threshold": args.fusion_feature_threshold,

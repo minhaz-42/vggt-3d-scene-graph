@@ -163,6 +163,33 @@ results table in `docs/dataset_protocol.md`.
 
 ---
 
+## Phase 1 implementation status (2026-06-23)
+
+Phase 1 is **implemented and locally verified** (branch `phase1-uncertainty-fusion`):
+
+- `graph_builder.py`: uncertainty-modulated gate + bridge veto + 6-way `variant` dispatch,
+  monotonicity guards, feature-cap fix. `proposed` forces `use_uncertainty=True`.
+- `run_pipeline.py` / `run_benchmark.py`: `--variant` + uncertainty knobs; variants reuse the
+  shared upstream feature cache and write graphs to `results/.../variants/<variant>/` (the
+  default `graph-fusion` keeps the legacy path, so existing baseline tables/globs are
+  unaffected — this supersedes the spec §6.C literal `output_root/<variant>/` template).
+- `evaluate_sparse_view_annotations.py`: `--variant` (repeatable) + per-variant path routing
+  + an anti-fabrication guard (refuses to score a graph whose stamped variant disagrees).
+- New `scripts/export_variant_comparison.py` + committed `variant_structural_comparison.{md,csv}`.
+
+Verified by execution: `graph-fusion` reproduces prior output byte-for-byte (8/8);
+`--variant proposed` alone now engages uncertainty (81→86 objects); guard + validation fire.
+
+An adversarial review (12 confirmed findings) drove these fixes. **Structural result:**
+`proposed` conservatively splits a few % more than baseline (less over-merging) but the
+effect is modest (node uncertainties ~0.04), and the `fixed-shrink` control splits more — so
+the *informativeness* of uncertainty needs the **labeled object-F1 eval** (CLIP labelling +
+checked annotations), which is exactly what the Colab run produces.
+
+**Deferred (follow-on):** a dose-response sweep *driver* over `uncertainty_weight ∈
+{0,0.25,0.5,0.75,1.0}`. The knobs are wired, but a clean weight=0 anchor requires also zeroing
+`feature_uncertainty_weight` and disabling the veto at that point (spec §4) — not yet scripted.
+
 ## Open questions for the user
 
 1. ~~Uncertainty-in-fusion~~ **RESOLVED (2026-06-23):** wire it in. Mechanism + code spec

@@ -14,6 +14,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--results-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--view-count", type=int, default=10)
+    parser.add_argument(
+        "--variant",
+        default="graph-fusion",
+        choices=["2d-only", "geometry-only", "semantic-lifting", "graph-fusion", "proposed", "fixed-shrink"],
+        help="Fusion variant whose scene_graph.png to render. Non-default variants live under variants/<variant>/.",
+    )
     parser.add_argument("--scene-id", action="append", default=[], help="Scene id to include. Repeat as needed.")
     parser.add_argument("--rgb-width", type=int, default=360)
     parser.add_argument("--graph-width", type=int, default=760)
@@ -111,7 +117,8 @@ def main() -> None:
     for scene in scenes:
         scene_id = str(scene["scene_id"])
         rgb_path = _first_image_path(scene)
-        graph_path = args.results_root / scene_id / f"views_{args.view_count:02d}" / "scene_graph.png"
+        graph_base = args.results_root if args.variant == "graph-fusion" else args.results_root / "variants" / args.variant
+        graph_path = graph_base / scene_id / f"views_{args.view_count:02d}" / "scene_graph.png"
         if not rgb_path.exists():
             raise FileNotFoundError(f"Missing RGB image: {rgb_path}")
         if not graph_path.exists():

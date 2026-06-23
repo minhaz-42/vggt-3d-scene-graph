@@ -11,6 +11,8 @@ from .types import ObjectNode
 def cosine_similarity(left: np.ndarray | None, right: np.ndarray | None) -> float:
     if left is None or right is None:
         return 0.0
+    if left.shape != right.shape:
+        return 0.0
 
     left_norm = float(np.linalg.norm(left))
     right_norm = float(np.linalg.norm(right))
@@ -70,8 +72,32 @@ def build_geometry_fusion_graph(
     distance_threshold: float = 0.15,
     feature_similarity_threshold: float | None = None,
     allow_same_view_edges: bool = False,
+    *,
+    use_uncertainty: bool = False,
+    uncertainty_weight: float = 0.0,
+    feature_uncertainty_weight: float = 0.0,
+    uncertainty_agg: str = "max",
+    min_shrink: float = 0.1,
+    max_feature_threshold: float = 0.99,
+    bridge_tau: float = 1.0,
+    fixed_shrink: float = 1.0,
 ) -> nx.Graph:
+    """Build the cross-view fusion candidate graph.
+
+    With ``use_uncertainty=False`` (and ``fixed_shrink=1.0``) this reproduces the original
+    geometry+feature gate bit-for-bit. When enabled (the ``proposed`` variant), the effective
+    distance threshold is shrunk and the feature-similarity bar is raised in proportion to the
+    pair's joint uncertainty, and a bridge veto forbids two uncertain nodes from seeding a merge.
+    See docs/phase1_uncertainty_fusion_spec.md.
+    """
     node_list = list(nodes)
+    if not (0.0 < fixed_shrink <= 1.0):
+        raise ValueError(f"fixed_shrink must be in (0, 1] to keep eff_distance <= base, got {fixed_shrink}")
+    if use_uncertainty:
+        if uncertainty_weight < 0 or feature_uncertainty_weight < 0:
+            raise ValueError("uncertainty_weight and feature_uncertainty_weight must be >= 0 to preserve gate monotonicity")
+        if not (0.0 < min_shrink <= 1.0):
+            raise ValueError(f"min_shrink must be in (0, 1], got {min_shrink}")
     graph = nx.Graph()
 
     for node in node_list:
@@ -84,12 +110,30 @@ def build_geometry_fusion_graph(
             if not allow_same_view_edges and left_view == right_view:
                 continue
 
+            eff_distance_threshold = distance_threshold * fixed_shrink
+            eff_feature_threshold = feature_similarity_threshold
+            veto = False
+            if use_uncertainty:
+                u_left = float(getattr(left, "uncertainty", 0.0) or 0.0)
+                u_right = float(getattr(right, "uncertainty", 0.0) or 0.0)
+                u_pair = max(u_left, u_right) if uncertainty_agg == "max" else 0.5 * (u_left + u_right)
+                u_pair = min(max(u_pair, 0.0), 1.0)
+                shrink = max(1.0 - uncertainty_weight * u_pair, min_shrink)
+                eff_distance_threshold = distance_threshold * shrink
+                if feature_similarity_threshold is not None:
+                    gap = 1.0 - feature_similarity_threshold
+                    eff_feature_threshold = min(
+                        feature_similarity_threshold + feature_uncertainty_weight * u_pair * gap,
+                        max(feature_similarity_threshold, max_feature_threshold),
+                    )
+                veto = (u_left > bridge_tau) and (u_right > bridge_tau)
+
             distance = centroid_distance(left, right)
-            if distance <= distance_threshold:
+            if distance <= eff_distance_threshold and not veto:
                 feature_similarity = None
-                if feature_similarity_threshold is not None and left.feature is not None and right.feature is not None:
+                if eff_feature_threshold is not None and left.feature is not None and right.feature is not None:
                     feature_similarity = cosine_similarity(left.feature, right.feature)
-                    if feature_similarity < feature_similarity_threshold:
+                    if feature_similarity < eff_feature_threshold:
                         continue
                 graph.add_edge(
                     left.node_id,
@@ -166,18 +210,74 @@ def fuse_node_cluster(cluster_nodes: list[ObjectNode], node_id: str, max_points:
     )
 
 
+FUSION_VARIANTS = (
+    "2d-only",
+    "geometry-only",
+    "semantic-lifting",
+    "graph-fusion",
+    "proposed",
+    "fixed-shrink",
+)
+
+
 def fuse_object_nodes(
     nodes: Iterable[ObjectNode],
     distance_threshold: float = 0.15,
     feature_similarity_threshold: float | None = None,
     max_points_per_fused_node: int = 8192,
+    *,
+    variant: str = "graph-fusion",
+    use_uncertainty: bool = False,
+    uncertainty_weight: float = 0.0,
+    feature_uncertainty_weight: float = 0.0,
+    uncertainty_agg: str = "max",
+    min_shrink: float = 0.1,
+    max_feature_threshold: float = 0.99,
+    bridge_tau: float = 1.0,
+    fixed_shrink: float = 1.0,
 ) -> list[ObjectNode]:
+    """Fuse lifted candidate nodes into cross-view objects.
+
+    All five paper variants route through this one entry point via ``variant``; only the gate
+    parameters differ. The connected-components + ``fuse_node_cluster`` tail is identical for
+    every variant. ``variant="graph-fusion"`` (default) reproduces the original pipeline.
+    See docs/phase1_uncertainty_fusion_spec.md.
+    """
+    if variant not in FUSION_VARIANTS:
+        raise ValueError(f"Unknown fusion variant: {variant!r}. Expected one of {FUSION_VARIANTS}.")
+
     node_list = list(nodes)
-    graph = build_geometry_fusion_graph(
-        node_list,
-        distance_threshold=distance_threshold,
-        feature_similarity_threshold=feature_similarity_threshold,
-    )
+
+    gate = {
+        "distance_threshold": distance_threshold,
+        "feature_similarity_threshold": feature_similarity_threshold,
+        "allow_same_view_edges": False,
+    }
+    if variant == "2d-only":
+        gate["distance_threshold"] = float("inf")
+        gate["allow_same_view_edges"] = True
+    elif variant == "geometry-only":
+        gate["feature_similarity_threshold"] = None
+    elif variant == "proposed":
+        gate.update(
+            use_uncertainty=True,  # proposed is uncertainty-ON by definition (spec §5); weight=0 is the no-op
+            uncertainty_weight=uncertainty_weight,
+            feature_uncertainty_weight=feature_uncertainty_weight,
+            uncertainty_agg=uncertainty_agg,
+            min_shrink=min_shrink,
+            max_feature_threshold=max_feature_threshold,
+            bridge_tau=bridge_tau,
+        )
+    elif variant == "fixed-shrink":
+        gate["fixed_shrink"] = fixed_shrink
+
+    if variant == "semantic-lifting":
+        graph = nx.Graph()
+        for node in node_list:
+            graph.add_node(node.node_id, object=node)
+    else:
+        graph = build_geometry_fusion_graph(node_list, **gate)
+
     node_by_id = {node.node_id: node for node in node_list}
     fused_nodes: list[ObjectNode] = []
     for index, component in enumerate(nx.connected_components(graph), start=1):

@@ -36,6 +36,21 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--skip-existing", action="store_true")
     parser.add_argument("--dry-run", action="store_true", help="Print planned commands without running them.")
     parser.add_argument("--index-output", type=Path, help="Benchmark index JSON path.")
+    parser.add_argument(
+        "--variant",
+        default="graph-fusion",
+        choices=["2d-only", "geometry-only", "semantic-lifting", "graph-fusion", "proposed", "fixed-shrink"],
+        help="Fusion variant for the graph stage. Non-default variants reuse the shared upstream "
+        "feature cache and write graphs under <output-root>/variants/<variant>/.",
+    )
+    parser.add_argument("--use-uncertainty", action="store_true", help="Enable uncertainty-aware fusion (variant=proposed).")
+    parser.add_argument("--uncertainty-weight", type=float, default=0.5)
+    parser.add_argument("--feature-uncertainty-weight", type=float, default=1.0)
+    parser.add_argument("--uncertainty-agg", choices=["max", "mean"], default="max")
+    parser.add_argument("--uncertainty-min-shrink", type=float, default=0.1)
+    parser.add_argument("--uncertainty-max-feature-threshold", type=float, default=0.99)
+    parser.add_argument("--bridge-tau", type=float, default=0.6)
+    parser.add_argument("--fixed-shrink", type=float, default=1.0)
     return parser.parse_args()
 
 
@@ -94,23 +109,34 @@ def main() -> None:
         for view_count in view_counts:
             selected = sparse_view_split(scene.image_paths, view_count)
             image_names = [path.name for path in selected]
-            run_dir = args.output_root / scene.scene_id / f"views_{len(image_names):02d}"
-            geometry_path = run_dir / "vggt_geometry.npz"
-            sam_path = run_dir / "sam_proposals.json"
-            clip_path = run_dir / "sam_clip_features.json"
-            dinov2_path = run_dir / "sam_clip_dinov2_features.json"
-            graph_path = run_dir / "scene_graph.json"
-            labeled_graph_path = run_dir / "scene_graph_labeled.json"
-            figure_path = run_dir / "scene_graph.png"
-            run_dir.mkdir(parents=True, exist_ok=True)
+            view_subdir = f"views_{len(image_names):02d}"
+            # Upstream features (geometry/SAM/CLIP/DINOv2) are variant-independent and shared.
+            feature_dir = args.output_root / scene.scene_id / view_subdir
+            # Graphs are per-variant. The default variant keeps the original layout for
+            # backward compatibility; other variants are namespaced under variants/<variant>/.
+            if args.variant == "graph-fusion":
+                graph_dir = feature_dir
+            else:
+                graph_dir = args.output_root / "variants" / args.variant / scene.scene_id / view_subdir
+            geometry_path = feature_dir / "vggt_geometry.npz"
+            sam_path = feature_dir / "sam_proposals.json"
+            clip_path = feature_dir / "sam_clip_features.json"
+            dinov2_path = feature_dir / "sam_clip_dinov2_features.json"
+            graph_path = graph_dir / "scene_graph.json"
+            labeled_graph_path = graph_dir / "scene_graph_labeled.json"
+            figure_path = graph_dir / "scene_graph.png"
+            feature_dir.mkdir(parents=True, exist_ok=True)
+            graph_dir.mkdir(parents=True, exist_ok=True)
 
             commands: list[dict[str, object]] = []
             common = {
                 "scene_id": scene.scene_id,
                 "split": scene.split,
+                "variant": args.variant,
                 "view_count": len(image_names),
                 "selected_images": image_names,
-                "run_dir": str(run_dir),
+                "run_dir": str(graph_dir),
+                "feature_dir": str(feature_dir),
                 "geometry_path": str(geometry_path),
                 "proposals_path": str(dinov2_path),
                 "scene_graph_path": str(graph_path),
@@ -213,26 +239,43 @@ def main() -> None:
                 )
 
             if "graph" in stages:
-                commands.append(
-                    _run_command(
-                        [
-                            sys.executable,
-                            "scripts/run_pipeline.py",
-                            "--scene-id",
-                            scene.scene_id,
-                            "--scene-dir",
-                            str(scene.scene_dir),
-                            "--geometry",
-                            str(geometry_path),
-                            "--proposals",
-                            str(dinov2_path),
-                            "--output",
-                            str(graph_path),
-                        ],
-                        graph_path,
-                        args,
-                    )
-                )
+                graph_command = [
+                    sys.executable,
+                    "scripts/run_pipeline.py",
+                    "--scene-id",
+                    scene.scene_id,
+                    "--scene-dir",
+                    str(scene.scene_dir),
+                    "--geometry",
+                    str(geometry_path),
+                    "--proposals",
+                    str(dinov2_path),
+                    "--output",
+                    str(graph_path),
+                    "--variant",
+                    args.variant,
+                ]
+                if args.variant == "proposed":
+                    # proposed is uncertainty-ON by definition; forward all knobs so a sweep can
+                    # set them per point (weight=0 + feature-weight=0 + bridge-tau>=1 is the no-op).
+                    graph_command += [
+                        "--use-uncertainty",
+                        "--uncertainty-weight",
+                        str(args.uncertainty_weight),
+                        "--feature-uncertainty-weight",
+                        str(args.feature_uncertainty_weight),
+                        "--uncertainty-agg",
+                        args.uncertainty_agg,
+                        "--uncertainty-min-shrink",
+                        str(args.uncertainty_min_shrink),
+                        "--uncertainty-max-feature-threshold",
+                        str(args.uncertainty_max_feature_threshold),
+                        "--bridge-tau",
+                        str(args.bridge_tau),
+                    ]
+                if args.variant == "fixed-shrink":
+                    graph_command += ["--fixed-shrink", str(args.fixed_shrink)]
+                commands.append(_run_command(graph_command, graph_path, args))
 
             if "labels" in stages and args.label_vocab is not None:
                 label_command = [
@@ -279,7 +322,12 @@ def main() -> None:
 
             index_records.append({**common, "commands": commands})
 
-    output_path = args.index_output or args.output_root / "benchmark_index.json"
+    if args.index_output:
+        output_path = args.index_output
+    elif args.variant == "graph-fusion":
+        output_path = args.output_root / "benchmark_index.json"
+    else:
+        output_path = args.output_root / "variants" / args.variant / "benchmark_index.json"
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(
         json.dumps(
@@ -287,6 +335,7 @@ def main() -> None:
                 "dataset": str(args.dataset),
                 "dataset_name": manifest.name,
                 "dataset_version": manifest.version,
+                "variant": args.variant,
                 "stages": sorted(stages),
                 "num_runs": len(index_records),
                 "runs": index_records,

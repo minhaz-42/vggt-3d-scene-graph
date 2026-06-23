@@ -71,5 +71,40 @@ python scripts/export_sparse_view_tables.py \
   --aggregate-latex-output paper/tables/tum_rgbd_paper_subset_by_view.tex \
   --aggregate-markdown-output paper/tables/tum_rgbd_paper_subset_by_view.md
 
+# --- Phase 1: baseline/ablation variants (reuse the cached upstream features) ---
+VARIANTS="${VARIANTS:-geometry-only 2d-only semantic-lifting fixed-shrink proposed}"
+if [ "${RUN_VARIANTS:-1}" = "1" ]; then
+  echo "==> Running fusion variants (graph+labels+figure, features reused): $VARIANTS"
+  for V in $VARIANTS; do
+    extra=""
+    [ "$V" = "fixed-shrink" ] && extra="--fixed-shrink ${FIXED_SHRINK:-0.6}"
+    # proposed auto-enables uncertainty (no extra flag needed).
+    # shellcheck disable=SC2086
+    python scripts/run_benchmark.py --dataset "$MANIFEST" --output-root "$OUTPUT_ROOT" \
+      --view-counts $VIEW_COUNTS --variant "$V" --stages graph labels figure --skip-existing \
+      --label-vocab configs/label_vocab/indoor_open_vocab.json $extra \
+      --index-output "$OUTPUT_ROOT/variants/$V/benchmark_index.json"
+  done
+
+  echo "==> Structural variant comparison (annotation-free)"
+  python scripts/export_variant_comparison.py --results-root "$OUTPUT_ROOT" \
+    --markdown-output "$OUTPUT_ROOT/variant_structural_comparison.md" \
+    --csv-output "$OUTPUT_ROOT/variant_structural_comparison.csv"
+
+  # Labeled object/relation F1 per variant vs the 10-view annotation (needs annotation packets).
+  ANN="$OUTPUT_ROOT/annotations"
+  if [ -d "$ANN" ]; then
+    echo "==> Per-variant labeled F1 vs 10-view annotation"
+    python scripts/evaluate_sparse_view_annotations.py --dataset "$MANIFEST" \
+      --results-root "$OUTPUT_ROOT" --annotations-root "$ANN" \
+      --output "$OUTPUT_ROOT/variant_checked_metrics.csv" \
+      --reference-view-count 10 --packet-mode pseudo_reference \
+      --annotation-file-name annotation_checked.json \
+      --variant graph-fusion --variant geometry-only --variant 2d-only \
+      --variant semantic-lifting --variant fixed-shrink --variant proposed \
+      || echo "   (skipped: annotation_checked.json not present for all scenes)"
+  fi
+fi
+
 echo "==> Done. Bundle results with:"
 echo "    tar -czf results_bundle.tar.gz $OUTPUT_ROOT paper/tables paper/figures"

@@ -29,6 +29,7 @@ def summarize(path: Path) -> dict[str, object]:
     return {
         "path": str(path),
         "scene_id": payload.get("scene_id"),
+        "variant": pipeline.get("variant", "graph-fusion"),
         "num_nodes": len(nodes),
         "num_relations": len(relations),
         "num_candidate_nodes": pipeline.get("num_candidate_nodes"),
