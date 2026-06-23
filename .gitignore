@@ -20,6 +20,11 @@ results/**/sam_clip_features.json
 results/**/sam_clip_dinov2_features.json
 # Per-variant raw scene graphs are regenerable; keep only the variant_*.{csv,md} comparisons.
 results/**/variants/
+# Per-run scene graphs are regenerable and device-dependent (CPU vs GPU); don't ship them,
+# so a fresh clone always rebuilds from its own features instead of reusing stale graphs.
+results/**/views_*/scene_graph.json
+results/**/views_*/scene_graph_labeled.json
+results/**/views_*/scene_graph.png
 
 # Keep lightweight result artifacts under version control:
 #   scene_graph(_labeled).json, scene_graph.png, *.csv, benchmark_index.json,
