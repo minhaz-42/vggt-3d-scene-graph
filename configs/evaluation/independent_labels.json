@@ -1,0 +1,19 @@
+{
+  "label_source": "vlm-drafted-pending-human-verification",
+  "notes": "Object-label multiset per scene, enumerated by inspecting the RGB frames directly (independent of the SAM/CLIP/VGGT/graph-fusion pipeline), mapped to configs/label_vocab/indoor_open_vocab.json. Counts are scene-level (objects present across the 10 frames). Relations omitted: the pipeline's relations are geometric heuristics (near/above/left_of/...) not independently annotatable. PILOT: freiburg1_desk only; remaining scenes added after the approach is validated. MUST be human-verified before paper use.",
+  "scenes": {
+    "tum_rgbd_freiburg1_desk": {
+      "objects": {
+        "monitor": 2,
+        "keyboard": 1,
+        "desk": 1,
+        "book": 3,
+        "chair": 1,
+        "wall": 1,
+        "floor": 1,
+        "unknown object": 3
+      },
+      "relations": []
+    }
+  }
+}
