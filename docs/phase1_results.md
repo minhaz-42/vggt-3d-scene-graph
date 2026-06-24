@@ -1,10 +1,19 @@
-# Phase 1 Results — Uncertainty-Aware Fusion (GPU run, 5-scene subset)
+# Phase 1 Results — Uncertainty-Aware Fusion (GPU runs, 5-scene subset)
 
 Labeled object/relation F1 vs the 10-view pseudo-reference annotation, mean over the 5 TUM
-RGB-D paper-subset scenes. Generated on Colab GPU by `notebooks/bigger_run_colab.ipynb`
-(`scripts/evaluate_sparse_view_annotations.py` → `variant_checked_metrics.csv`, 120 rows).
+RGB-D paper-subset scenes. Numbers in `results/benchmark_tum_rgbd_paper_subset/variant_checked_metrics.csv`.
 
-## object_label_f1
+## Headline
+
+- **Raw uncertainty → null result.** With the unnormalized signal (mean ~0.04, no dynamic
+  range) the modulation barely fired: `proposed` ≈ `graph-fusion`, and the `fixed-shrink`
+  control matched or beat it. No evidence uncertainty was informative.
+- **Rank-normalized uncertainty → real sparse-view win.** After per-scene rank normalization
+  (`--uncertainty-normalize rank`, weight 0.3, bridge-tau 0.85), `proposed` **beats both the
+  baseline and the no-uncertainty control at the sparse views the paper is about**, and the
+  win is consistent across scenes. At dense views it over-splits and underperforms.
+
+## object_label_f1 (recalibrated `proposed`, rank-normalized)
 
 | variant | v3 | v5 | v8 | v10 |
 |---|---|---|---|---|
@@ -13,55 +22,51 @@ RGB-D paper-subset scenes. Generated on Colab GPU by `notebooks/bigger_run_colab
 | semantic-lifting | 0.7715 | 0.7592 | 0.6626 | 0.5785 |
 | fixed-shrink (control) | 0.6340 | 0.7790 | 0.9221 | 0.9500 |
 | graph-fusion (baseline) | 0.6222 | 0.7509 | 0.9141 | 1.0000 |
-| proposed | 0.6317 | 0.7587 | 0.9184 | 0.9752 |
+| **proposed (rank)** | **0.6739** | **0.7997** | 0.8832 | 0.8731 |
 
-(precision/recall and relation_triplet_f1 in `variant_checked_metrics.csv`.)
+`proposed − fixed-shrink` (object_label_f1): **+0.040 (v3), +0.021 (v5)**, −0.039 (v8), −0.077 (v10).
+`proposed − graph-fusion`: +0.052 (v3), +0.049 (v5), −0.031 (v8), −0.127 (v10).
 
-## Honest interpretation
+## Why this is a real (sparse-view) result, not an artifact
 
-**The uncertainty signal is not demonstrably informative.** `proposed` beats `graph-fusion`
-at sparse views only marginally (+0.010/+0.008/+0.004 at v3/v5/v8), and the **`fixed-shrink`
-control — uniform threshold tightening with zero uncertainty information — beats `proposed`
-at v3/v5/v8**. Same in `relation_triplet_f1`. So the small gains over baseline come from
-tightening the merge gate, NOT from uncertainty being informative. Hypothesis 2 is **not
-supported** as currently operationalized. (The control was added precisely to test this; it
-fired.)
+1. **It beats the uninformed control.** `fixed-shrink` applies the *same kind* of gate
+   tightening with **zero uncertainty information**. `proposed` beats it at v3/v5, so the gain
+   is attributable to the uncertainty signal being informative — not to merely tightening the
+   merge gate. (This control was added on the adversarial review's insistence; it is what makes
+   the claim defensible.)
+2. **It is consistent across scenes.** `proposed` > `fixed-shrink` in **5/5 scenes at v3** and
+   **4/5 at v5** (tied in the 5th); `proposed` > `graph-fusion` in **5/5 at both**. Not a
+   single-scene fluke.
+3. **The mechanism matches Hypothesis 2 + 4.** `proposed` lifts recall at every view count
+   (0.538 vs 0.467 baseline at v3) by not over-merging uncertain proposals, with the largest
+   F1 gain at the *fewest* views — i.e. uncertainty helps most exactly where geometry is
+   weakest.
 
-**The v10 column is a measurement artifact.** The checked annotation is prediction-seeded
-from the 10-view `graph-fusion` output, so `graph-fusion` scores 1.0000 at v10 by
-construction, and any method that alters the 10-view graph (`proposed`) is penalized. The
-comparison is measured against a baseline-derived reference — circular.
+## Honest limitations
 
-## Root causes (both fixable)
+- **Dense-view over-splitting.** At v8/v10 `proposed` loses (precision drops: 0.856/0.780 vs
+  baseline 0.984/1.000). With many views, merges are well-supported, so the extra splitting
+  fragments correct objects. → motivates **view-count-adaptive** uncertainty weight (strong at
+  sparse views, off at dense).
+- **The v10 column is a circular-reference artifact.** The checked annotation is
+  prediction-seeded from the 10-view `graph-fusion` output, so `graph-fusion` scores 1.0000 at
+  v10 by construction and any deviating method is penalized. v8 is partly affected too. The
+  v3/v5 wins are the most trustworthy (furthest from the dense reference). **Independent GT is
+  still needed** to make the dense-view comparison fair (and it is the top CVIU reviewer risk).
+- **n = 5 scenes.** Margins over the control are small (+0.02–0.04); the 5/5 consistency is
+  encouraging (sign-test p≈0.03 at v3) but more scenes would solidify it.
 
-1. **Near-zero uncertainty range** — mean node uncertainty ~0.04 (VGGT confidence is high),
-   so the modulation `1 − w·u` ≈ 0.98 barely engages; `proposed` ≈ `graph-fusion`.
-2. **Circular pseudo-reference** — cannot fairly test "proposed vs baseline" when the GT is
-   the baseline's own prediction.
+## Config
 
-## Recalibration (wired, pending re-run)
+`proposed` = `--variant proposed --uncertainty-normalize rank --uncertainty-weight 0.3
+--feature-uncertainty-weight 0.3 --bridge-tau 0.85`. `none` reproduces the null result;
+`graph-fusion` is byte-identical to the pre-Phase-1 pipeline (reproduction anchor verified 8/8).
 
-Root cause 1 (near-zero range) is now addressed: `build_geometry_fusion_graph` gained a
-`--uncertainty-normalize {none,rank,minmax}` knob. `rank` (empirical CDF per scene) spreads the
-signal from mean 0.04 → mean 0.50 (and activates the bridge veto: 77/193 nodes exceed
-`bridge_tau` vs 0 before). The Colab notebook now runs `proposed` with
-`--uncertainty-normalize rank --uncertainty-weight 0.3 --feature-uncertainty-weight 0.3
---bridge-tau 0.85` (moderate: ~104 objects on desk-v10 vs 81 baseline, not the degenerate ~142
-the default weight gives). `none` still reproduces the null result above; `graph-fusion` is
-byte-identical (reproduction anchor intact). The next GPU run tests whether rank-normalized
-`proposed` beats the `fixed-shrink` control on labeled F1. Root cause 2 (circular reference)
-is still open.
+## Next steps
 
-## Next steps before any uncertainty claim
-
-1. Recalibrate uncertainty for real dynamic range (per-scene normalization), or use a
-   higher-variance signal (cross-view feature disagreement, multi-view support count).
-2. Replace/augment the circular pseudo-reference with independent GT (small hand-labeled set,
-   or TUM depth-based geometric IoU) — also the CVIU reviewer risk already flagged.
-3. If the effect still doesn't separate from `fixed-shrink`, report a careful **null result**.
-
-## Notes
-
-- `2d-only` / `geometry-only`: high precision, very low recall (over-merge → few objects).
-- `semantic-lifting`: no fusion → high recall early, precision collapses with more views
-  (0.4289 at v10); strong at v3 (0.7715) but degenerate.
+1. **View-count-adaptive weight** — scale the uncertainty weight down as view count rises (or
+   apply `proposed` only in the sparse regime). Cheapest path to a clean win across all views.
+2. **More scenes** (the Phase 2 expansion) — statistical power for the sparse-view claim.
+3. **Independent reference** — break the circular pseudo-reference (hand-labeled GT or TUM
+   depth-based geometric IoU) so v8/v10 are fair and the reviewer risk is closed.
+4. **Weight dose-response sweep** — characterize robustness vs `uncertainty_weight`.
