@@ -1,6 +1,8 @@
 # Open-vocabulary front-end fix: SAM-auto-mask + CLIP → OWLv2 detector
 
-**Status:** Week 1 (GO/NO-GO + new proposal stage) — **GO, complete.**
+**Status:** Week 2 (pipeline integration) — **complete.** OWLv2 runs end-to-end through the
+benchmark on real objects; CLIP-text labeling replaced by a score-weighted vote over detector
+labels. See the Week-2 section below and the tracker in `docs/owlv2_workflow_plan.md`.
 
 ## Why
 
@@ -66,16 +68,31 @@ Validated end-to-end on `freiburg1_desk`: 94 proposals (box-only) / 16 on a 2-fr
 records parse via `load_proposal_records`; `label_hint` populated; masks decode and are tighter
 than boxes.
 
-## Week 2 plan — pipeline integration
+## Week 2 — pipeline integration (done)
 
-1. Wire `run_owlv2_proposals.py` into `run_benchmark.py` as the proposals backend (replace the
-   SAM-auto call; keep the `clip`/`dinov2` feature stages — they now crop **real object boxes**,
-   so the embeddings are sound; the old failure was CLIP *labeling* of fragments, not embeddings).
-2. Replace the `labels` stage (`assign_open_vocab_labels.py`, CLIP-text similarity) with
-   **OWLv2-label aggregation per fused node**: score-weighted majority vote over each fused
-   node's constituent proposals' `owlv2_label`s. (`label_hint` already seeds per-proposal labels;
-   need the node-level vote because fusion merges proposals that may disagree. Check how
-   `graph_builder.fuse_object_nodes` currently sets the fused label.)
-3. Re-run the desk scene (geometry cached) → real objects end-to-end.
-4. **Week 3:** build the independent GT for all 5 scenes (now meaningful) and re-run the
-   variant comparison on real objects — does uncertainty fusion actually help?
+1. **Proposals backend.** `run_benchmark.py` now takes `--proposal-backend {owlv2,sam}` (default
+   `owlv2`) and dispatches to `run_owlv2_proposals.py`. Knobs: `--owlv2-model/-threshold/-nms-iou/
+   -max-detections/-device`, `--proposal-local-files-only`; optional box-prompted SAM masks reuse
+   the existing `--sam-checkpoint`. `--label-vocab` is required (it supplies the text queries).
+   Proposal/feature files are backend-namespaced (`owlv2_proposals.json`,
+   `owlv2_clip_dinov2_features.json`, …) so an OWLv2 run never clobbers the legacy SAM cache.
+2. **Feature stages kept.** `clip`/`dinov2` now crop the real OWLv2 boxes; `extract_proposal_features.py`
+   preserves the per-proposal `owlv2_label`/`owlv2_score` fields, so the label survives to the vote.
+3. **Labeling replaced.** New `scripts/assign_detector_labels.py` sets each fused node's label by a
+   **score-weighted majority vote** over its constituent proposals' `owlv2_label`s (ties broken by
+   count). It writes the same `scene_graph_labeled.json` schema as the old CLIP-text labeler, so the
+   figure + eval are unchanged. (Note: `fuse_object_nodes` already does a plain count vote over the
+   `label_hint`-derived labels during fusion; the new stage refines that to score-weighted.)
+4. **Desk re-run (cached geometry, `results/owlv2_smoke/`).** Real objects end-to-end:
+   | views | proposals | fused | labels |
+   |---|---|---|---|
+   | v3 | 20 | 12 | keyboard:1, monitor:2, desk:6, book:2, floor:1 |
+   | v5 | 39 | 16 | keyboard:2, monitor:4, desk:5, book:1, floor:1, lamp:1, wall:1, cup:1 |
+   Over-detection collapses in 3D fusion (v3 20→12, v5 39→16); the v3 keyboard fuses across all 3
+   frames into one node. Compare the old `floor:54, curtain:13, bed:6` soup — none of the real objects.
+
+**Week 3 (next):** build the independent GT for all 5 scenes (now meaningful) and re-run the
+variant comparison (graph-fusion / proposed / fixed-shrink / baselines) on real objects — does
+the rank-normalized uncertainty fusion win survive once labels are real? Open tuning items from the
+re-run: desk/"stuff" over-splitting + whether to filter stuff classes for object-F1; monitor/keyboard
+over-split at higher view counts; low book recall.

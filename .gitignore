@@ -18,6 +18,11 @@ results/benchmark_dryrun/
 results/**/sam_proposals.json
 results/**/sam_clip_features.json
 results/**/sam_clip_dinov2_features.json
+results/**/owlv2_proposals.json
+results/**/owlv2_clip_features.json
+results/**/owlv2_clip_dinov2_features.json
+# Local OWLv2 Week-2 validation run (regenerable from cached geometry).
+results/owlv2_smoke/
 # Per-variant raw scene graphs are regenerable; keep only the variant_*.{csv,md} comparisons.
 results/**/variants/
 # Per-run scene graphs are regenerable and device-dependent (CPU vs GPU); don't ship them,

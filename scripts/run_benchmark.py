@@ -22,11 +22,39 @@ def parse_args() -> argparse.Namespace:
         default=["all"],
         choices=["all", "geometry", "proposals", "clip", "dinov2", "graph", "labels", "figure"],
     )
-    parser.add_argument("--sam-checkpoint", type=Path, help="SAM checkpoint for proposal generation.")
+    parser.add_argument(
+        "--proposal-backend",
+        default="owlv2",
+        choices=["owlv2", "sam"],
+        help="Object-proposal front-end. 'owlv2' = open-vocab detector (real labels, the fix); "
+        "'sam' = legacy SAM auto-masks + CLIP-text labels (kept for reproducing old runs).",
+    )
+    parser.add_argument(
+        "--sam-checkpoint",
+        type=Path,
+        help="SAM checkpoint. Required for --proposal-backend sam; optional for owlv2 "
+        "(when set, OWLv2 boxes are refined into clean instance masks via box-prompted SAM).",
+    )
     parser.add_argument("--sam-model-type", default="vit_b", choices=["vit_h", "vit_l", "vit_b"])
     parser.add_argument("--sam-max-image-side", type=int, default=1024)
     parser.add_argument("--sam-points-per-side", type=int, default=16)
     parser.add_argument("--sam-max-proposals-per-image", type=int, default=30)
+    # OWLv2 open-vocab detector knobs (proposal-backend=owlv2). Queries come from --label-vocab.
+    parser.add_argument("--owlv2-model", default="google/owlv2-base-patch16-ensemble")
+    parser.add_argument("--owlv2-threshold", type=float, default=0.2, help="OWLv2 detection score threshold.")
+    parser.add_argument("--owlv2-nms-iou", type=float, default=0.5, help="OWLv2 per-class NMS IoU; <=0 disables.")
+    parser.add_argument("--owlv2-max-detections", type=int, default=30, help="Max OWLv2 detections per image.")
+    parser.add_argument(
+        "--owlv2-device",
+        default="auto",
+        choices=["auto", "cpu", "mps", "cuda"],
+        help="Device for OWLv2 (and box-prompted SAM). 'auto' picks cuda>mps>cpu.",
+    )
+    parser.add_argument(
+        "--proposal-local-files-only",
+        action="store_true",
+        help="Load the OWLv2 detector from the local HF cache only (offline).",
+    )
     parser.add_argument("--geometry-device", default="cpu", choices=["auto", "cpu", "mps", "cuda"])
     parser.add_argument("--feature-device", default="cpu")
     parser.add_argument("--clip-model", default="openai/clip-vit-base-patch32")
@@ -88,15 +116,21 @@ def _run_command(cmd: list[str], output_path: Path | None, args: argparse.Namesp
     return record
 
 
-def _require_sam(args: argparse.Namespace, stages: set[str]) -> None:
-    if "proposals" in stages and args.sam_checkpoint is None:
-        raise SystemExit("--sam-checkpoint is required when running the proposals stage.")
+def _validate_proposal_backend(args: argparse.Namespace, stages: set[str]) -> None:
+    if "proposals" not in stages:
+        return
+    if args.proposal_backend == "sam" and args.sam_checkpoint is None:
+        raise SystemExit("--sam-checkpoint is required for --proposal-backend sam.")
+    if args.proposal_backend == "owlv2" and args.label_vocab is None:
+        raise SystemExit(
+            "--label-vocab is required for --proposal-backend owlv2 (it supplies the detector's text queries)."
+        )
 
 
 def main() -> None:
     args = parse_args()
     stages = _stage_set(args.stages)
-    _require_sam(args, stages)
+    _validate_proposal_backend(args, stages)
     manifest = load_dataset_manifest(args.dataset)
     selected_scene_ids = set(args.scene_id)
     scenes = [scene for scene in manifest.scenes if not selected_scene_ids or scene.scene_id in selected_scene_ids]
@@ -120,9 +154,12 @@ def main() -> None:
             else:
                 graph_dir = args.output_root / "variants" / args.variant / scene.scene_id / view_subdir
             geometry_path = feature_dir / "vggt_geometry.npz"
-            sam_path = feature_dir / "sam_proposals.json"
-            clip_path = feature_dir / "sam_clip_features.json"
-            dinov2_path = feature_dir / "sam_clip_dinov2_features.json"
+            # Proposal/feature filenames are backend-namespaced so an OWLv2 run never clobbers
+            # (or silently reuses) the legacy SAM-auto cache, and the names stay honest.
+            file_prefix = "owlv2" if args.proposal_backend == "owlv2" else "sam"
+            raw_proposals_path = feature_dir / f"{file_prefix}_proposals.json"
+            clip_path = feature_dir / f"{file_prefix}_clip_features.json"
+            dinov2_path = feature_dir / f"{file_prefix}_clip_dinov2_features.json"
             graph_path = graph_dir / "scene_graph.json"
             labeled_graph_path = graph_dir / "scene_graph_labeled.json"
             figure_path = graph_dir / "scene_graph.png"
@@ -134,6 +171,7 @@ def main() -> None:
                 "scene_id": scene.scene_id,
                 "split": scene.split,
                 "variant": args.variant,
+                "proposal_backend": args.proposal_backend,
                 "view_count": len(image_names),
                 "selected_images": image_names,
                 "run_dir": str(graph_dir),
@@ -165,31 +203,59 @@ def main() -> None:
                 )
 
             if "proposals" in stages:
-                commands.append(
-                    _run_command(
-                        [
-                            sys.executable,
-                            "scripts/run_sam_proposals.py",
-                            "--scene-dir",
-                            str(scene.scene_dir),
-                            *_image_args(image_names),
-                            "--checkpoint",
+                if args.proposal_backend == "owlv2":
+                    proposals_command = [
+                        sys.executable,
+                        "scripts/run_owlv2_proposals.py",
+                        "--scene-dir",
+                        str(scene.scene_dir),
+                        *_image_args(image_names),
+                        "--labels",
+                        str(args.label_vocab),
+                        "--owlv2-model",
+                        args.owlv2_model,
+                        "--device",
+                        args.owlv2_device,
+                        "--threshold",
+                        str(args.owlv2_threshold),
+                        "--nms-iou",
+                        str(args.owlv2_nms_iou),
+                        "--max-detections-per-image",
+                        str(args.owlv2_max_detections),
+                        "--output",
+                        str(raw_proposals_path),
+                    ]
+                    if args.sam_checkpoint is not None:
+                        # Box-prompted SAM masks → clean 3D lifting (only object pixels, not bbox bg).
+                        proposals_command += [
+                            "--sam-checkpoint",
                             str(args.sam_checkpoint),
-                            "--model-type",
+                            "--sam-model-type",
                             args.sam_model_type,
-                            "--max-image-side",
-                            str(args.sam_max_image_side),
-                            "--points-per-side",
-                            str(args.sam_points_per_side),
-                            "--max-proposals-per-image",
-                            str(args.sam_max_proposals_per_image),
-                            "--output",
-                            str(sam_path),
-                        ],
-                        sam_path,
-                        args,
-                    )
-                )
+                        ]
+                    if args.proposal_local_files_only:
+                        proposals_command.append("--local-files-only")
+                else:
+                    proposals_command = [
+                        sys.executable,
+                        "scripts/run_sam_proposals.py",
+                        "--scene-dir",
+                        str(scene.scene_dir),
+                        *_image_args(image_names),
+                        "--checkpoint",
+                        str(args.sam_checkpoint),
+                        "--model-type",
+                        args.sam_model_type,
+                        "--max-image-side",
+                        str(args.sam_max_image_side),
+                        "--points-per-side",
+                        str(args.sam_points_per_side),
+                        "--max-proposals-per-image",
+                        str(args.sam_max_proposals_per_image),
+                        "--output",
+                        str(raw_proposals_path),
+                    ]
+                commands.append(_run_command(proposals_command, raw_proposals_path, args))
 
             if "clip" in stages:
                 commands.append(
@@ -200,7 +266,7 @@ def main() -> None:
                             "--scene-dir",
                             str(scene.scene_dir),
                             "--proposals",
-                            str(sam_path),
+                            str(raw_proposals_path),
                             "--output",
                             str(clip_path),
                             "--backend",
@@ -280,35 +346,47 @@ def main() -> None:
                     graph_command += ["--fixed-shrink", str(args.fixed_shrink)]
                 commands.append(_run_command(graph_command, graph_path, args))
 
-            if "labels" in stages and args.label_vocab is not None:
-                label_command = [
-                    sys.executable,
-                    "scripts/assign_open_vocab_labels.py",
-                    "--scene-graph",
-                    str(graph_path),
-                    "--proposals",
-                    str(dinov2_path),
-                    "--labels",
-                    str(args.label_vocab),
-                    "--output",
-                    str(labeled_graph_path),
-                    "--model-name",
-                    args.clip_model,
-                    "--device",
-                    args.feature_device,
-                ]
-                if args.label_local_files_only:
-                    label_command.append("--local-files-only")
-                commands.append(
-                    _run_command(
-                        label_command,
-                        labeled_graph_path,
-                        args,
-                    )
-                )
+            # OWLv2 carries real labels on every proposal, so labeling is a score-weighted vote
+            # over the fused node's owlv2_labels (no vocab needed). SAM has no labels, so it still
+            # needs the CLIP-text-similarity stage against a vocabulary.
+            labeled_graph_available = "labels" in stages and (
+                args.proposal_backend == "owlv2" or args.label_vocab is not None
+            )
+            if labeled_graph_available:
+                if args.proposal_backend == "owlv2":
+                    label_command = [
+                        sys.executable,
+                        "scripts/assign_detector_labels.py",
+                        "--scene-graph",
+                        str(graph_path),
+                        "--proposals",
+                        str(dinov2_path),
+                        "--output",
+                        str(labeled_graph_path),
+                    ]
+                else:
+                    label_command = [
+                        sys.executable,
+                        "scripts/assign_open_vocab_labels.py",
+                        "--scene-graph",
+                        str(graph_path),
+                        "--proposals",
+                        str(dinov2_path),
+                        "--labels",
+                        str(args.label_vocab),
+                        "--output",
+                        str(labeled_graph_path),
+                        "--model-name",
+                        args.clip_model,
+                        "--device",
+                        args.feature_device,
+                    ]
+                    if args.label_local_files_only:
+                        label_command.append("--local-files-only")
+                commands.append(_run_command(label_command, labeled_graph_path, args))
 
             if "figure" in stages:
-                graph_for_figure = labeled_graph_path if "labels" in stages and args.label_vocab is not None else graph_path
+                graph_for_figure = labeled_graph_path if labeled_graph_available else graph_path
                 commands.append(
                     _run_command(
                         [
@@ -339,6 +417,7 @@ def main() -> None:
                 "dataset_name": manifest.name,
                 "dataset_version": manifest.version,
                 "variant": args.variant,
+                "proposal_backend": args.proposal_backend,
                 "stages": sorted(stages),
                 "num_runs": len(index_records),
                 "runs": index_records,
