@@ -1,8 +1,9 @@
 # Open-vocabulary front-end fix: SAM-auto-mask + CLIP → OWLv2 detector
 
-**Status:** Week 2 (pipeline integration) — **complete.** OWLv2 runs end-to-end through the
-benchmark on real objects; CLIP-text labeling replaced by a score-weighted vote over detector
-labels. See the Week-2 section below and the tracker in `docs/owlv2_workflow_plan.md`.
+**Status:** Week 3 (independent re-eval) — **complete.** OWLv2 runs end-to-end on real objects
+(Week 2), and the variant comparison was re-run on an independent reference. **Key finding: the
+uncertainty-aware fusion does NOT help on real labels** — the Phase-1 win was a circular-reference
+artifact. Full write-up: `docs/phase1_results_independent.md`. Tracker: `docs/owlv2_workflow_plan.md`.
 
 ## Why
 
@@ -91,8 +92,12 @@ than boxes.
    Over-detection collapses in 3D fusion (v3 20→12, v5 39→16); the v3 keyboard fuses across all 3
    frames into one node. Compare the old `floor:54, curtain:13, bed:6` soup — none of the real objects.
 
-**Week 3 (next):** build the independent GT for all 5 scenes (now meaningful) and re-run the
-variant comparison (graph-fusion / proposed / fixed-shrink / baselines) on real objects — does
-the rank-normalized uncertainty fusion win survive once labels are real? Open tuning items from the
-re-run: desk/"stuff" over-splitting + whether to filter stuff classes for object-F1; monitor/keyboard
-over-split at higher view counts; low book recall.
+## Week 3 — independent re-eval (done)
+
+Built an independent 5-scene reference (draft + adversarial verify over raw frames; pending human
+verification), ran the full OWLv2 benchmark (5 scenes × {3,5,8,10} × 6 variants), and re-ran the
+variant comparison on real objects. **The rank-normalized uncertainty fusion does NOT beat the
+no-uncertainty baseline or the control** — slightly worse at every view count, 5/5 scene losses at
+v5–v10, robust under 3 reference filterings and a weight sweep (0.1–0.8). The Phase-1 sparse-view
+"win" was a circular-reference artifact. The real win is the OWLv2 open-vocab system + the
+de-circularized benchmark. Full write-up + tables: `docs/phase1_results_independent.md`.

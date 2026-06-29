@@ -1,5 +1,12 @@
 # Phase 1 Results — Uncertainty-Aware Fusion (GPU runs, 5-scene subset)
 
+> ⚠️ **SUPERSEDED — read [`phase1_results_independent.md`](phase1_results_independent.md) first.**
+> The "sparse-view win" below was measured against a **circular** pseudo-reference (seeded from the
+> 10-view graph-fusion prediction). Re-evaluated on real OWLv2 objects against an **independent**
+> reference (Week 3), the win disappears: `proposed` is slightly *worse* than both `graph-fusion`
+> and `fixed-shrink` at every view count, and no uncertainty weight rescues it. The numbers here are
+> retained only as the record of the circular-reference artifact.
+
 Labeled object/relation F1 vs the 10-view pseudo-reference annotation, mean over the 5 TUM
 RGB-D paper-subset scenes. Numbers in `results/benchmark_tum_rgbd_paper_subset/variant_checked_metrics.csv`.
 

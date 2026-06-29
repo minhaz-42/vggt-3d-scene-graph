@@ -1,0 +1,113 @@
+# Phase 1 re-evaluated on an INDEPENDENT reference — uncertainty fusion does not help
+
+**This supersedes the positive sparse-view read in [`phase1_results.md`](phase1_results.md).** That
+result was measured against a *circular* pseudo-reference (seeded from the 10-view graph-fusion
+prediction, so graph-fusion scored 1.0 at v10 by construction). Week 2 replaced the broken
+SAM-auto + CLIP front-end with the OWLv2 detector (real open-vocab objects), and Week 3 built an
+**independent** reference and re-ran the full variant comparison. On real objects against a fair
+reference, the headline flips.
+
+## Headline
+
+**The rank-normalized uncertainty-aware fusion (`proposed`) provides no benefit over the
+no-uncertainty baseline (`graph-fusion`) or the uninformed control (`fixed-shrink`) — it is
+slightly worse at every view count, and no uncertainty weight in [0.1, 0.8] rescues it.** The
+Phase-1 "sparse-view win" was an artifact of the circular reference.
+
+## Setup
+
+- **Front-end:** OWLv2 (`google/owlv2-base-patch16-ensemble`), box-prompted SAM masks, score
+  threshold 0.2, per-class NMS 0.5. Real open-vocab objects (Week 2).
+- **Reference:** independent per-scene object multiset for all 5 paper-subset scenes, enumerated by
+  two independent passes (draft + adversarial verify) over the raw RGB frames — independent of
+  SAM/CLIP/VGGT/graph-fusion. `configs/evaluation/independent_labels.json`; provenance + the
+  corrections the adversarial pass applied in `docs/independent_reference_worklist.md`.
+  **Still VLM-drafted, pending human verification** (see caveats).
+- **Metric:** `object_label_f1` = multiset precision/recall/F1 of fused-node labels vs the reference
+  multiset, mean over the 5 scenes. Driver: `scripts/run_owlv2_benchmark.sh`; eval:
+  `scripts/evaluate_sparse_view_annotations.py`; aggregation: `scripts/aggregate_variant_f1.py`.
+  Raw: `results/benchmark_owlv2/variant_independent_metrics.csv`.
+
+## object_label_f1 on the independent reference (mean over 5 scenes)
+
+| variant | v3 | v5 | v8 | v10 |
+|---|---|---|---|---|
+| 2d-only | 0.4805 | 0.4944 | 0.5117 | 0.4986 |
+| geometry-only | 0.4495 | 0.4768 | 0.5017 | 0.4956 |
+| semantic-lifting | 0.4158 | 0.3395 | 0.2690 | 0.2315 |
+| fixed-shrink (control) | 0.5095 | 0.4868 | 0.4683 | 0.4253 |
+| **graph-fusion (baseline)** | **0.5054** | **0.5050** | **0.4903** | **0.4581** |
+| proposed (rank, w=0.3) | 0.4922 | 0.4757 | 0.4326 | 0.3976 |
+
+`proposed − fixed-shrink`: −0.017 (v3), −0.011 (v5), −0.036 (v8), −0.028 (v10).
+`proposed − graph-fusion`: −0.013 (v3), −0.029 (v5), −0.058 (v8), −0.061 (v10).
+Per-scene: `proposed` < `graph-fusion` in **3/5 at v3 and 5/5 at v5, v8, v10**. The sign of the
+Phase-1 result (proposed > controls, 5/5 at v3/v5) is reversed.
+
+## Why the Phase-1 win was an artifact
+
+The Phase-1 reference was prediction-seeded from the 10-view graph-fusion output, so it *encoded
+graph-fusion's own splitting pattern*. `proposed` keeps more uncertain proposals unmerged → splits
+more → produced more of the same fragments the circular reference contained → looked better. An
+independent reference fixes the true object count, so over-splitting is correctly penalized, and the
+apparent gain disappears.
+
+## Robustness — the negative result holds under every reference filtering
+
+The reference includes `unknown object` (which OWLv2 never predicts) and "stuff" (wall/floor/
+ceiling). Removing them raises every variant's F1 but does **not** change the ranking:
+
+| reference filtering | proposed − graph-fusion (v3 / v5 / v8 / v10) |
+|---|---|
+| full | −0.013 / −0.029 / −0.058 / −0.061 |
+| drop `unknown object` | −0.023 / −0.052 / −0.078 / −0.082 |
+| objects-only (drop unknown + wall/floor/ceiling) | −0.019 / −0.041 / −0.058 / −0.058 |
+
+## Weight sweep — no setting rescues it
+
+`proposed` (rank) swept over uncertainty weight ∈ {0.1, 0.2, 0.3, 0.5, 0.8} (dropping `unknown
+object`), vs the baseline `graph-fusion = 0.594 / 0.594 / 0.556 / 0.515`:
+
+| weight | v3 | v5 | v8 | v10 |
+|---|---|---|---|---|
+| 0.1 | 0.5647 | 0.5308 | 0.4760 | 0.4274 |
+| 0.2 | 0.5713 | 0.5394 | 0.4757 | 0.4244 |
+| 0.3 | 0.5713 | 0.5417 | 0.4780 | 0.4335 |
+| 0.5 | 0.5762 | 0.5236 | 0.4590 | 0.4069 |
+| 0.8 | 0.5656 | 0.5050 | 0.4298 | 0.3860 |
+
+Best `proposed` at each view still loses to `graph-fusion`: −0.018 (v3), −0.052 (v5), −0.078 (v8),
+−0.082 (v10). Larger weights are worse at dense views. Raw: `results/benchmark_owlv2/uncertainty_weight_sweep.txt`.
+
+## Mechanism (why, precisely)
+
+The uncertainty modulation does exactly what it was designed to — it **lifts recall** by not
+over-merging uncertain proposals (`proposed` recall 0.475/0.541/0.632/0.637 vs graph-fusion
+0.466/0.494/0.594/0.590). But the same behavior **costs more precision** by fragmenting correct
+objects (`proposed` precision 0.531/0.438/0.336/0.295 vs 0.587/0.563/0.443/0.405). On a fixed-count
+reference the precision loss outweighs the recall gain → net F1 is lower. The signal is not noise
+(recall genuinely improves), but as a *merge-gate modulation* it splits indiscriminately rather than
+only where splitting is correct.
+
+## Implications
+
+1. **The uncertainty-aware fusion is not a defensible paper contribution as formulated.** Honest
+   options: report it as a negative result / ablation, or redirect the novelty.
+2. **The OWLv2 migration is the real win.** The system now produces genuine open-vocabulary 3D
+   objects, and the eval is de-circularized — a sound footing the circular version never had. The
+   paper can stand on the open-vocab sparse-view 3D scene-graph system + a fair benchmark.
+3. **`graph-fusion` is the strongest fusion variant** on real labels at every view count; F1 falls
+   with more views for all fusion variants (more proposals → more over-detection → precision drops
+   against a fixed reference) — the opposite of the circular reference's monotone rise.
+4. **If uncertainty is pursued further**, the recall gain hints it should *select/prune* nodes or
+   weight *label confidence*, not just tighten the merge gate (which only adds fragments).
+
+## Caveats
+
+- **The independent reference is VLM-drafted (two passes) and must be human-verified** before any
+  paper claim — this is the top reviewer risk and the worklist for it is `docs/independent_reference_worklist.md`.
+  The qualitative conclusion (proposed ≈ or < baseline across all views/weights/filterings) is large
+  and consistent enough that human correction of a few counts is very unlikely to flip it.
+- **n = 5 scenes.** Consistent (5/5 at v5–v10) but small.
+- Reference is a scene-level multiset over the 10 frames; sparse-view predictions are recall-limited
+  by construction — fair across variants, but absolute F1 is depressed.

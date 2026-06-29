@@ -27,8 +27,8 @@ against CLIP (~1.0 at v10 by construction, ~3% vs an independent reference). See
 |----|------|--------|
 | 1 | **GO/NO-GO**: confirm a detector finds real objects → pick detector. Build new proposal stage (detector boxes + labels; optionally SAM box-prompted masks). | ✅ **Done — GO** |
 | 2 | Integrate into the pipeline (replace proposal + labeling stages), re-run (geometry cached), get real objects. | ✅ **Done** |
-| 3 | Build independent GT for all 5 scenes (now meaningful) → re-run the variant comparison on real objects: does uncertainty fusion actually help? | ⬜ Next |
-| 4–5 | Scene expansion (~30-scene run, statistical power) + ablations. | ⬜ |
+| 3 | Build independent GT for all 5 scenes (now meaningful) → re-run the variant comparison on real objects: does uncertainty fusion actually help? | ✅ **Done — NO** |
+| 4–5 | Scene expansion (~30-scene run, statistical power) + ablations. | ⬜ Next (see Week-3 finding) |
 | 6–7 | Write-up + figures + venue formatting. | ⬜ |
 | 8 | Buffer → submit. | ⬜ |
 
@@ -86,16 +86,31 @@ Legend: ✅ done · 🟡 in progress · ⬜ not started
   variant comparison runs on real labels.
 - **book recall is low** (1–2 nodes) as flagged in Week 1; may want a per-class lower threshold.
 
-## Week 3 — independent GT + variant re-eval ⬜
+## Week 3 — independent GT + variant re-eval ✅ (finding: uncertainty does NOT help)
 
-- [ ] Extend `configs/evaluation/independent_labels.json` from the desk-only pilot to all 5 scenes
-      (currently `vlm-drafted-pending-human-verification`; must be human-verified before paper use).
-- [ ] Build packets via `scripts/build_independent_reference.py`.
-- [ ] Re-run the variant comparison (graph-fusion / proposed / fixed-shrink control / baselines) on
-      **real objects** against the independent reference.
-- [ ] Answer the core question: **does rank-normalized uncertainty fusion actually help** once
-      labels are real (revisit the `phase1-results-null` sparse-view win, which was measured against
-      wrong labels)?
+- [x] Extended `configs/evaluation/independent_labels.json` to all 5 scenes. Object multisets drafted
+      + **adversarially verified** by two independent passes over the raw RGB frames (workflow
+      `independent-reference-draft`). Provenance + corrections: `docs/independent_reference_worklist.md`.
+      Still `vlm-drafted-pending-human-verification`.
+- [x] Built packets via `scripts/build_independent_reference.py` → `results/benchmark_owlv2/annotations/`.
+- [x] Ran the full OWLv2 benchmark — 5 scenes × {3,5,8,10} views × 6 variants — on cached geometry
+      (`scripts/run_owlv2_benchmark.sh` → `results/benchmark_owlv2/`).
+- [x] Re-ran the variant comparison on real objects vs the independent reference
+      (`scripts/aggregate_variant_f1.py`).
+- [x] **Answer: NO.** `proposed` (rank, w=0.3) is slightly *worse* than both `graph-fusion` and
+      `fixed-shrink` at every view count (proposed − graph-fusion: −0.013/−0.029/−0.058/−0.061 at
+      v3/v5/v8/v10; 5/5 scene losses at v5–v10). The Phase-1 sparse-view "win" was a **circular-reference
+      artifact**. Holds under 3 reference filterings and across a weight sweep (0.1–0.8 — none rescue it).
+      Mechanism: uncertainty modulation lifts recall but over-splits → larger precision loss. Full
+      write-up: **`docs/phase1_results_independent.md`** (supersedes `phase1_results.md`).
+
+### Week-3 implications (decide before Week 4–5)
+- The uncertainty-aware fusion is not a defensible contribution as formulated → report as a negative
+  result/ablation, or redirect the novelty.
+- The real win is the **OWLv2 open-vocab 3D scene-graph system + the de-circularized benchmark**;
+  `graph-fusion` is the strongest fusion variant on real labels.
+- Open: human-verify the reference (top reviewer risk); if pursuing uncertainty, make it *prune/select*
+  nodes or weight label confidence rather than tighten the merge gate.
 
 ## Week 4–5 — scene expansion + ablations ⬜
 
