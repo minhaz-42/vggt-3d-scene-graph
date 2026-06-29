@@ -23,6 +23,9 @@ results/**/owlv2_clip_features.json
 results/**/owlv2_clip_dinov2_features.json
 # Local OWLv2 Week-2 validation run (regenerable from cached geometry).
 results/owlv2_smoke/
+# Verification aid (contact sheets + published artifact HTML) — regenerable, large.
+results/benchmark_owlv2/verification/
+results/benchmark_owlv2/sweep/
 # Per-variant raw scene graphs are regenerable; keep only the variant_*.{csv,md} comparisons.
 results/**/variants/
 # Per-run scene graphs are regenerable and device-dependent (CPU vs GPU); don't ship them,

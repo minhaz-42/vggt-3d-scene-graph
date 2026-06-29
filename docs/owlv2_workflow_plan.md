@@ -104,13 +104,17 @@ Legend: ✅ done · 🟡 in progress · ⬜ not started
       Mechanism: uncertainty modulation lifts recall but over-splits → larger precision loss. Full
       write-up: **`docs/phase1_results_independent.md`** (supersedes `phase1_results.md`).
 
-### Week-3 implications (decide before Week 4–5)
-- The uncertainty-aware fusion is not a defensible contribution as formulated → report as a negative
-  result/ablation, or redirect the novelty.
-- The real win is the **OWLv2 open-vocab 3D scene-graph system + the de-circularized benchmark**;
+### Week-3 implications → DECISION (2026-06-30)
+- **Direction chosen: reframe the contribution around the OWLv2 open-vocab sparse-view 3D scene-graph
+  system + the de-circularized benchmark.** Uncertainty-aware fusion is reported as an honest negative
+  ablation (it lifts recall but over-splits → no net F1 gain on real labels, at any weight).
   `graph-fusion` is the strongest fusion variant on real labels.
-- Open: human-verify the reference (top reviewer risk); if pursuing uncertainty, make it *prune/select*
-  nodes or weight label confidence rather than tighten the merge gate.
+- **Active task: human-verify the independent reference** (top reviewer risk). Verification aid built
+  in `results/benchmark_owlv2/verification/` (per-scene contact sheets) + the verification Artifact;
+  checklist in `docs/independent_reference_worklist.md`. After corrections: edit
+  `configs/evaluation/independent_labels.json` → rebuild packets → re-run eval (result expected to hold).
+- If uncertainty is ever revisited: make it *prune/select* nodes or weight label confidence, not
+  tighten the merge gate.
 
 ## Week 4–5 — scene expansion + ablations ⬜
 
