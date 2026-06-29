@@ -108,7 +108,12 @@ Legend: ✅ done · 🟡 in progress · ⬜ not started
 - **Direction chosen: reframe the contribution around the OWLv2 open-vocab sparse-view 3D scene-graph
   system + the de-circularized benchmark.** Uncertainty-aware fusion is reported as an honest negative
   ablation (it lifts recall but over-splits → no net F1 gain on real labels, at any weight).
-  `graph-fusion` is the strongest fusion variant on real labels.
+- **POSITIVE method contribution found: `graph-fusion-dedup`.** A post-fusion duplicate-instance merge
+  (same-label nodes with 3D-box IoU > 0.1) beats `graph-fusion` at every view count by +0.06 → +0.14,
+  winning in every scene (5W/0L at v8/v10), gain growing at dense views, F1 rising not falling with
+  views. Targets the measured over-counting weakness — the opposite axis from the (failed) uncertainty
+  gate. Wired as a variant in `graph_builder.py`/`run_pipeline.py`/`run_benchmark.py`. Numbers in
+  `phase1_results_independent.md`; the system weakness it fixes is in `owlv2_system_characterization.md`.
 - **Active task: human-verify the independent reference** (top reviewer risk). Verification aid built
   in `results/benchmark_owlv2/verification/` (per-scene contact sheets) + the verification Artifact;
   checklist in `docs/independent_reference_worklist.md`. After corrections: edit

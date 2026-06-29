@@ -40,7 +40,7 @@ def parse_args() -> argparse.Namespace:
         "--variant",
         action="append",
         default=[],
-        choices=["2d-only", "geometry-only", "semantic-lifting", "graph-fusion", "proposed", "fixed-shrink"],
+        choices=["2d-only", "geometry-only", "semantic-lifting", "graph-fusion", "graph-fusion-dedup", "proposed", "fixed-shrink"],
         help="Fusion variant(s) to evaluate. Repeat for several. Defaults to graph-fusion. "
         "Non-default variants are read from <results-root>/variants/<variant>/.",
     )

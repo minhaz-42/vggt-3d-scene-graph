@@ -63,6 +63,12 @@ This is the same axis the uncertainty-aware fusion acted on — but in the **wro
 That independently explains the Week-3 negative result and points any future uncertainty work toward
 *encouraging* duplicate merges / pruning fragments, not preventing merges.
 
+**This prediction was implemented and confirmed.** `graph-fusion-dedup` (a post-fusion merge of
+same-label nodes whose 3D boxes overlap, `merge_duplicate_instances` in `graph_builder.py`) raises
+object F1 over `graph-fusion` at every view count (+0.06 → +0.14), wins in every scene, and is the
+only variant whose F1 *improves* with more views. Full numbers in `phase1_results_independent.md`
+("Positive result").
+
 ## Caveats
 - Reference is VLM-drafted (pending human verification); per-class counts (esp. small classes like
   `cabinet`, `picture`, `window` with ref ≤ 3) are the most sensitive to verification.

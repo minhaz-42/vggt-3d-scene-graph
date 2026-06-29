@@ -36,8 +36,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--variant",
         default="graph-fusion",
-        choices=["2d-only", "geometry-only", "semantic-lifting", "graph-fusion", "proposed", "fixed-shrink"],
-        help="Fusion variant for baselines/ablations. Default reproduces the original pipeline.",
+        choices=["2d-only", "geometry-only", "semantic-lifting", "graph-fusion", "graph-fusion-dedup", "proposed", "fixed-shrink"],
+        help="Fusion variant for baselines/ablations. Default reproduces the original pipeline; "
+        "'graph-fusion-dedup' adds a post-fusion duplicate-instance merge.",
+    )
+    parser.add_argument(
+        "--dedup-iou",
+        type=float,
+        default=0.1,
+        help="3D-box IoU above which same-label fused nodes are merged (variant=graph-fusion-dedup).",
     )
     parser.add_argument(
         "--use-uncertainty",
@@ -130,6 +137,7 @@ def main() -> None:
         max_feature_threshold=args.uncertainty_max_feature_threshold,
         bridge_tau=args.bridge_tau,
         fixed_shrink=args.fixed_shrink,
+        dedup_iou=args.dedup_iou,
     )
     relations = infer_relations(
         fused_nodes,
@@ -158,6 +166,7 @@ def main() -> None:
         "uncertainty_max_feature_threshold": args.uncertainty_max_feature_threshold,
         "bridge_tau": args.bridge_tau,
         "fixed_shrink": args.fixed_shrink,
+        "dedup_iou": args.dedup_iou,
         "min_point_confidence": args.min_point_confidence,
         "fusion_distance": args.fusion_distance,
         "fusion_feature_threshold": args.fusion_feature_threshold,

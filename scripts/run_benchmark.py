@@ -67,10 +67,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--variant",
         default="graph-fusion",
-        choices=["2d-only", "geometry-only", "semantic-lifting", "graph-fusion", "proposed", "fixed-shrink"],
+        choices=["2d-only", "geometry-only", "semantic-lifting", "graph-fusion", "graph-fusion-dedup", "proposed", "fixed-shrink"],
         help="Fusion variant for the graph stage. Non-default variants reuse the shared upstream "
         "feature cache and write graphs under <output-root>/variants/<variant>/.",
     )
+    parser.add_argument("--dedup-iou", type=float, default=0.1, help="3D-box IoU for duplicate-instance merge (variant=graph-fusion-dedup).")
     parser.add_argument("--use-uncertainty", action="store_true", help="Enable uncertainty-aware fusion (variant=proposed).")
     parser.add_argument("--uncertainty-weight", type=float, default=0.5)
     parser.add_argument("--feature-uncertainty-weight", type=float, default=1.0)
@@ -344,6 +345,8 @@ def main() -> None:
                     ]
                 if args.variant == "fixed-shrink":
                     graph_command += ["--fixed-shrink", str(args.fixed_shrink)]
+                if args.variant == "graph-fusion-dedup":
+                    graph_command += ["--dedup-iou", str(args.dedup_iou)]
                 commands.append(_run_command(graph_command, graph_path, args))
 
             # OWLv2 carries real labels on every proposal, so labeling is a score-weighted vote

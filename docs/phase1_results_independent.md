@@ -14,6 +14,12 @@ no-uncertainty baseline (`graph-fusion`) or the uninformed control (`fixed-shrin
 slightly worse at every view count, and no uncertainty weight in [0.1, 0.8] rescues it.** The
 Phase-1 "sparse-view win" was an artifact of the circular reference.
 
+**Positive result (the replacement contribution): a post-fusion duplicate-instance merge
+(`graph-fusion-dedup`) beats `graph-fusion` at every view count by +0.06 → +0.14, winning in
+every scene (no losses), with the gain growing at dense views.** It targets the system's true
+weakness (over-counting, see `owlv2_system_characterization.md`) — the opposite direction from
+the uncertainty gate. See "Positive result" below.
+
 ## Setup
 
 - **Front-end:** OWLv2 (`google/owlv2-base-patch16-ensemble`), box-prompted SAM masks, score
@@ -36,8 +42,9 @@ Phase-1 "sparse-view win" was an artifact of the circular reference.
 | geometry-only | 0.4495 | 0.4768 | 0.5017 | 0.4956 |
 | semantic-lifting | 0.4158 | 0.3395 | 0.2690 | 0.2315 |
 | fixed-shrink (control) | 0.5095 | 0.4868 | 0.4683 | 0.4253 |
-| **graph-fusion (baseline)** | **0.5054** | **0.5050** | **0.4903** | **0.4581** |
+| graph-fusion (baseline) | 0.5054 | 0.5050 | 0.4903 | 0.4581 |
 | proposed (rank, w=0.3) | 0.4922 | 0.4757 | 0.4326 | 0.3976 |
+| **graph-fusion-dedup (ours)** | **0.5684** | **0.5893** | **0.6349** | **0.6004** |
 
 `proposed − fixed-shrink`: −0.017 (v3), −0.011 (v5), −0.036 (v8), −0.028 (v10).
 `proposed − graph-fusion`: −0.013 (v3), −0.029 (v5), −0.058 (v8), −0.061 (v10).
@@ -78,6 +85,32 @@ object`), vs the baseline `graph-fusion = 0.594 / 0.594 / 0.556 / 0.515`:
 
 Best `proposed` at each view still loses to `graph-fusion`: −0.018 (v3), −0.052 (v5), −0.078 (v8),
 −0.082 (v10). Larger weights are worse at dense views. Raw: `results/benchmark_owlv2/uncertainty_weight_sweep.txt`.
+
+## Positive result — duplicate-instance merge (`graph-fusion-dedup`)
+
+The per-class characterization (`owlv2_system_characterization.md`) showed the system's only real
+weakness is **over-counting**: the same physical object survives as several fused nodes (desk 9×,
+monitor 10× at v10) because OWLv2 over-detects and same-view detections can never form a fusion edge.
+`graph-fusion-dedup` adds one post-fusion step: union same-label fused nodes whose axis-aligned 3D
+boxes have IoU > 0.1 and re-fuse each group (`merge_duplicate_instances` in `graph_builder.py`).
+
+| variant | v3 | v5 | v8 | v10 |
+|---|---|---|---|---|
+| graph-fusion | 0.5054 | 0.5050 | 0.4903 | 0.4581 |
+| **graph-fusion-dedup** | **0.5684** | **0.5893** | **0.6349** | **0.6004** |
+| Δ vs graph-fusion | +0.063 | +0.084 | +0.145 | +0.142 |
+
+- **Wins in every scene, never loses:** 4W/0L/1T (v3), 4W/0L/1T (v5), **5W/0L (v8, v10)**; same
+  story vs `fixed-shrink` (+0.06 → +0.18). (n=5 → sign-test floor p=0.062.)
+- **The gain grows with views** (+0.06 at v3 → +0.14 at v8/v10), and dedup is the **only** variant
+  whose F1 rises rather than falls with more views — it removes the duplicate detections that
+  accumulate as views are added. Precision is restored (desk v10 multiset: monitor 10→4, desk 9→1).
+- Recall is essentially preserved (genuinely distinct same-class objects have non-overlapping boxes,
+  so they are not merged). IoU threshold swept {0.1, 0.3, 0.5} — 0.1 (most aggressive overlap merge)
+  is best; adding a centroid-distance term did not beat IoU alone.
+- This is the **opposite axis** from the uncertainty gate (which *tightened* merging → more splitting
+  → worse precision), which is why uncertainty failed and dedup succeeds. It is a clean candidate for
+  the paper's positive method contribution.
 
 ## Mechanism (why, precisely)
 

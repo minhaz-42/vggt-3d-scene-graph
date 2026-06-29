@@ -11,6 +11,7 @@ n_scenes = 5
 | fixed-shrink | 0.5095 | 0.4868 | 0.4683 | 0.4253 |
 | graph-fusion | 0.5054 | 0.5050 | 0.4903 | 0.4581 |
 | **proposed** | 0.4922 | 0.4757 | 0.4326 | 0.3976 |
+| graph-fusion-dedup | 0.5684 | 0.5893 | 0.6349 | 0.6004 |
 
 ## `proposed` − `fixed-shrink` (object_label_f1)
 - mean delta — v3: -0.0173, v5: -0.0111, v8: -0.0356, v10: -0.0276
@@ -35,3 +36,5 @@ n_scenes = 5
 | graph-fusion | precision | 0.5873 | 0.5629 | 0.4432 | 0.4049 |
 | proposed | recall | 0.4754 | 0.5409 | 0.6322 | 0.6371 |
 | proposed | precision | 0.5314 | 0.4377 | 0.3362 | 0.2950 |
+| graph-fusion-dedup | recall | 0.4490 | 0.4847 | 0.5941 | 0.5830 |
+| graph-fusion-dedup | precision | 0.8281 | 0.7842 | 0.7002 | 0.6428 |

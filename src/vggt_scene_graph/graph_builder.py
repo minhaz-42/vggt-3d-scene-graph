@@ -238,11 +238,75 @@ def fuse_node_cluster(cluster_nodes: list[ObjectNode], node_id: str, max_points:
     )
 
 
+def _aabb(points: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    return np.min(points, axis=0), np.max(points, axis=0)
+
+
+def _aabb_iou(a_min: np.ndarray, a_max: np.ndarray, b_min: np.ndarray, b_max: np.ndarray) -> float:
+    """Axis-aligned 3D IoU of two boxes."""
+    lo = np.maximum(a_min, b_min)
+    hi = np.minimum(a_max, b_max)
+    inter = float(np.prod(np.maximum(0.0, hi - lo)))
+    va = float(np.prod(np.maximum(1e-9, a_max - a_min)))
+    vb = float(np.prod(np.maximum(1e-9, b_max - b_min)))
+    union = va + vb - inter
+    return inter / union if union > 0 else 0.0
+
+
+def merge_duplicate_instances(
+    nodes: Iterable[ObjectNode],
+    iou_threshold: float = 0.1,
+    max_points: int = 8192,
+) -> list[ObjectNode]:
+    """Post-fusion instance de-duplication: merge same-label fused nodes whose 3D boxes overlap.
+
+    Cross-view ``fuse_object_nodes`` leaves the *same physical object* split across several fused
+    nodes — OWLv2 over-detects (4-6 boxes for one monitor) and same-view detections can never form a
+    fusion edge, so the duplicates survive. On the independent reference this is the dominant
+    precision sink (e.g. desk counted 9x, monitor 10x at v10). This pass unions same-label nodes
+    whose axis-aligned 3D boxes have IoU > ``iou_threshold`` and re-fuses each group, collapsing
+    duplicate detections of one object while leaving genuinely distinct same-class objects (whose
+    boxes do not overlap) separate. See docs/owlv2_system_characterization.md.
+    """
+    node_list = list(nodes)
+    by_label: dict[str | None, list[ObjectNode]] = {}
+    for node in node_list:
+        by_label.setdefault(node.label, []).append(node)
+
+    merged: list[ObjectNode] = []
+    for label, group in by_label.items():
+        # Unlabeled nodes are never merged together (no reliable identity).
+        if label is None or len(group) == 1:
+            merged.extend(group)
+            continue
+        boxes = [_aabb(node.points_xyz) for node in group]
+        graph = nx.Graph()
+        graph.add_nodes_from(range(len(group)))
+        for i in range(len(group)):
+            for j in range(i + 1, len(group)):
+                if _aabb_iou(boxes[i][0], boxes[i][1], boxes[j][0], boxes[j][1]) > iou_threshold:
+                    graph.add_edge(i, j)
+        for component in nx.connected_components(graph):
+            cluster = [group[k] for k in sorted(component)]
+            if len(cluster) == 1:
+                merged.append(cluster[0])
+            else:
+                merged.append(fuse_node_cluster(cluster, node_id="dedup_tmp", max_points=max_points))
+
+    # Renumber deterministically so node ids are stable object_001..N.
+    out: list[ObjectNode] = []
+    for index, node in enumerate(sorted(merged, key=lambda n: n.node_id), start=1):
+        node.node_id = f"object_{index:03d}"
+        out.append(node)
+    return out
+
+
 FUSION_VARIANTS = (
     "2d-only",
     "geometry-only",
     "semantic-lifting",
     "graph-fusion",
+    "graph-fusion-dedup",
     "proposed",
     "fixed-shrink",
 )
@@ -264,13 +328,15 @@ def fuse_object_nodes(
     max_feature_threshold: float = 0.99,
     bridge_tau: float = 1.0,
     fixed_shrink: float = 1.0,
+    dedup_iou: float = 0.1,
 ) -> list[ObjectNode]:
     """Fuse lifted candidate nodes into cross-view objects.
 
-    All five paper variants route through this one entry point via ``variant``; only the gate
+    All paper variants route through this one entry point via ``variant``; only the gate
     parameters differ. The connected-components + ``fuse_node_cluster`` tail is identical for
-    every variant. ``variant="graph-fusion"`` (default) reproduces the original pipeline.
-    See docs/phase1_uncertainty_fusion_spec.md.
+    every variant. ``variant="graph-fusion"`` (default) reproduces the original pipeline;
+    ``"graph-fusion-dedup"`` adds a post-fusion duplicate-instance merge (raises precision).
+    See docs/phase1_uncertainty_fusion_spec.md and docs/owlv2_system_characterization.md.
     """
     if variant not in FUSION_VARIANTS:
         raise ValueError(f"Unknown fusion variant: {variant!r}. Expected one of {FUSION_VARIANTS}.")
@@ -314,5 +380,10 @@ def fuse_object_nodes(
         cluster_nodes = [node_by_id[node_id] for node_id in sorted(component)]
         fused_nodes.append(
             fuse_node_cluster(cluster_nodes, node_id=f"object_{index:03d}", max_points=max_points_per_fused_node)
+        )
+
+    if variant == "graph-fusion-dedup":
+        fused_nodes = merge_duplicate_instances(
+            fused_nodes, iou_threshold=dedup_iou, max_points=max_points_per_fused_node
         )
     return fused_nodes
