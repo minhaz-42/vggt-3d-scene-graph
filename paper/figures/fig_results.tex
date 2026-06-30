@@ -1,9 +1,9 @@
-\begin{figure}[t]
+\begin{figure}[tb]
 \centering
 \begin{tikzpicture}
 \begin{groupplot}[
-  group style={group size=2 by 1, horizontal sep=1.7cm},
-  width=0.46\linewidth, height=5.4cm,
+  group style={group size=2 by 1, horizontal sep=1.2cm},
+  width=0.45\linewidth, height=4.0cm,
   xtick={3,5,8,10}, xmin=2.4, xmax=10.6,
   tick align=outside, axis line style={cInk!80},
   label style={font=\footnotesize, color=cInk}, tick label style={font=\scriptsize, color=cInk},
@@ -12,7 +12,7 @@
   every axis plot/.append style={line width=1pt, mark size=2pt},
   legend cell align=left,
 ]
-% ---- (a) accuracy ----
+%, - (a) accuracy, -
 \nextgroupplot[ylabel={Object-label F1}, xlabel={input views $N$}, ymin=0.16, ymax=0.63,
   title={(a) accuracy vs.\ views},
   legend style={font=\tiny, at={(0.5,-0.30)}, anchor=north, legend columns=2, draw=gray!35, column sep=4pt}]
@@ -23,9 +23,9 @@
 \addplot[cCtrl, mark=triangle*, densely dashed] coordinates {(3,0.5048)(5,0.4715)(8,0.4448)(10,0.4189)};
 \addlegendentry{fixed-shrink (control)}
 \addplot[cUnc, mark=diamond*] coordinates {(3,0.4801)(5,0.4370)(8,0.3841)(10,0.3544)};
-\addlegendentry{proposed (uncertainty)}
+\addlegendentry{proposed}
 \node[font=\scriptsize\itshape, color=cOurs, anchor=south] at (axis cs:6.5,0.585) {only ours rises};
-% ---- (b) mechanism ----
+%, - (b) mechanism, -
 \nextgroupplot[ylabel={precision / recall}, xlabel={input views $N$}, ymin=0.36, ymax=0.80,
   title={(b) precision recovered, recall kept},
   legend style={font=\tiny, at={(0.5,-0.30)}, anchor=north, legend columns=2, draw=gray!35, column sep=4pt}]
@@ -44,7 +44,7 @@
 \textbf{(a)} Object-label F1 vs.\ number of input views: every prior cross-view fusion variant
 \emph{degrades} as views are added (more frames yield more un-collapsed duplicates), while
 duplicate-aware fusion (amber) is the only variant whose accuracy \emph{rises} and is best at every
-view count; the uncertainty gate (brick) sits below even the uninformed control.
+view count; the uncertainty gate (\textsc{proposed}) sits below even the uninformed control.
 \textbf{(b)} The mechanism: dedup \emph{recovers precision} (solid amber far above the baseline,
 $0.71\!\to\!0.59$ vs.\ $0.56\!\to\!0.40$) while leaving \emph{recall essentially unchanged} (dashed
 lines overlap). Values match Table~\ref{tab:variant_f1}.}

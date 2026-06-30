@@ -1,4 +1,4 @@
-\begin{figure}[t]
+\begin{figure}[tb]
 \centering
 \resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[font=\small,
@@ -7,26 +7,25 @@
   alab/.style={font=\footnotesize, color=cFrozen, fill=white, inner sep=1.5pt}]
   \node[thumb] (rgb) at (0,0) {\includegraphics[height=24mm]{thumb_rgb.png}};
   \node[flab, below=0.6mm of rgb] {sparse RGB views};
-  \node[thumb] (depth) at (3.7,1.75) {\includegraphics[height=21mm]{thumb_depth.png}};
+  \node[thumb] (depth) at (5.2,1.95) {\includegraphics[height=21mm]{thumb_depth.png}};
   \node[flab, below=0.4mm of depth] {world points / depth};
-  \node[thumb] (det) at (3.7,-1.75) {\includegraphics[height=21mm]{thumb_det.png}};
+  \node[thumb] (det) at (5.2,-1.95) {\includegraphics[height=21mm]{thumb_det.png}};
   \node[flab, below=0.4mm of det] {open-vocab boxes};
-  \node[stage, minimum width=18mm, minimum height=12mm] (fuse) at (6.9,0) {lift $+$\\cross-view\\fusion};
-  \node[ours, minimum width=22mm, minimum height=12mm] (dedup) at (9.5,0) {duplicate-aware\\merge \textbf{(ours)}};
-  \node[thumb] (graph) at (12.6,0) {\includegraphics[height=27mm]{thumb_pc.png}};
+  \node[stage, minimum width=18mm, minimum height=12mm] (fuse) at (8.4,0) {lift $+$\\cross-view\\fusion};
+  \node[ours, minimum width=22mm, minimum height=12mm] (dedup) at (11.0,0) {duplicate-aware\\merge \textbf{(ours)}};
+  \node[thumb] (graph) at (14.1,0) {\includegraphics[height=27mm]{thumb_pc.png}};
   \node[flab, below=0.6mm of graph] {3D scene graph};
-  \draw[flow] (rgb) -- node[alab, above, sloped]{VGGT (frozen)} (depth);
-  \draw[flow] (rgb) -- node[alab, below, sloped]{OWLv2 (frozen)} (det);
+  \draw[flow] (rgb) -- node[alab, pos=0.5]{VGGT} (depth);
+  \draw[flow] (rgb) -- node[alab, pos=0.5]{OWLv2} (det);
   \draw[flow] (depth) -| (fuse);
   \draw[flow] (det)   -| (fuse);
   \draw[flow] (fuse) -- (dedup);
   \draw[flow] (dedup) -- (graph);
 \end{tikzpicture}}
-\caption{The pipeline, on a real office scene. Sparse RGB views feed two \emph{frozen} foundation
-models: VGGT produces world-point geometry (depth shown) and OWLv2 proposes open-vocabulary labeled
-boxes. Detections are lifted into the world-point map and fused across views into object nodes; our one
-addition is a \emph{duplicate-aware merge} (amber) that collapses same-label overlapping nodes,
-yielding the labeled 3D object--relation graph at right. No model is fine-tuned and there is no
-per-scene optimization.}
+\caption{The pipeline on a real office scene. Sparse RGB views feed two \emph{frozen} models: VGGT
+produces world-point geometry (depth shown) and OWLv2 proposes open-vocabulary boxes. Detections are
+lifted into the world-point map and fused across views into object nodes; our one addition, a
+\emph{duplicate-aware merge} (amber), collapses same-label overlapping nodes into the labeled 3D
+object--relation graph at right. No fine-tuning, no per-scene optimization.}
 \label{fig:method_pipeline}
 \end{figure}

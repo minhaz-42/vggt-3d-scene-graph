@@ -1,0 +1,39 @@
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.78\linewidth, height=4.5cm,
+  xlabel={duplicate-merge IoU threshold $\tau$}, ylabel={object-label F1},
+  xmin=-0.02, xmax=0.52, ymin=0.47, ymax=0.625,
+  xtick={0,0.1,0.2,0.3,0.4,0.5},
+  tick align=outside, axis line style={cInk!80},
+  label style={font=\footnotesize, color=cInk}, tick label style={font=\scriptsize, color=cInk},
+  ymajorgrids, grid style={gray!15},
+  every axis plot/.append style={line width=1pt, mark size=1.9pt},
+  legend style={font=\tiny, at={(0.985,0.97)}, anchor=north east, draw=gray!35,
+                fill=white, fill opacity=0.9, text opacity=1, column sep=3pt, legend columns=2},
+  legend cell align=left,
+]
+% robust low-IoU band [0, 0.2]
+\fill[cOursFill, opacity=0.55] (axis cs:0,0.47) rectangle (axis cs:0.2,0.625);
+% default tau = 0.1
+\draw[densely dashed, cInk!55, line width=0.7pt] (axis cs:0.1,0.47) -- (axis cs:0.1,0.625);
+\addplot[cBase!40, mark=square*] coordinates {(0,0.581)(0.05,0.573)(0.1,0.570)(0.15,0.565)(0.2,0.558)(0.3,0.544)(0.5,0.529)};
+\addlegendentry{$N{=}3$}
+\addplot[cBase!60, mark=triangle*] coordinates {(0,0.593)(0.05,0.576)(0.1,0.575)(0.15,0.568)(0.2,0.557)(0.3,0.535)(0.5,0.517)};
+\addlegendentry{$N{=}5$}
+\addplot[cBase!80, mark=diamond*] coordinates {(0,0.610)(0.05,0.590)(0.1,0.585)(0.15,0.573)(0.2,0.560)(0.3,0.534)(0.5,0.503)};
+\addlegendentry{$N{=}8$}
+\addplot[cBase, mark=*] coordinates {(0,0.605)(0.05,0.582)(0.1,0.573)(0.15,0.561)(0.2,0.546)(0.3,0.522)(0.5,0.490)};
+\addlegendentry{$N{=}10$}
+\node[font=\scriptsize\itshape, color=cOurs!80!black, anchor=south] at (axis cs:0.10,0.474) {robust band};
+\node[font=\scriptsize, color=cInk!70, anchor=south west] at (axis cs:0.115,0.595) {default $\tau{=}0.1$};
+\end{axis}
+\end{tikzpicture}
+\caption{Robustness of duplicate-aware fusion to the merge threshold $\tau$ (object-label F1, mean over
+the 28 scenes, at $N{=}3/5/8/10$ views). The gain over \textsc{graph-fusion} is flat across the low-IoU
+band $\tau\in[0,0.2]$ (average $\Delta$ from $+0.118$ at $\tau{=}0$ to $+0.075$ at $\tau{=}0.2$) and
+fades only once $\tau$ is strict enough to stop merging duplicates ($+0.054$ at $\tau{=}0.3$, $+0.030$
+at $\tau{=}0.5$). The default $\tau{=}0.1$ (dashed) sits within noise of the optimum.}
+\label{fig:dedup_iou}
+\end{figure}

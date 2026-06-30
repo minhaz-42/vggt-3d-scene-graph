@@ -1,11 +1,10 @@
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{fig_detections.png}
+\includegraphics[width=0.88\linewidth]{fig_detections.png}
 \caption{The open-vocabulary detection front-end on real frames (three views of
 \texttt{freiburg3\_long\_office\_household}). OWLv2, queried with the indoor vocabulary, returns named,
-boxed objects (desk, chair, bottle, cup, trash can) directly on each frame, with confidences --- a
-genuine detector label per box. This is the property the lifting and fusion stages need; the common
-alternative (a post-hoc CLIP guess on a class-agnostic mask) returned room-scale category noise on
-these blurry frames rather than the objects actually present.}
+boxed objects (desk, chair, bottle, cup, trash can) with confidences, the property the lifting and
+fusion stages need; the common mask-then-CLIP alternative returned room-scale category noise on these
+blurry frames rather than the objects present.}
 \label{fig:detections}
 \end{figure}

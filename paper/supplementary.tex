@@ -1,0 +1,132 @@
+% =====================================================================
+% SUPPLEMENTARY MATERIAL for "Open-Vocabulary 3D Scene Graphs from Sparse Views".
+% Separate PDF (ACCV allows unlimited supplementary). Holds supporting figures and the
+% detailed per-class tables moved out of the 14-page main paper. Compile standalone with
+% tectonic; shares figures/ assets and the palette with the main paper.
+% =====================================================================
+\documentclass[runningheads]{llncs}
+
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\input{figures/palette}
+\graphicspath{{figures/}}
+
+% Number floats S1, S2, ... so the main paper can cite them as "Fig. S1" / "Table S1".
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+
+\begin{document}
+
+\title{Supplementary Material\\[2pt]
+\large Open-Vocabulary 3D Scene Graphs from Sparse Views via\\Duplicate-Aware Fusion and a De-Circularized Benchmark}
+\titlerunning{Supplementary Material}
+\author{Anonymous}
+\authorrunning{Anonymous}
+\institute{Anonymous}
+\maketitle
+
+This supplement holds material referenced from the main paper: the open-vocabulary detection front-end
+on real frames (Fig.~\ref{fig:detections}), the duplicate-merge IoU-threshold robustness sweep
+(Fig.~\ref{fig:dedup_iou}), the two detailed per-class tables (Tables~\ref{tab:perclass_overall}
+and~\ref{tab:dedup_mechanism}), the full uncertainty-gate negative result
+(Table~\ref{tab:uncertainty_neg}), and the per-view duplicate-aware gains with per-scene win counts
+(Table~\ref{tab:dedup_delta}). All numbers match the released per-scene scores; the headline values are
+already stated in the main paper.
+
+\input{figures/fig_detections}
+
+\input{figures/fig_dedup_iou}
+
+\begin{table}[t]
+\centering
+\caption{Per-class characterization of \textsc{graph-fusion} (micro-averaged over 28 scenes, dropping
+\texttt{unknown object}). Recall rises and precision falls as views are added; F1 is best at the sparse
+end. The over-counting signature behind the main-paper finding.}
+\label{tab:perclass_overall}
+\small
+\begin{tabular}{rrrr}
+\toprule
+Views & Precision & Recall & F1 \\
+\midrule
+3  & 0.519 & 0.700 & \textbf{0.596} \\
+5  & 0.429 & 0.739 & 0.543 \\
+8  & 0.361 & 0.794 & 0.496 \\
+10 & 0.331 & 0.802 & 0.468 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Per-class mechanism of duplicate-aware fusion at v8 (micro-averaged over 28 scenes). Dedup
+recovers precision on the over-counted classes while preserving recall for almost all classes; the only
+recall cost is on closely-packed same-class instances (\texttt{desk}, \texttt{bottle}).}
+\label{tab:dedup_mechanism}
+\small
+\begin{tabular}{lccc}
+\toprule
+Class & \textsc{graph-fusion} P/R & dedup P/R & $\Delta$ recall \\
+\midrule
+\texttt{monitor}  & 0.43 / 0.95 & 0.64 / 0.95 & $0.00$ \\
+\texttt{chair}    & 0.45 / 0.91 & 0.71 / 0.91 & $0.00$ \\
+\texttt{floor}    & 0.27 / 0.93 & 0.71 / 0.93 & $0.00$ \\
+\texttt{wall}     & 0.26 / 0.69 & 0.60 / 0.69 & $0.00$ \\
+\texttt{desk}     & 0.15 / 0.96 & 0.45 / 0.92 & $-0.04$ \\
+\texttt{cabinet}  & 0.36 / 0.27 & 0.67 / 0.27 & $0.00$ \\
+\texttt{keyboard} & 0.39 / 1.00 & 0.50 / 1.00 & $0.00$ \\
+\texttt{person}   & 0.79 / 0.79 & 1.00 / 0.79 & $0.00$ \\
+\texttt{bottle}   & 0.70 / 0.76 & 0.78 / 0.72 & $-0.04$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Uncertainty-aware fusion is a negative result. $\Delta$ \textsc{proposed} $-$
+\textsc{graph-fusion} in object-label F1 (rank-normalized, $w{=}0.3$); W/L/T is per-scene over $n=28$.
+A weight sweep over $[0.1, 0.8]$ contains no setting that beats the baseline.}
+\label{tab:uncertainty_neg}
+\small
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lrrrr}
+\toprule
+ & v3 & v5 & v8 & v10 \\
+\midrule
+$\Delta$ \textsc{proposed} $-$ \textsc{graph-fusion} & $-0.033$ & $-0.053$ & $-0.082$ & $-0.096$ \\
+Per-scene W/L/T                                       & 2/22/4   & 0/26/2   & 0/26/2   & 0/27/1 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Duplicate-aware fusion versus the \textsc{graph-fusion} baseline and the \textsc{fixed-shrink}
+control. $\Delta$ is the object-label F1 gain; W/L/T is per-scene wins/losses/ties for dedup over
+\textsc{graph-fusion} ($n=28$, sign test $p<0.001$ at every view).}
+\label{tab:dedup_delta}
+\small
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lrrrr}
+\toprule
+ & v3 & v5 & v8 & v10 \\
+\midrule
+$\Delta$ dedup $-$ \textsc{graph-fusion}  & $+0.057$ & $+0.083$ & $+0.120$ & $+0.122$ \\
+$\Delta$ dedup $-$ \textsc{fixed-shrink}  & $+0.065$ & $+0.101$ & $+0.141$ & $+0.154$ \\
+Per-scene W/L/T (vs \textsc{graph-fusion})  & 22/1/5 & 25/0/3 & 27/0/1 & 26/1/1 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\end{document}

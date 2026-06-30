@@ -3,10 +3,11 @@
 % incl. figures/tables (references unlimited), double-blind, supplementary allowed.
 % FALLBACK: OpenSUN3D @ ECCV 2026 (Aug 1) — same LNCS family but 8 pages, so for that
 % target trim + move the sweeps to supplementary (see docs/opensun3d_submission_plan.md).
-% For final submission use the OFFICIAL ACCV 2026 LNCS author kit on Overleaf
-% (accv2026.org/submissions/author-guidelines/) — drop these sections in; this file
-% uses the LNCS base class so structure is correct. Still needs: the official kit,
-% the n~=28 numbers + figures, and a 14-page fit check (compile on Overleaf).
+% STATUS: n=28 results + figures are in; main body fits 14 pages (refs spill over, which
+% is allowed); supporting figures + detailed tables are in supplementary.tex.
+% BEFORE SUBMISSION: (1) swap the author block below to the Anonymous version (double-blind);
+% (2) move sources into the OFFICIAL ACCV 2026 LNCS author kit on Overleaf
+% (accv2026.org/submissions/author-guidelines/) and re-check the 14-page fit there.
 % =====================================================================
 \documentclass[runningheads]{llncs}
 
@@ -28,19 +29,34 @@
 \graphicspath{{figures/}}
 \emergencystretch=2em  % absorb minor overfull from unbreakable \texttt tokens
 
+% Modest float/caption spacing to fit the 14-page limit (no margin/font changes).
+\setlength{\textfloatsep}{6pt plus 2pt minus 2pt}
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{5pt}
+\setlength{\belowcaptionskip}{1pt}
+
 % Placeholder marker (no longer used; kept harmless).
 \newcommand{\todo}[1]{\textbf{[TODO: #1]}}
 
 \begin{document}
 
-\title{Open-Vocabulary 3D Scene Graphs from Sparse RGB Views:\\
-Duplicate-Aware Fusion and a De-Circularized Benchmark}
-\titlerunning{Open-Vocabulary 3D Scene Graphs from Sparse RGB Views}
+\title{Open-Vocabulary 3D Scene Graphs\\from Sparse Views:\\[5pt]
+\large Duplicate-Aware Fusion and Honest Evaluation}
+\titlerunning{Open-Vocabulary 3D Scene Graphs from Sparse Views}
 
-% Double-blind: no authors / affiliations / repo links in the submitted version.
+% ============================================================================
+% AUTHOR BLOCK. ACCV 2026 is DOUBLE-BLIND -> ANONYMOUS block is ACTIVE for the
+% review submission. For the CAMERA-READY / arXiv version, swap back to the named
+% block below (comment the Anonymous block, uncomment the named one).
+% ============================================================================
 \author{Anonymous}
 \authorrunning{Anonymous}
 \institute{Anonymous}
+% --- Named block for camera-ready / arXiv (swap with the above): ---
+% \author{Tanvir Ahmed}
+% \authorrunning{T. Ahmed}
+% \institute{North South University, Dhaka, Bangladesh \\
+% \email{tanvir.ahmed32@northsouth.edu}}
 
 \maketitle
 

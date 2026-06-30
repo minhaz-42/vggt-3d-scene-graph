@@ -1,6 +1,6 @@
-\begin{figure}[t]
+\begin{figure}[tb]
 \centering
-\resizebox{\linewidth}{!}{%
+\resizebox{0.76\linewidth}{!}{%
 \begin{tikzpicture}[font=\small,
    pbox/.style={fxbox, minimum width=30mm, align=center},
    tiny/.style={font=\scriptsize},
@@ -50,7 +50,7 @@ model's own ten-view prediction, so the model is graded against itself: it score
 construction, and a variant that splits more (the uncertainty gate) is rewarded for reproducing the
 reference's fragments. \textbf{Right (ours):} the reference is authored from the raw RGB frames,
 independent of any model output, so the object count is fixed and over-splitting is penalized. Both
-findings --- the uncertainty gate reversing to a loss, duplicate-aware fusion winning --- appear only
+findings, the uncertainty gate reversing to a loss, duplicate-aware fusion winning, appear only
 under the independent reference.}
 \label{fig:decirc}
 \end{figure}

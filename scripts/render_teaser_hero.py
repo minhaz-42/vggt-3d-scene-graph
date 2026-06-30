@@ -71,7 +71,6 @@ def main():
     for L,fn in (("x",ax.set_xlim),("y",ax.set_ylim),("z",ax.set_zlim)):
         pass
     ax.set_xlim(np.percentile(P[:,0],[1,99])); ax.set_ylim(np.percentile(P[:,1],[1,99])); ax.set_zlim(np.percentile(P[:,2],[1,99]))
-    draw_frustums(ax, geom, float(np.mean([np.ptp(P[:,i]) for i in range(3)])))
     ax.set_title("open-vocabulary 3D scene graph", fontsize=8.5, color="#222", y=0.98)
 
     g=json.load(open(a.graph)); nodes=g["nodes"]

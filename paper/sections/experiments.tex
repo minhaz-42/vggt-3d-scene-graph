@@ -1,144 +1,44 @@
 \section{Experiments}
 \label{sec:experiments}
 
-We study two questions: what actually helps when building open-vocabulary 3D scene
-graphs from a handful of RGB views, and how to measure it honestly --- the second
-matters because the system was originally reported as a sparse-view win for
-uncertainty-aware fusion, an artifact of a circular evaluation. We describe the
-benchmark (Sec.~\ref{sec:exp_scenes}), its de-circularized reference
-(Sec.~\ref{sec:exp_reference}), and the variants and metric
-(Sec.~\ref{sec:exp_variants}--\ref{sec:exp_metric}) before the results
-(Section~\ref{sec:results}).
+We ask what helps when building open-vocabulary 3D scene graphs from a handful of RGB views, and how to measure it honestly. The second matters because an earlier version reported a sparse-view win for uncertainty-aware fusion that was a circular-evaluation artifact; we fix the protocol, then re-ask the first question on it. We describe the benchmark and protocol (Section~\ref{sec:exp_scenes}), the independent reference that de-circularizes evaluation (Section~\ref{sec:exp_reference}), and the variants, metric, and implementation (Sections~\ref{sec:exp_variants}--\ref{sec:exp_impl}) before the results (Section~\ref{sec:results}).
 
-\subsection{Benchmark Scenes and Sparse-View Protocol}
+\subsection{Benchmark and Sparse-View Protocol}
 \label{sec:exp_scenes}
 
-We benchmark on public TUM RGB-D indoor sequences~\cite{sturm2012tumrgbd}. The
-benchmark spans \textbf{28 object-rich sequences} across \texttt{freiburg1}--\texttt{freiburg3}:
-the five paper-subset scenes in Table~\ref{tab:tum_rgbd_paper_subset_plan} (which carry the
-human-verified gold reference) plus 23 additional sequences; the full list is in
-\texttt{tum\_rgbd\_expanded.json}. Each sequence contributes ten
-selected RGB frames (stride~10). Although the source benchmark is RGB-D, our
-pipeline consumes only RGB; we use this dataset because it provides public,
-recognizable indoor scenes with reproducible sequence identifiers.
-
-\input{tables/tum_rgbd_paper_subset_plan}
-
-For each scene we evaluate $N \in \{3, 5, 8, 10\}$ input views (a $28\times4$ matrix,
-112 graphs per variant), each run end-to-end along an identical code path --- the
-pipeline of Section~\ref{sec:method}, driven by
-\texttt{run\_owlv2\_benchmark.sh}. Reporting accuracy as a function of $N$
-reads off sparse-view behavior directly rather than a single dense-view number.
+We evaluate on public TUM RGB-D indoor sequences~\cite{sturm2012tumrgbd}, recognizable scenes with reproducible identifiers. The benchmark spans \textbf{28 object-rich sequences} across \texttt{freiburg1}--\texttt{freiburg3}: five paper-subset scenes (\texttt{freiburg1\_room}, \texttt{freiburg1\_desk}, \texttt{freiburg1\_desk2}, \texttt{freiburg2\_xyz}, \texttt{freiburg3\_long\_office\_household}) carrying the human-verified gold reference, plus 23 further sequences released with the code. Each contributes ten RGB frames sampled at stride ten; the pipeline consumes only RGB. Per scene we run $N\in\{3,5,8,10\}$ input views, a $28\times4$ grid of $112$ graphs per variant, each produced end-to-end by the pipeline of Section~\ref{sec:method}. Reporting accuracy against $N$ reads sparse-view behavior directly rather than collapsing it to one dense-view number.
 
 \subsection{An Independently-Authored Reference}
 \label{sec:exp_reference}
 
 \input{figures/fig_decirc}
 
-The central evaluation problem in this setting is that there is no
-ground-truth open-vocabulary object inventory for TUM RGB-D scenes, so a
-reference must be constructed. The tempting shortcut --- and the one the
-original version of this work took --- is to seed the reference from the
-system's own dense-view prediction (the 10-view graph) and then lightly check
-it. We argue this is unsound and replace it with a reference authored
-\emph{from the frames}.
+TUM RGB-D has no ground-truth open-vocabulary object inventory, so a reference must be constructed. The shortcut taken by the original version seeds the reference from the system's own dense-view prediction (its ten-view graph) and lightly checks it. This couples reference to predictor: a variant scores $1.0$ at ten views \emph{by construction}, and every sparser run is graded on how faithfully it reproduces that variant's own splitting pattern rather than on agreement with the scene (Figure~\ref{fig:decirc}, left), rewarding methods that leave proposals unmerged to reproduce the reference's fragments.
 
-\paragraph{Why a prediction-seeded reference is circular.}
-Seeding the reference from a variant's own 10-view output (Figure~\ref{fig:decirc}, left) makes that
-variant score $1.0$ at ten views \emph{by construction} and grades every sparser run on how faithfully
-it reproduces the same splitting pattern rather than agreement with the scene --- so a method that
-keeps more proposals unmerged is rewarded for reproducing the reference's own fragments. The
-quantitative artifacts this produced (the apparent uncertainty win, the dense-view ceiling) are in
-Section~\ref{subsec:decirc}.
-
-\paragraph{Construction of the independent reference.}
-Our reference is, for each scene, an object multiset enumerated only from the ten raw RGB frames,
-independent of the detection/descriptor/geometry/fusion stack under test. Each scene is drafted once
-and re-examined in a second, adversarial pass that seeks missed or spurious objects. The five
-paper-subset scenes are additionally \textbf{human-verified} against the frames (the gold core,
-\texttt{independent\_labels.json}); the other 23 use the two-pass draft \emph{without} verification
-(\texttt{independent\_labels\_expanded.json}) as scale corroboration, and both findings also hold on
-the gold five alone. Because the reference fixes the object inventory without reference to any model
-output, no variant can score $1.0$ at ten views and over-splitting is penalized. It is a scene-level
-multiset over all ten frames, so sparse-view predictions are recall-limited against it --- depressing
-absolute F1 uniformly across variants and leaving the comparison fair.
+We instead author the reference \emph{from the frames}. For each scene we enumerate an object multiset from the ten raw RGB frames alone, independent of the detection, descriptor, geometry, and fusion stack under test, then re-examine it in a second adversarial pass for missed or spurious objects. The five paper-subset scenes are additionally \textbf{human-verified} against the frames (the gold core); the other 23 use the two-pass draft without verification as scale corroboration, and both findings hold on the gold five alone. Since the inventory is fixed without reference to any model output, no variant can reach $1.0$ at ten views and over-splitting is penalized. The reference is a scene-level multiset over all ten frames, so sparse-view predictions are recall-limited against it, depressing absolute F1 uniformly across variants and keeping the comparison fair.
 
 \subsection{Variants Compared}
 \label{sec:exp_variants}
 
-We hold the front-end (OWLv2 detections lifted by VGGT geometry) and the
-reference fixed, and compare seven variants that differ only in how per-view
-detections become 3D nodes and how those nodes are fused across views:
+Holding the front-end (OWLv2 detections lifted by VGGT geometry) and the reference fixed, we compare seven variants that differ only in how per-view detections become 3D nodes and how those nodes are fused. \textbf{2d-only} pools per-view OWLv2 labels with no 3D lifting or fusion, an image-level upper reference on labels alone. \textbf{geometry-only} lifts detections to 3D and pools them with no semantic association. \textbf{semantic-lifting} associates lifted detections by appearance alone, without the geometric gate. \textbf{fixed-shrink} is an uncertainty-blind control that shrinks the fusion gate by a fixed, scene-agnostic factor, isolating whether the uncertainty \emph{signal}, not merely a tighter gate, is what helps. \textbf{graph-fusion} is the cross-view fusion of Section~\ref{sec:fusion} with no uncertainty modulation and no duplicate handling. \textbf{proposed} adds the rank-normalized uncertainty-aware gate (default $w{=}0.3$, swept over $\{0.1,0.2,0.3,0.5,0.8\}$) as an ablation. \textbf{graph-fusion-dedup (ours)} follows graph-fusion with the single duplicate-instance merge of Section~\ref{sec:dedup}: same-label nodes whose axis-aligned 3D boxes overlap ($\mathrm{IoU}>\tau$, default $\tau{=}0.1$) are unioned and re-fused. Two pairings carry the argument: \emph{fixed-shrink} versus \emph{proposed} tests whether the uncertainty signal helps beyond an uninformed gate adjustment, and \emph{graph-fusion} versus \emph{graph-fusion-dedup} tests whether merging \emph{more}, not less, is the productive direction.
 
-\begin{itemize}
-  \item \textbf{2d-only} --- per-view OWLv2 labels pooled without 3D lifting or
-        cross-view fusion (an image-level upper reference on labels alone).
-  \item \textbf{geometry-only} --- detections lifted to 3D via VGGT and pooled,
-        with no semantic cross-view association.
-  \item \textbf{semantic-lifting} --- detections lifted and associated by
-        appearance descriptors without the geometric fusion gate.
-  \item \textbf{fixed-shrink (uninformed control)} --- the fusion gate is
-        modulated by a fixed, scene-agnostic shrink factor; an
-        uncertainty-blind control that isolates whether the
-        \emph{uncertainty signal}, rather than merely the act of tightening the
-        gate, carries any benefit.
-  \item \textbf{graph-fusion (baseline)} --- the standard cross-view fusion of
-        Section~\ref{sec:method} with no uncertainty modulation and no
-        duplicate handling.
-  \item \textbf{proposed (uncertainty)} --- graph-fusion with the
-        rank-normalized uncertainty-aware merge gate (default weight
-        $w{=}0.3$); evaluated as an ablation rather than the headline method,
-        and additionally swept over $w \in \{0.1, 0.2, 0.3, 0.5, 0.8\}$.
-  \item \textbf{graph-fusion-dedup (ours)} --- graph-fusion followed by a single
-        post-fusion duplicate-instance merge: same-label fused nodes whose
-        axis-aligned 3D boxes overlap (IoU~$>\tau$, default $\tau{=}0.1$) are
-        unioned and re-fused (\texttt{merge\_duplicate\_instances} in
-        \texttt{graph\_builder.py}). This targets the measured over-counting
-        failure (Section~\ref{sec:results}) and is the opposite move from the
-        uncertainty gate, which \emph{tightens} merging.
-\end{itemize}
-
-The pairing is deliberate: \emph{fixed-shrink} versus \emph{proposed} asks
-whether the uncertainty signal is informative beyond an uninformed gate
-adjustment, and \emph{graph-fusion} versus \emph{graph-fusion-dedup} asks
-whether merging \emph{more} (rather than less) is the productive direction.
+The uncertainty-aware gate in \textsc{proposed} assigns each lifted candidate an uncertainty
+\begin{equation}
+    U_{v,k} = \lambda\,(1-\bar{C}_{v,k}) + (1-\lambda)\,\mathrm{spread}(X_{v,k}), \qquad \lambda = 0.7,
+\end{equation}
+combining the mean VGGT confidence $\bar{C}_{v,k}$ over the lifted points $X_{v,k}$ with a robust spread of those points (the 75th-percentile distance to their median, clipped to $[0,1]$). These values are rank-normalized per scene; per candidate pair the joint uncertainty (the larger of the two) shrinks the centroid budget $\epsilon_g$ and raises the appearance bar $\epsilon_f$ in proportion to $w$, with a veto forbidding two highly uncertain nodes from seeding a merge. The gate can thus only \emph{remove} merges, never add them, the wrong direction for an over-counting system; we keep it as an ablation, and the sweep over $w$ (Section~\ref{sec:results}) confirms the negative result.
 
 \subsection{Metric}
 \label{sec:exp_metric}
 
-Our primary metric is \texttt{object\_label\_f1}: the multiset precision,
-recall, and F1 of fused-node labels against the independent reference multiset,
-averaged over the 28 scenes (5 human-verified, 23 two-pass VLM-drafted). Treating
-labels as a multiset (rather than a set) makes the metric sensitive to
-over-counting --- a scene with one physical monitor reported as four fused monitor
-nodes is penalized on precision --- which is exactly the failure mode the reframed
-contribution targets. Per-scene wins/losses are reported alongside the means, with
-significance from a two-sided sign-test. Evaluation is run by
-\texttt{evaluate\_sparse\_view\_annotations.py} and aggregated by
-\texttt{aggregate\_variant\_f1.py}; raw per-(scene, $N$, variant) scores
-are in \texttt{variant\_independent\_metrics.csv}.
+Our primary metric is \texttt{object\_label\_f1}, the multiset precision, recall, and F1 of fused-node labels against the independent reference multiset, averaged over the 28 scenes (5 human-verified, 23 two-pass VLM-drafted). The multiset treatment makes the metric sensitive to over-counting: one physical monitor reported as four fused monitor nodes is penalized on precision, the failure mode the reframed contribution targets. We report per-scene wins, losses, and ties alongside the means, with significance from a two-sided sign test, and release the evaluation and aggregation code with the raw per-(scene, $N$, variant) scores.
 
 \subsection{Implementation Details}
 \label{sec:exp_impl}
 
-All heavy models are frozen and run off-the-shelf; there is no per-scene
-optimization or fine-tuning. The open-vocabulary detector is OWLv2
-(\texttt{google/owlv2-base-patch16-ensemble})~\cite{minderer2023owlv2}, the
-successor to OWL-ViT~\cite{minderer2022owlvit}, with a detection score threshold
-of $0.2$ and per-class non-maximum suppression at IoU~$0.5$; detection boxes
-prompt SAM~\cite{kirillov2023segment} for masks. 3D geometry is the feed-forward
-VGGT transformer~\cite{wang2025vggt}, consuming RGB frames only. Appearance
-descriptors for cross-view association use CLIP~\cite{radford2021clip} and
-DINOv2~\cite{oquab2023dinov2}. VGGT geometry runs on GPU; detection, lifting,
-fusion, and evaluation run on CPU. We fix all thresholds across scenes and view
-counts (no per-scene tuning), and the duplicate-aware merge uses a single global
-IoU threshold $\tau{=}0.1$ that we show is robust across $\tau \in [0, 0.2]$
-(Section~\ref{sec:results}).
+All heavy models are frozen and run off-the-shelf, with no per-scene optimization or fine-tuning. The detector is the OWLv2-base patch-16 ensemble checkpoint~\cite{minderer2023owlv2}, successor to OWL-ViT~\cite{minderer2022owlvit}, with score threshold $0.2$ and per-class non-maximum suppression at box-IoU $0.5$; detection boxes prompt SAM~\cite{kirillov2023segment} for masks. Geometry is the feed-forward VGGT transformer~\cite{wang2025vggt} consuming RGB frames only, and cross-view association uses CLIP~\cite{radford2021clip} and DINOv2~\cite{oquab2023dinov2} descriptors. VGGT runs on GPU; detection, lifting, fusion, and evaluation run on CPU. All thresholds are fixed across scenes and view counts, and the duplicate-aware merge uses a single global IoU threshold $\tau{=}0.1$ shown robust across $\tau\in[0,0.2]$ (Section~\ref{sec:results}).
 
-\subsection{Static and dynamic subsets}
+\subsection{Static and Dynamic Subsets}
 \label{sec:exp_expansion}
 
-Six of the 28 sequences are \emph{dynamic} (a moving person: \texttt{desk\_with\_person},
-\texttt{sitting\_*}, \texttt{walking\_*}), which violates VGGT's static multi-view assumption; the
-other 22 are static. We report the two as separate subsets and analyze the duplicate-aware gain on
-each with the results (Section~\ref{subsec:dedup}).
+Six of the 28 sequences are \emph{dynamic}, with a moving person (\texttt{desk\_with\_person}, \texttt{sitting\_*}, \texttt{walking\_*}), violating VGGT's static multi-view assumption; the other 22 are static. We report the subsets separately and analyze the duplicate-aware gain on each with the results (Section~\ref{sec:results}).

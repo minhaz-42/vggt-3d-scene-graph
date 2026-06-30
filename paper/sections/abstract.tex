@@ -1,18 +1,16 @@
-We study how to build and---crucially---how to \emph{honestly evaluate} open-vocabulary 3D scene
-graphs from a handful of casually captured RGB views. Our pipeline keeps every heavy model frozen and
-uses no per-scene optimization: feed-forward VGGT geometry~\cite{wang2025vggt} turns sparse images into
-world-point maps, an open-vocabulary detector (OWLv2)~\cite{minderer2023owlv2} proposes labeled object
-boxes, and these are lifted to 3D and fused across views into a labeled object--relation graph. Three
-findings follow once the labels are real and the evaluation is de-circularized. First, replacing the
-common class-agnostic-mask $+$ per-patch CLIP front-end~\cite{kirillov2023segment,radford2021clip} with
-a genuine detector is what makes the labels real: on a desk scene it recovers the actual objects where
-mask$+$CLIP returned room-scale category noise. Second, the dominant failure of the lifted system is
-then \emph{over-counting}---one physical object survives as several fused nodes---and a one-line
-duplicate-aware merge fixes it, improving object-label F1 at every view count and winning on $22$--$27$
-of the $28$ benchmark scenes ($p<0.001$). Third, a previously promising uncertainty-aware fusion gate
-gives \emph{no} benefit across a full weight sweep---a negative result that a circular evaluation had
-masked. To ground these claims we contribute an independent benchmark on 28 TUM
-RGB-D~\cite{sturm2012tumrgbd} sequences (5 human-verified, 23 two-pass VLM-drafted) whose reference is
-authored from the frames rather than seeded from the model's own predictions, and we document the
-circular-pseudo-reference pitfall that inflates scores. The benchmark and de-circularization protocol
-are dataset-agnostic, and we release them for reuse.
+Open-vocabulary 3D scene graphs, labeled objects and the spatial relations among them, are
+useful for embodied and mixed-reality agents, yet most systems assume posed RGB-D video or a prebuilt
+3D map. We target the harder regime of a handful of casually captured RGB views, and argue that
+progress here depends as much on honest evaluation as on the pipeline itself. Our system keeps every
+heavy model frozen and uses no per-scene optimization: feed-forward VGGT geometry turns the sparse images
+into world-point maps, an open-vocabulary detector (OWLv2) proposes labeled object boxes, and these are
+lifted to 3D and fused across views into an object--relation graph. A genuine detector front-end is what
+makes the labels real: the common class-agnostic-mask plus per-patch CLIP alternative returns scene-scale
+category noise on casual frames. We evaluate against an independently authored reference, built from the
+frames rather than seeded from the model's own predictions. The dominant error is then \emph{over-counting},
+one physical object surviving as several fused nodes, and a one-line duplicate-aware merge corrects it,
+improving object-label F1 at every view count and winning on $22$--$27$ of $28$ TUM RGB-D scenes
+($p<0.001$). By contrast, a previously
+promising uncertainty-aware fusion gate gives no benefit across a full weight sweep, a negative result
+that the earlier prediction-seeded, circular reference had masked. We release the benchmark and the
+dataset-agnostic de-circularization protocol.

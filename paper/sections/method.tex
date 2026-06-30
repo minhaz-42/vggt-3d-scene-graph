@@ -1,186 +1,136 @@
 \section{Method}
 \label{sec:method}
 
-\subsection{Problem Setup}
+\subsection{Problem Setup and Overview}
+\label{sec:setup}
 
-Given a sparse set of RGB views $\mathcal{I}=\{I_1,\ldots,I_V\}$, the goal is to
-produce an open-vocabulary 3D scene graph $\mathcal{G}=(\mathcal{O},\mathcal{R})$.
-Each object node $o_i \in \mathcal{O}$ stores a 3D point set, centroid, an
-axis-aligned 3D bounding box, an open-vocabulary label, view support, a feature
-descriptor, and its source detections. Each relation edge $r_{ij} \in \mathcal{R}$
-stores a spatial predicate between two object nodes. The method assumes neither depth
-images, externally supplied camera poses, nor a prebuilt mesh: it derives geometry and
-labeled object proposals from frozen feed-forward models, lifts the proposals to a
-common 3D frame, and fuses them into objects with no per-scene optimization.
-Figure~\ref{fig:method_pipeline} summarizes the data flow.
+Given a sparse set of RGB views $\mathcal{I}=\{I_1,\dots,I_V\}$ of a static indoor scene, we build an
+open-vocabulary 3D scene graph $\mathcal{G}=(\mathcal{O},\mathcal{R})$. An object node
+$o\in\mathcal{O}$ stores a 3D point set, centroid, axis-aligned 3D box, open-vocabulary label, supporting
+views, an optional appearance descriptor, and its source detections; a relation edge $r\in\mathcal{R}$
+carries a spatial predicate between two nodes. The input is RGB only, with no depth, no camera poses, and
+no prebuilt mesh. Every heavy model is frozen and run off-the-shelf, and the stages that assemble a graph
+from their outputs are training-free geometric operations, so the system needs no per-scene optimization.
+
+Figure~\ref{fig:method_pipeline} traces the flow. Feed-forward VGGT~\cite{wang2025vggt} gives a per-view
+world-point map and confidence; OWLv2~\cite{minderer2023owlv2} gives labeled detections, so each proposal
+already carries a real object label rather than a region awaiting classification. We lift each detection
+into a shared 3D frame through the world-point map, fuse candidates across views into objects, merge
+over-detected copies of one object in a single duplicate-aware pass, and read spatial relations off the
+fused geometry. The exported graph stores each label and relation beside the evidence that produced it,
+so it can be inspected or turned into annotation packets.
 
 \input{figures/fig_pipeline}
-
-\subsection{Overview}
-
-The pipeline has five frozen-model stages (Figure~\ref{fig:method_pipeline}): VGGT
-geometry~\cite{wang2025vggt}; open-vocabulary detection with OWLv2, so each proposal already carries a
-real object label~\cite{minderer2023owlv2}; 3D lifting of each detection into the world-point map;
-cross-view fusion into object nodes, followed by the duplicate-aware merge; and rule-based spatial
-relations. The exported graph keeps predicted labels and relations alongside the evidence that produced
-them, so it can be inspected or turned into annotation packets.
-
-Our one front-end change from the common open-vocabulary recipe is to replace mask-then-CLIP labeling
-(Section~\ref{sec:related_work}) with a genuine detector whose box \emph{is} the labeled object
-hypothesis. Everything downstream is unchanged, so the resulting accuracy change is attributable to the
-front-end rather than to a re-tuned geometry stack.
 
 \subsection{Sparse-View Geometry}
 \label{sec:geometry}
 
-We run VGGT on the selected sparse views and store camera intrinsics, extrinsics, depth
-maps, world-point maps, and confidence maps~\cite{wang2025vggt}. The world-point map for
-each view acts as a 2D-to-3D lookup table: object proposals are lifted directly from
-image coordinates into a common 3D frame without first reconstructing a mesh, running
-bundle adjustment, or optimizing a radiance-field or Gaussian-Splatting
-representation~\cite{schonberger2016sfm,mildenhall2020nerf,kerbl2023gaussian}. For view
-$v$ we denote the world-point map by $P_v(u) \in \mathbb{R}^3$ and the confidence map by
-$C_v(u)$ at image coordinate $u$.
+We run VGGT once on the selected views, frozen~\cite{wang2025vggt}. Without bundle adjustment it
+predicts, in one forward pass, a dense world-point map with depth, camera parameters, and per-pixel
+confidence; we write the world-point map as $P_v(u)\in\mathbb{R}^3$ and the confidence as $C_v(u)$ at
+pixel $u$ of view $v$. Only $P_v$ and $C_v$ flow downstream: the world-point map is a direct 2D-to-3D
+lookup placing any pixel into a common 3D frame, so we never build a mesh, run structure-from-motion, or
+optimize a radiance-field or Gaussian-splat
+representation~\cite{schonberger2016sfm,mildenhall2020nerf,kerbl2023gaussian}. All thresholds below are in
+the units of this map.
 
 \subsection{Open-Vocabulary Detection Front-End}
 \label{sec:owlv2}
 
-\input{figures/fig_detections}
+On each view we run OWLv2~\cite{minderer2023owlv2}, which takes free-form text queries and returns boxes
+with per-box class scores. The queries are the benchmark's indoor vocabulary, so the detector itself, not
+a downstream patch classifier, assigns the open-vocabulary label, reading the actual objects off each
+frame (Fig.~S1, supplementary). For detection $k$ in view $v$ we keep its box, score $s_{v,k}$, and label
+$\ell_{v,k}$. We use the \texttt{owlv2-base-patch16-ensemble} checkpoint at score threshold $0.2$ with
+per-class non-maximum suppression at box-IoU $0.5$, which mainly tidies large surface classes such as a
+desk. We keep the threshold loose on purpose: one object may receive several overlapping boxes per frame,
+but those boxes lift to nearly the same 3D points and collapse later (Section~\ref{sec:dedup}).
 
-For each view we run OWLv2~\cite{minderer2023owlv2}, an open-vocabulary detector that
-takes a set of free-form text queries and returns boxes with per-box class scores. The
-queries are the indoor object vocabulary of the benchmark, so the detector --- not a
-post~hoc patch-classification step --- carries the open-vocabulary label. For detection
-$k$ in view $v$ we store its box, score $s_{v,k}$, and predicted label
-$\ell_{v,k}$. We use the \texttt{owlv2-base-patch16-ensemble} model with a detection
-threshold of $0.2$ and per-class non-maximum suppression at box-IoU $0.5$; the NMS
-mainly cleans the large surface classes (e.g.\ a desk) that otherwise accrue many
-overlapping boxes. We deliberately do \emph{not} over-tighten the 2D threshold: a
-physical object may receive several overlapping boxes per frame, but overlapping boxes
-on the same object lift to nearly the same 3D points and are intended to collapse
-downstream. Optionally, each detection box prompts a frozen
-SAM~\cite{kirillov2023segment} to produce a tight instance mask $M_{v,k}$ so that
-lifting selects only object pixels; without a mask, lifting falls back to the box
-rectangle. When language-aligned and self-supervised appearance descriptors are
-available, we additionally extract CLIP and DINOv2 features for each detection and store
-the normalized concatenation~\cite{radford2021clip,oquab2023dinov2}; these are used only
-for fusion gating and provenance, never for labeling.
+This is our one departure from the common recipe (Section~\ref{sec:related_work}), which pairs
+class-agnostic masks with whole-image CLIP on crops; here the detector box \emph{is} the labeled object
+hypothesis, and everything downstream is unchanged, so any accuracy difference is attributable to the
+front-end. Each box optionally prompts a frozen SAM~\cite{kirillov2023segment} for a tight mask
+$M_{v,k}$ so that lifting selects object pixels rather than the whole box; without a mask it falls back to
+the box rectangle. A separate frozen stage extracts CLIP~\cite{radford2021clip} and
+DINOv2~\cite{oquab2023dinov2} descriptors, stored as a normalized concatenation and used only to gate
+fusion and as provenance, never for labels.
 
 \subsection{3D Lifting}
 \label{sec:lifting}
 
-Each detection's region (its instance mask $M_{v,k}$, or its box if no mask is
-available) is resized to the VGGT geometry resolution and used to select world points
-from the corresponding view; non-finite points and points below the confidence
-threshold $\tau_c$ are discarded:
+Each detection's region, its mask $M_{v,k}$ when present and its box rectangle otherwise, is rescaled to
+the VGGT geometry resolution and used to read world points. Non-finite points and points below the
+confidence threshold $\tau_c$ are dropped:
 \begin{equation}
-    X_{v,k} = \{P_v(u) \mid u \in M_{v,k},\; C_v(u) \geq \tau_c\}.
+    X_{v,k} = \{\,P_v(u) \mid u \in M_{v,k},\; C_v(u) \geq \tau_c\,\}, \qquad \tau_c = 0.2 .
 \end{equation}
-Detections with no valid lifted points are rejected. Each surviving candidate node
-stores its sampled 3D point set $X_{v,k}$, centroid $\mu_{v,k}$, an axis-aligned 3D
-bounding box, the detector label $\ell_{v,k}$ and score $s_{v,k}$, and (when available)
-the feature $f_{v,k}$.
+A detection with no surviving points is discarded. Each candidate node stores its lifted points $X_{v,k}$
+(subsampled to a fixed cap), its centroid $\mu_{v,k}$, an axis-aligned 3D box, the label $\ell_{v,k}$ and
+score $s_{v,k}$, and, when available, the descriptor $f_{v,k}$.
 
 \subsection{Cross-View Fusion}
 \label{sec:fusion}
 
-Candidate nodes are fused into objects by building an association graph over the lifted
-detections. By default we disallow same-view association edges, so a connected component
-represents cross-view support for one object rather than a grouping of detections within
-a single image. An edge connects two candidates when their centroids are close in 3D
-and, when valid descriptors exist, their cosine similarity exceeds a feature threshold:
+Lifted candidates are assembled through an association graph. We forbid edges between two detections from
+the same view, so a connected component is cross-view support for one object, not a grouping within an
+image. Two candidates $a$ and $b$ are joined when their centroids are close and, when both carry
+descriptors, their appearance is similar:
 \begin{equation}
     \|\mu_a-\mu_b\|_2 \leq \epsilon_g
     \quad\text{and}\quad
-    \cos(f_a,f_b) \geq \epsilon_f .
+    \cos(f_a,f_b) \geq \epsilon_f ,
 \end{equation}
-The feature condition is omitted for candidates without valid descriptors. Connected
-components define fused object identities; for each component, points are pooled and
-sampled, descriptors are averaged and renormalized, and the node label is set by a
-score-weighted majority vote over the constituent detector labels $\{\ell_{v,k}\}$
-(ties broken by count). This separates view-local evidence from object identity while
-preserving the detection provenance needed for inspection and annotation.
+with $\epsilon_g=0.15$ and $\epsilon_f=0.75$; the appearance term is skipped when descriptors are absent.
+Each component becomes one object: its points are pooled and subsampled, its descriptors averaged and
+renormalized, and its label set by plurality vote over the constituent detections. This separates
+view-local evidence from object identity while keeping the per-detection provenance.
 
 \subsection{Duplicate-Aware Fusion}
 \label{sec:dedup}
 
-Cross-view fusion alone leaves \emph{over-counting} unaddressed, and two structural reasons make it
-expected: the detector over-fires (several overlapping boxes per object per frame), and the
-association graph forbids same-view edges by design, so duplicate detections of one object within a
-frame are never joined by cross-view fusion. A single desk or monitor therefore survives as several
-fused nodes --- the dominant precision loss against the independent reference
-(Section~\ref{sec:results}). The corrective move is \emph{merging}, not splitting.
+Cross-view fusion still leaves the scene \emph{over-counted}, for two structural reasons: the detector
+over-fires (several overlapping boxes per object per frame), and same-view edges are forbidden, so
+duplicates within a frame are never joined. A desk or monitor thus survives as several fused nodes, the
+dominant precision loss against the independent reference (Section~\ref{sec:results}). Over-counting is an
+over-\emph{splitting} error, so the corrective move is to merge.
 
-We add a single post-fusion pass, \textsc{Dedup}, that merges fused nodes of the same
-label whose axis-aligned 3D boxes overlap. Let $\mathcal{O}$ be the fused nodes from
-Section~\ref{sec:fusion}. For a node $o$ with point set $X_o$, let
-$B_o=[\,b^{\min}_o,\,b^{\max}_o\,]$ be its axis-aligned 3D bounding box, with
-$b^{\min}_o=\min X_o$ and $b^{\max}_o=\max X_o$ taken coordinate-wise. For two boxes the
-axis-aligned 3D intersection-over-union is
+We add one post-fusion pass, \textsc{Dedup}, that merges same-label fused nodes whose axis-aligned 3D
+boxes overlap. For a node $o$ with point set $X_o$, let $B_o=[\,b^{\min}_o,\,b^{\max}_o\,]$ be its
+axis-aligned box, with $b^{\min}_o$ and $b^{\max}_o$ the coordinate-wise minimum and maximum of $X_o$.
+The axis-aligned 3D intersection-over-union of two boxes is
 \begin{equation}
     \mathrm{IoU}_{3D}(B_a,B_b)=
     \frac{\mathrm{vol}\!\left(B_a\cap B_b\right)}
          {\mathrm{vol}(B_a)+\mathrm{vol}(B_b)-\mathrm{vol}\!\left(B_a\cap B_b\right)},
 \end{equation}
-where $\mathrm{vol}(B_a\cap B_b)=\prod_{d=1}^{3}\max\!\bigl(0,\,
-\min(b^{\max}_{a,d},b^{\max}_{b,d})-\max(b^{\min}_{a,d},b^{\min}_{b,d})\bigr)$. We
-partition $\mathcal{O}$ by label. Within each label group we form a merge graph whose
-vertices are the nodes and whose edges connect pairs with
-$\mathrm{IoU}_{3D}(B_a,B_b)>\tau$, and we take its connected components; each component
-is collapsed into one object by re-running the same pooling, descriptor averaging, and
-label vote used in fusion. Nodes with no label, and singleton groups, are passed through
-unchanged. Concretely, with $G_\ell=\{o\in\mathcal{O}\,:\,\mathrm{label}(o)=\ell\}$:
+with $\mathrm{vol}(B_a\cap B_b)=\prod_{d=1}^{3}\max\!\bigl(0,\,
+\min(b^{\max}_{a,d},b^{\max}_{b,d})-\max(b^{\min}_{a,d},b^{\min}_{b,d})\bigr)$. Partitioning the nodes by
+label, we connect every pair with $\mathrm{IoU}_{3D}>\tau$ and collapse each connected component into one
+object via the same fuse step:
 \begin{equation}
     \textsc{Dedup}(\mathcal{O};\tau)=
     \bigcup_{\ell}\;\Bigl\{\,\textsc{Fuse}(c)\;:\;
     c\in\mathrm{CC}\bigl(G_\ell,\;\{(a,b):\mathrm{IoU}_{3D}(B_a,B_b)>\tau\}\bigr)\Bigr\},
 \end{equation}
-where $\mathrm{CC}(\cdot)$ denotes connected components and $\textsc{Fuse}(\cdot)$
-re-fuses a component into a single node (the identity on singletons). Restricting merges
-to same-label nodes keeps genuinely distinct objects of different classes separate, and
-requiring box overlap keeps spatially separated instances of the \emph{same} class
-separate. The default threshold is $\tau=0.1$; the step is robust across the low-IoU
-range and the IoU criterion alone outperforms adding a centroid-distance term
-(Section~\ref{sec:experiments}). We use 3D-box IoU rather than mask or point-set overlap
-because the lifted boxes are exactly the geometry already attached to each node, making
-the test parameter-free beyond $\tau$. The one structural cost is that closely packed
-same-class instances (e.g.\ two monitors on one desk) can have overlapping boxes and be
-over-merged; we quantify this trade-off and discuss appearance-based instance splitting
-as the natural remedy in Sections~\ref{sec:experiments} and~\ref{sec:discussion}.
+where $G_\ell$ is the set of nodes with label $\ell$, $\mathrm{CC}(\cdot)$ denotes connected components,
+and $\textsc{Fuse}(\cdot)$ re-fuses a component into a single node (the identity on singletons).
+Unlabeled nodes and singletons pass through unchanged. The same-label restriction keeps distinct classes
+apart, and the box-overlap test keeps spatially separated same-class instances apart. We use 3D-box IoU
+rather than mask or point-set overlap because the boxes are already attached to each node, making the test
+parameter-free beyond $\tau$; the default $\tau=0.1$ is robust across the low-IoU range
+(Section~\ref{sec:experiments}). Its one cost is that two genuinely distinct same-class instances with
+overlapping boxes, such as two monitors on one desk, can be over-merged; we quantify this and point to
+appearance-based instance splitting as the remedy in Sections~\ref{sec:experiments}
+and~\ref{sec:discussion}.
 
 \subsection{Spatial Relations}
 \label{sec:relations}
 
-Spatial relations are inferred from fused centroids using distance and relative-position
-rules. The relation vocabulary includes \emph{near}, \emph{left\_of}, \emph{right\_of},
-\emph{above}, \emph{below}, \emph{in\_front\_of}, and \emph{behind}. A \emph{near}
-relation is emitted for object pairs within a distance threshold; otherwise the vertical
-displacement or the dominant horizontal coordinate determines the directional predicate,
-with an optional maximum relation distance suppressing very distant pairs. The exported
-graph preserves both the symbolic fields and the numeric support, so the same object
-identities, point sets, labels, and provenance can be reused by manual review or by a
-future learned relation head.
-
-\subsection{An Ablated Variant: Uncertainty-Aware Fusion}
-\label{sec:uncertainty}
-
-A natural hypothesis --- and the headline of an earlier version of this system --- is
-that fusion should be \emph{uncertainty-aware}: each lifted candidate can be assigned an
-uncertainty
-\begin{equation}
-    U_{v,k} = \lambda\,(1-\bar{C}_{v,k}) + (1-\lambda)\,
-    \mathrm{clip}\!\left(\tfrac{\sigma(X_{v,k})}{s_0},0,1\right),
-\end{equation}
-combining VGGT point confidence $\bar{C}_{v,k}$ with the spatial spread
-$\sigma(X_{v,k})$ of the lifted points (in our runs $\lambda=0.7$, $s_0=1$), and the
-fusion gate is then \emph{tightened} for uncertain pairs --- effectively splitting
-ambiguous candidates apart. We retain this as an ablated variant rather than as part of
-the core method, because (i)~the failure analysis above shows the system over-counts, so
-the productive move is to merge more, not to split more, and a gate that splits uncertain
-pairs acts on the wrong axis; and (ii)~once labels are real and the evaluation is
-de-circularized, the variant gives no benefit over plain cross-view fusion across a full
-weight sweep (Section~\ref{sec:experiments}). We report it as a deliberate, rigorous
-negative result. The uncertainty score itself is still exported with each node, since it
-is potentially useful for the opposite operation --- guiding an appearance-based
-\emph{split} of over-merged groups --- which we leave to future work
-(Section~\ref{sec:discussion}).
+Spatial relations are read off the fused centroids by a small, auditable set of distance and direction
+rules, one directed edge per ordered object pair. With $\delta=\mu_{\text{obj}}-\mu_{\text{subj}}$, a pair
+closer than $0.35$ is labeled \emph{near}, which preempts the directional predicates; otherwise a vertical
+separation above $0.08$ gives \emph{above} or \emph{below}, and failing that the larger horizontal axis
+gives \emph{left\_of}/\emph{right\_of} or \emph{in\_front\_of}/\emph{behind}. Pairs beyond a maximum range
+($0.75$) emit no edge. The exported graph keeps both the predicate and the numeric displacement that
+produced it, so the same object identities, point sets, labels, and provenance can be reused by manual
+review or by a future learned relation head.

@@ -2,53 +2,16 @@
 \label{sec:related_work}
 
 \paragraph{Feed-forward sparse-view geometry.}
-Classical multi-view reconstruction and SLAM rely on correspondence, triangulation, and bundle
-adjustment over calibrated or densely overlapping views (e.g.\ COLMAP~\cite{schonberger2016sfm},
-ORB-SLAM3~\cite{campos2021orbslam3}). Feed-forward models remove the per-scene optimization: DUSt3R
-predicts point maps from unconstrained images~\cite{wang2024dust3r}, MASt3R adds 3D-aware
-matching~\cite{leroy2024mast3r}, and VGGT predicts cameras, depth, point maps, and confidence from one
-or many views~\cite{wang2025vggt}. We use VGGT as a \emph{frozen} source of pixel-aligned 3D evidence,
-but our output is an object--relation graph, not a reconstruction.
+Classical geometry recovery rests on correspondence, triangulation, and bundle adjustment over calibrated or densely overlapping views, as in COLMAP~\cite{schonberger2016sfm} and ORB-SLAM3~\cite{campos2021orbslam3}; both are accurate but need many views or per-scene optimization. A recent line replaces that optimization with one network pass: DUSt3R regresses point maps from an image pair~\cite{wang2024dust3r}, MASt3R adds 3D-aware matching~\cite{leroy2024mast3r}, Fast3R extends it to many views~\cite{yang2025fast3r}, and VGGT predicts cameras, depth, point maps, and per-pixel confidence from one or many views at once~\cite{wang2025vggt}. We treat VGGT as a \emph{frozen} source of pixel-aligned 3D evidence; our output is an object--relation graph, not a reconstruction.
 
 \paragraph{Open-vocabulary detection as a labeling front-end.}
-A lifted scene graph is only as good as its 2D labels. The common mask-then-embed recipe pairs
-class-agnostic SAM masks~\cite{kirillov2023segment} with per-region CLIP
-embeddings~\cite{radford2021clip} (optionally DINOv2~\cite{oquab2023dinov2}); it is fully frozen but
-pushes naming onto whole-image-trained CLIP applied to crops, which tends to return scene-scale guesses
-rather than the objects present. Open-vocabulary \emph{detectors} instead localize and name in one
-pass --- OWL-ViT~\cite{minderer2022owlvit}, OWLv2~\cite{minderer2023owlv2}, Grounding
-DINO~\cite{liu2024groundingdino}, Detic~\cite{zhou2022detic}. We adopt OWLv2 because it emits
-localized, named instances --- the property the lifting and fusion stages need --- and study what that
-buys a sparse-view 3D pipeline over mask-then-embed.
+A lifted scene graph is only as good as its 2D labels. The common recipe pairs class-agnostic SAM masks~\cite{kirillov2023segment} with per-region CLIP embeddings~\cite{radford2021clip}, sometimes adding DINOv2~\cite{oquab2023dinov2}; it is frozen but hands naming to a whole-image CLIP model applied to crops, which returns scene-level guesses rather than the object inside the crop. Open-vocabulary \emph{detectors} instead localize and name in one pass: OWL-ViT~\cite{minderer2022owlvit} and its scaled successor OWLv2~\cite{minderer2023owlv2}, Grounding DINO~\cite{liu2024groundingdino}, Detic~\cite{zhou2022detic}, and the real-time YOLO-World~\cite{cheng2024yoloworld}. We build our front-end on OWLv2 because it emits localized, named instances, exactly what lifting and fusion consume, and we measure what that buys a sparse-view 3D pipeline over the mask-then-embed alternative.
 
 \paragraph{Open-vocabulary 3D semantics.}
-Open-vocabulary 3D understanding typically lifts or distills foundation-model features into point
-clouds, maps, or neural representations: building on NeRF~\cite{mildenhall2020nerf}, LERF embeds
-language in radiance fields~\cite{kerr2023lerf}, while OpenScene~\cite{peng2023openscene},
-ConceptFusion~\cite{jatavallabhula2023conceptfusion}, OpenMask3D~\cite{takmaz2023openmask3d}, and
-OpenSplat3D~\cite{piekenbrinck2025opensplat3d} fuse open-set features over points, maps, masks, or
-Gaussian splats~\cite{kerbl2023gaussian}. We are complementary: we build explicit object--relation
-graphs from sparse RGB views without a completed 3D map or a per-scene radiance field. Notably,
-uncertainty-aware aggregation has been proposed for multi-view fusion in this
-setting~\cite{li2025cuao3d}; we revisit it on real detector labels under an independent reference and
-report a negative result (Section~\ref{sec:results}).
+A large body of work lifts or distills foundation-model features into points, maps, or neural representations. Building on NeRF~\cite{mildenhall2020nerf}, LERF embeds language in a radiance field~\cite{kerr2023lerf}, while OpenScene~\cite{peng2023openscene}, ConceptFusion~\cite{jatavallabhula2023conceptfusion}, OpenMask3D~\cite{takmaz2023openmask3d}, and OpenSplat3D~\cite{piekenbrinck2025opensplat3d} fuse open-set features over point clouds, posed RGB-D, masks, or Gaussian splats~\cite{kerbl2023gaussian}. Our goal is complementary: rather than a dense map or radiance field, we build an explicit object--relation graph from a few RGB views. CUA-O3D proposes uncertainty-aware aggregation for fusing such features across views~\cite{li2025cuao3d}; we revisit that idea on real detector labels under an independent reference and report a negative result (Section~\ref{sec:results}).
 
-\paragraph{3D scene graphs.}
-3D scene graphs organize objects and their relations into structured scene
-representations~\cite{armeni2019scenegraph}, with datasets and learned predictors for reconstructed
-indoor scenes~\cite{wald2020threedssg,dai2017scannet}. ConceptGraphs is closest to our output: it builds
-open-vocabulary 3D scene graphs from \emph{posed RGB-D} sequences~\cite{gu2024conceptgraphs}. We share
-the object--relation goal but relax the input to sparse RGB views lifted through feed-forward geometry.
-A recurring failure of any such lifting-and-fusion pipeline is \emph{over-counting} --- one object
-surviving as several nodes --- which motivates our duplicate-aware merge.
+\paragraph{Open-vocabulary 3D scene graphs.}
+Scene graphs cast a scene as objects and their relations~\cite{armeni2019scenegraph}, with datasets and predictors for reconstructed indoor scenes~\cite{wald2020threedssg,dai2017scannet}. Recent work makes these open-vocabulary: ConceptGraphs builds them from posed RGB-D sequences~\cite{gu2024conceptgraphs}, Open3DSG predicts open-set objects and relations from a complete 3D point cloud~\cite{koch2024open3dsg}, and HOV-SG adds a floor--room--object hierarchy for language-guided navigation~\cite{werby2024hovsg}. All three begin from dense or posed 3D input; we share their object--relation goal but take only a handful of unposed RGB frames, lifting them through frozen feed-forward geometry. That sparse-view input makes one failure mode dominant: \emph{over-counting}, where a single physical object survives cross-view fusion as several same-label nodes. Removing those duplicates is the job of our fusion step.
 
 \paragraph{Honest evaluation and reproducibility.}
-With no clean instance-level ground truth for a few casual RGB views, it is tempting to score a method
-against a reference derived from its own dense-view output --- coupling reference to predictor and
-producing a \emph{circular} evaluation in which a method scores perfectly at the reference view by
-construction. Such reference--predictor coupling is a form of information leakage, a known driver of the
-reproducibility crisis~\cite{kapoor2023leakage,gundersen2018reproducibility}. The 3D community has
-responded with controlled benchmarks carrying independent ground truth (e.g.\
-Replica~\cite{straub2019replica}, TUM RGB-D~\cite{sturm2012tumrgbd}). In that spirit we contribute an
-independent sparse-view reference authored from the frames, document the circular-pseudo-reference
-pitfall, and report what actually helps once it is removed.
+Clean instance-level ground truth is expensive for casual RGB views, so it is tempting to grade a method against a reference derived from its own dense-view output. This couples reference to predictor and yields a \emph{circular} evaluation in which a method scores perfectly at the reference view almost by construction, a form of information leakage that drives the reproducibility crisis~\cite{kapoor2023leakage,gundersen2018reproducibility}. The standard response in 3D is to evaluate on controlled benchmarks with independent ground truth, such as Replica~\cite{straub2019replica} and TUM RGB-D~\cite{sturm2012tumrgbd}. In that spirit we author a sparse-view reference directly from the frames, independently of the system under test, document the circular-pseudo-reference pitfall, and report what helps once the coupling is removed.
