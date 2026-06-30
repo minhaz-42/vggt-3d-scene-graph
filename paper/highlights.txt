@@ -1,5 +1,0 @@
-Sparse RGB views are lifted into language-grounded 3D scene graphs.
-VGGT geometry, SAM masks, CLIP, and DINOv2 are fused with uncertainty.
-A five-sequence TUM RGB-D benchmark evaluates 20 sparse-view runs.
-Checked prediction-seeded references report sparse-view consistency F1.
-Non-reference object and relation F1 improve monotonically from 3 to 8 views.

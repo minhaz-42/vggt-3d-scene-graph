@@ -1,6 +1,0 @@
-| Variant | Proposals | Features | Candidates | Objects | Multi-view | Relations | Uncertainty |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| OpenCV geometry-only | OpenCV | none | 80 | 14 | 9 | 100 | 0.039071 |
-| OpenCV feature fusion | OpenCV | clip+handcrafted | 80 | 16 | 10 | 142 | 0.024012 |
-| SAM semantic fusion | SAM | clip | 80 | 22 | 15 | 278 | 0.021765 |
-| Full pipeline | SAM | clip+dinov2 | 80 | 33 | 17 | 618 | 0.021568 |

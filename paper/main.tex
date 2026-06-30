@@ -1,51 +1,55 @@
-\documentclass[preprint,12pt]{elsarticle}
+% =====================================================================
+% PRIMARY TARGET: ACCV 2026 (deadline Jul 5, 2026). Springer LNCS, **14 pages**
+% incl. figures/tables (references unlimited), double-blind, supplementary allowed.
+% FALLBACK: OpenSUN3D @ ECCV 2026 (Aug 1) — same LNCS family but 8 pages, so for that
+% target trim + move the sweeps to supplementary (see docs/opensun3d_submission_plan.md).
+% For final submission use the OFFICIAL ACCV 2026 LNCS author kit on Overleaf
+% (accv2026.org/submissions/author-guidelines/) — drop these sections in; this file
+% uses the LNCS base class so structure is correct. Still needs: the official kit,
+% the n~=28 numbers + figures, and a 14-page fit check (compile on Overleaf).
+% =====================================================================
+\documentclass[runningheads]{llncs}
 
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{url}
+\usepackage{multirow}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning}
-\usepackage{hyperref}
-
-\setlength{\emergencystretch}{3em}
-\setlength{\hfuzz}{3pt}
+\usepackage[hidelinks]{hyperref}
 
 % Placeholder marker for results pending the ~30-scene expansion run.
 \newcommand{\todo}[1]{\textbf{[TODO: #1]}}
 
-\journal{Computer Vision and Image Understanding}
-
 \begin{document}
-
-\begin{frontmatter}
 
 \title{Open-Vocabulary 3D Scene Graphs from Sparse RGB Views:\\
 Duplicate-Aware Fusion and a De-Circularized Benchmark}
 
-\author{Anonymous Author(s)}
-\address{Anonymous affiliation(s)}
+% Double-blind: no authors / affiliations / repo links in the submitted version.
+\author{Anonymous}
+\institute{Anonymous}
+
+\maketitle
 
 \begin{abstract}
 \input{sections/abstract}
+\keywords{3D scene graphs \and sparse views \and open-vocabulary detection \and
+evaluation methodology \and benchmark \and duplicate-aware fusion}
 \end{abstract}
 
-\begin{keyword}
-3D scene graphs \sep sparse views \sep open-vocabulary detection \sep evaluation methodology \sep benchmark \sep duplicate-aware fusion
-\end{keyword}
-
-\end{frontmatter}
-
+% ACCV gives 14 pages, so the reframed sections fit with light editing. Keep the main
+% results tables in the body; move the full IoU sweep + full per-class table + weight
+% sweep to supplementary (ACCV allows it). For the 8-page OpenSUN3D fallback, trim harder.
 \input{sections/introduction}
 \input{sections/related_work}
 \input{sections/method}
 \input{sections/experiments}
 \input{sections/results}
 \input{sections/discussion}
-\input{sections/declarations}
 
-\bibliographystyle{elsarticle-num}
+\bibliographystyle{splncs04}
 \bibliography{references}
 
 \end{document}
