@@ -5,36 +5,36 @@ n_scenes = 5
 
 | variant | v3 | v5 | v8 | v10 |
 |---|---|---|---|---|
-| 2d-only | 0.4805 | 0.4944 | 0.5117 | 0.4986 |
-| geometry-only | 0.4495 | 0.4768 | 0.5017 | 0.4956 |
-| semantic-lifting | 0.4158 | 0.3395 | 0.2690 | 0.2315 |
-| fixed-shrink | 0.5095 | 0.4868 | 0.4683 | 0.4253 |
-| graph-fusion | 0.5054 | 0.5050 | 0.4903 | 0.4581 |
-| **proposed** | 0.4922 | 0.4757 | 0.4326 | 0.3976 |
-| graph-fusion-dedup | 0.5684 | 0.5893 | 0.6349 | 0.6004 |
+| 2d-only | 0.4897 | 0.4940 | 0.4820 | 0.4647 |
+| geometry-only | 0.4578 | 0.4843 | 0.4834 | 0.4833 |
+| semantic-lifting | 0.4168 | 0.3326 | 0.2548 | 0.2148 |
+| fixed-shrink | 0.5165 | 0.4849 | 0.4471 | 0.4008 |
+| graph-fusion | 0.5126 | 0.5038 | 0.4688 | 0.4324 |
+| **proposed** | 0.4982 | 0.4725 | 0.4132 | 0.3749 |
+| graph-fusion-dedup | 0.5804 | 0.5923 | 0.6137 | 0.5787 |
 
 ## `proposed` − `fixed-shrink` (object_label_f1)
-- mean delta — v3: -0.0173, v5: -0.0111, v8: -0.0356, v10: -0.0276
+- mean delta — v3: -0.0183, v5: -0.0124, v8: -0.0340, v10: -0.0259
 - per-scene wins — v3: 0W/3L/2T (p=0.250), v5: 1W/4L/0T (p=0.375), v8: 1W/4L/0T (p=0.375), v10: 0W/5L/0T (p=0.062)
 
 ## `proposed` − `graph-fusion` (object_label_f1)
-- mean delta — v3: -0.0133, v5: -0.0293, v8: -0.0577, v10: -0.0605
+- mean delta — v3: -0.0144, v5: -0.0313, v8: -0.0556, v10: -0.0574
 - per-scene wins — v3: 1W/3L/1T (p=0.625), v5: 0W/5L/0T (p=0.062), v8: 0W/5L/0T (p=0.062), v10: 0W/5L/0T (p=0.062)
 
 ## recall / precision (mean over scenes)
 | variant | metric | v3 | v5 | v8 | v10 |
 |---|---|---|---|---|---|
-| 2d-only | recall | 0.3929 | 0.4317 | 0.5163 | 0.5296 |
-| 2d-only | precision | 0.6897 | 0.6734 | 0.5928 | 0.5556 |
-| geometry-only | recall | 0.3361 | 0.3858 | 0.4826 | 0.4752 |
-| geometry-only | precision | 0.7043 | 0.6565 | 0.5531 | 0.5782 |
-| semantic-lifting | recall | 0.5048 | 0.5653 | 0.6504 | 0.6578 |
-| semantic-lifting | precision | 0.3717 | 0.2502 | 0.1730 | 0.1431 |
-| fixed-shrink | recall | 0.4754 | 0.5029 | 0.6028 | 0.5991 |
-| fixed-shrink | precision | 0.5773 | 0.5075 | 0.4095 | 0.3523 |
-| graph-fusion | recall | 0.4659 | 0.4942 | 0.5941 | 0.5904 |
-| graph-fusion | precision | 0.5873 | 0.5629 | 0.4432 | 0.4049 |
-| proposed | recall | 0.4754 | 0.5409 | 0.6322 | 0.6371 |
-| proposed | precision | 0.5314 | 0.4377 | 0.3362 | 0.2950 |
-| graph-fusion-dedup | recall | 0.4490 | 0.4847 | 0.5941 | 0.5830 |
-| graph-fusion-dedup | precision | 0.8281 | 0.7842 | 0.7002 | 0.6428 |
+| 2d-only | recall | 0.4167 | 0.4494 | 0.5184 | 0.5268 |
+| 2d-only | precision | 0.6647 | 0.6484 | 0.5289 | 0.4907 |
+| geometry-only | recall | 0.3552 | 0.4075 | 0.4935 | 0.4935 |
+| geometry-only | precision | 0.6757 | 0.6330 | 0.5138 | 0.5439 |
+| semantic-lifting | recall | 0.5360 | 0.5957 | 0.6643 | 0.6643 |
+| semantic-lifting | precision | 0.3574 | 0.2372 | 0.1602 | 0.1299 |
+| fixed-shrink | recall | 0.5054 | 0.5265 | 0.6141 | 0.6030 |
+| fixed-shrink | precision | 0.5573 | 0.4893 | 0.3822 | 0.3257 |
+| graph-fusion | recall | 0.4954 | 0.5170 | 0.6046 | 0.5935 |
+| graph-fusion | precision | 0.5673 | 0.5435 | 0.4132 | 0.3735 |
+| proposed | recall | 0.5054 | 0.5667 | 0.6448 | 0.6432 |
+| proposed | precision | 0.5124 | 0.4210 | 0.3140 | 0.2724 |
+| graph-fusion-dedup | recall | 0.4759 | 0.5070 | 0.6046 | 0.5935 |
+| graph-fusion-dedup | precision | 0.7995 | 0.7489 | 0.6503 | 0.5963 |

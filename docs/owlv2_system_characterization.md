@@ -9,12 +9,12 @@ of the benchmark contribution. Data: `results/benchmark_owlv2/per_class_object_a
 
 | views | precision | recall | F1 |
 |---|---|---|---|
-| 3 | 0.554 | 0.614 | **0.583** |
-| 5 | 0.491 | 0.651 | 0.560 |
-| 8 | 0.405 | 0.795 | 0.537 |
-| 10 | 0.361 | 0.795 | 0.496 |
+| 3 | 0.533 | 0.671 | **0.594** |
+| 5 | 0.464 | 0.699 | 0.557 |
+| 8 | 0.368 | 0.822 | 0.508 |
+| 10 | 0.322 | 0.808 | 0.461 |
 
-**Signature: recall rises with views (0.61 → 0.80), precision falls (0.55 → 0.36).** The system
+**Signature: recall rises with views (0.67 → 0.81), precision falls (0.53 → 0.32).** The system
 finds *more* of the true objects as it sees more frames, but it also emits more duplicate/fragment
 detections, so precision — and net F1 — degrade. F1 is best at the sparse end. (Note this is the
 opposite of the circular reference, where F1 rose to 1.0 at v10 by construction.)
@@ -25,32 +25,29 @@ opposite of the circular reference, where F1 rose to 1.0 at v10 by construction.
 |---|---|---|---|---|---|
 | book | 11 | 1.00/0.82 | 0.67/0.73 | 0.64/0.82 | 0.53/0.73 |
 | monitor | 9 | 0.55/0.67 | 0.54/0.78 | 0.38/1.00 | 0.33/1.00 |
-| cup | 9 | 1.00/0.44 | 0.83/0.56 | 0.67/0.67 | 0.64/0.78 |
-| bottle | 7 | 0.78/1.00 | 0.71/0.71 | 0.71/0.71 | 0.71/0.71 |
-| desk | 6 | 0.25/1.00 | 0.25/1.00 | 0.19/1.00 | 0.17/1.00 |
+| cup | 7 | 1.00/0.57 | 0.83/0.71 | 0.56/0.71 | 0.45/0.71 |
 | box | 6 | 0.40/0.33 | 0.38/0.50 | 0.46/1.00 | 0.35/1.00 |
-| floor | 5 | 0.50/0.40 | 0.75/0.60 | 0.57/0.80 | 0.44/0.80 |
-| chair | 5 | 1.00/0.40 | 0.67/0.40 | 0.50/0.80 | 0.44/0.80 |
+| desk | 6 | 0.25/1.00 | 0.25/1.00 | 0.19/1.00 | 0.17/1.00 |
+| bottle | 6 | 0.67/1.00 | 0.57/0.67 | 0.57/0.67 | 0.57/0.67 |
 | keyboard | 5 | 0.56/1.00 | 0.42/1.00 | 0.31/1.00 | 0.26/1.00 |
+| chair | 5 | 1.00/0.40 | 0.67/0.40 | 0.50/0.80 | 0.44/0.80 |
+| floor | 5 | 0.50/0.40 | 0.75/0.60 | 0.57/0.80 | 0.44/0.80 |
 | wall | 4 | 1.00/0.75 | 0.57/1.00 | 0.40/1.00 | 0.36/1.00 |
-| door | 4 | 1.00/0.25 | 1.00/0.25 | 0.67/0.50 | 0.67/0.50 |
-| window | 3 | 0.25/0.33 | 0.20/0.33 | 0.14/0.33 | 0.14/0.33 |
-| cabinet | 2 | 0.00/0.00 | 0.00/0.00 | 0.00/0.00 | 0.00/0.00 |
+| door | 3 | 1.00/0.33 | 1.00/0.33 | 0.33/0.33 | 0.33/0.33 |
 | bag | 2 | 1.00/0.50 | 1.00/0.50 | 1.00/0.50 | 1.00/0.50 |
-| picture | 2 | 0.00/0.00 | 1.00/0.50 | 1.00/0.50 | 1.00/0.50 |
+| cabinet | 2 | 0.00/0.00 | 0.00/0.00 | 0.00/0.00 | 0.00/0.00 |
 | lamp | 1 | 0.33/1.00 | 0.20/1.00 | 0.20/1.00 | 0.20/1.00 |
 | plant | 1 | 0.50/1.00 | 1.00/1.00 | 0.33/1.00 | 0.50/1.00 |
-| trash can | 1 | 0.00/0.00 | 0.00/0.00 | 0.50/1.00 | 0.33/1.00 |
 
 ### Three behavioral groups
 - **Found reliably but over-counted** (recall → 1.0, precision collapses with views): `desk`
   (0.25 → 0.17), `keyboard` (0.56 → 0.26), `monitor` (0.55 → 0.33), `wall`, `lamp`, `box`. These are
   always detected; the 3D fusion does not collapse the multiple detections of the *same* physical
   object, so they are over-counted — the dominant precision sink.
-- **Clean wins** (high precision *and* recall): `book`, `bottle`, `bag`, `chair`, `picture`, `plant`.
-  Distinct, well-separated objects that fuse correctly.
-- **Genuine misses**: `cabinet` (never detected at any view), `window` (P/R ≈ 0.14–0.33), `door`
-  (recall 0.25–0.50). OWLv2 under-fires on these classes on blurry low-res TUM frames.
+- **Clean wins** (high precision *and* recall): `book`, `bag`, `chair`, `plant`, and `cup`/`bottle` at
+  sparse views. Distinct, well-separated objects that fuse correctly.
+- **Genuine misses**: `cabinet` (never detected at any view) and `door` (recall ≈ 0.33). OWLv2
+  under-fires on these classes on blurry low-res TUM frames.
 
 ## The sharp implication for the technical story
 
@@ -70,7 +67,8 @@ only variant whose F1 *improves* with more views. Full numbers in `phase1_result
 ("Positive result").
 
 ## Caveats
-- Reference is VLM-drafted (pending human verification); per-class counts (esp. small classes like
-  `cabinet`, `picture`, `window` with ref ≤ 3) are the most sensitive to verification.
+- Reference is **human-verified** (2026-06-30); numbers above are on the verified reference.
+  Verification removed a few ambiguous small-class detections (window, picture, trash can, some
+  cup/bottle) — the per-class table and overall F1 shifted only marginally and the story is unchanged.
 - n = 5 scenes; per-class precision/recall is aggregated (micro) over them.
 - "Stuff" classes (desk/wall/floor) are kept here; they over-split and could be reported separately.

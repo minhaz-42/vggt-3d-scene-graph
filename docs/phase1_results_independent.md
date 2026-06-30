@@ -26,9 +26,11 @@ the uncertainty gate. See "Positive result" below.
   threshold 0.2, per-class NMS 0.5. Real open-vocab objects (Week 2).
 - **Reference:** independent per-scene object multiset for all 5 paper-subset scenes, enumerated by
   two independent passes (draft + adversarial verify) over the raw RGB frames — independent of
-  SAM/CLIP/VGGT/graph-fusion. `configs/evaluation/independent_labels.json`; provenance + the
-  corrections the adversarial pass applied in `docs/independent_reference_worklist.md`.
-  **Still VLM-drafted, pending human verification** (see caveats).
+  SAM/CLIP/VGGT/graph-fusion — and then **human-verified (2026-06-30)**.
+  `configs/evaluation/independent_labels.json` (`label_source: vlm-drafted-human-verified`);
+  provenance + corrections in `docs/independent_reference_worklist.md`. Human verification removed
+  ambiguous detections (window in room/desk/desk2; cup/bottle/picture in desk2; door/trash can in
+  fr3); all numbers below are on the verified reference. Both findings were unchanged by verification.
 - **Metric:** `object_label_f1` = multiset precision/recall/F1 of fused-node labels vs the reference
   multiset, mean over the 5 scenes. Driver: `scripts/run_owlv2_benchmark.sh`; eval:
   `scripts/evaluate_sparse_view_annotations.py`; aggregation: `scripts/aggregate_variant_f1.py`.
@@ -38,16 +40,16 @@ the uncertainty gate. See "Positive result" below.
 
 | variant | v3 | v5 | v8 | v10 |
 |---|---|---|---|---|
-| 2d-only | 0.4805 | 0.4944 | 0.5117 | 0.4986 |
-| geometry-only | 0.4495 | 0.4768 | 0.5017 | 0.4956 |
-| semantic-lifting | 0.4158 | 0.3395 | 0.2690 | 0.2315 |
-| fixed-shrink (control) | 0.5095 | 0.4868 | 0.4683 | 0.4253 |
-| graph-fusion (baseline) | 0.5054 | 0.5050 | 0.4903 | 0.4581 |
-| proposed (rank, w=0.3) | 0.4922 | 0.4757 | 0.4326 | 0.3976 |
-| **graph-fusion-dedup (ours)** | **0.5684** | **0.5893** | **0.6349** | **0.6004** |
+| 2d-only | 0.4897 | 0.4940 | 0.4820 | 0.4647 |
+| geometry-only | 0.4578 | 0.4843 | 0.4834 | 0.4833 |
+| semantic-lifting | 0.4168 | 0.3326 | 0.2548 | 0.2148 |
+| fixed-shrink (control) | 0.5165 | 0.4849 | 0.4471 | 0.4008 |
+| graph-fusion (baseline) | 0.5126 | 0.5038 | 0.4688 | 0.4324 |
+| proposed (rank, w=0.3) | 0.4982 | 0.4725 | 0.4132 | 0.3749 |
+| **graph-fusion-dedup (ours)** | **0.5804** | **0.5923** | **0.6137** | **0.5787** |
 
-`proposed − fixed-shrink`: −0.017 (v3), −0.011 (v5), −0.036 (v8), −0.028 (v10).
-`proposed − graph-fusion`: −0.013 (v3), −0.029 (v5), −0.058 (v8), −0.061 (v10).
+`proposed − fixed-shrink`: −0.018 (v3), −0.012 (v5), −0.034 (v8), −0.026 (v10).
+`proposed − graph-fusion`: −0.014 (v3), −0.031 (v5), −0.056 (v8), −0.057 (v10).
 Per-scene: `proposed` < `graph-fusion` in **3/5 at v3 and 5/5 at v5, v8, v10**. The sign of the
 Phase-1 result (proposed > controls, 5/5 at v3/v5) is reversed.
 
@@ -96,9 +98,9 @@ boxes have IoU > 0.1 and re-fuse each group (`merge_duplicate_instances` in `gra
 
 | variant | v3 | v5 | v8 | v10 |
 |---|---|---|---|---|
-| graph-fusion | 0.5054 | 0.5050 | 0.4903 | 0.4581 |
-| **graph-fusion-dedup** | **0.5684** | **0.5893** | **0.6349** | **0.6004** |
-| Δ vs graph-fusion | +0.063 | +0.084 | +0.145 | +0.142 |
+| graph-fusion | 0.5126 | 0.5038 | 0.4688 | 0.4324 |
+| **graph-fusion-dedup** | **0.5804** | **0.5923** | **0.6137** | **0.5787** |
+| Δ vs graph-fusion | +0.068 | +0.089 | +0.145 | +0.146 |
 
 - **Wins in every scene, never loses:** 4W/0L/1T (v3), 4W/0L/1T (v5), **5W/0L (v8, v10)**; same
   story vs `fixed-shrink` (+0.06 → +0.18). (n=5 → sign-test floor p=0.062.)
@@ -139,10 +141,12 @@ only where splitting is correct.
 
 ## Caveats
 
-- **The independent reference is VLM-drafted (two passes) and must be human-verified** before any
-  paper claim — this is the top reviewer risk and the worklist for it is `docs/independent_reference_worklist.md`.
-  The qualitative conclusion (proposed ≈ or < baseline across all views/weights/filterings) is large
-  and consistent enough that human correction of a few counts is very unlikely to flip it.
-- **n = 5 scenes.** Consistent (5/5 at v5–v10) but small.
+- **The independent reference is human-verified (2026-06-30).** It began as a two-pass VLM draft and
+  was then corrected by a human against the frames (removing ambiguous detections). Re-running both
+  analyses on the verified reference left every conclusion unchanged (proposed − graph-fusion moved
+  −0.013/−0.029/−0.058/−0.061 → −0.014/−0.031/−0.056/−0.057; dedup − graph-fusion +0.063/.../+0.142 →
+  +0.068/.../+0.146). The top former reviewer risk (circular / unverified GT) is closed.
+- **n = 5 scenes.** Consistent (5/5 at v5–v10) but small — the ~30-scene expansion is the remaining
+  statistical-power step.
 - Reference is a scene-level multiset over the 10 frames; sparse-view predictions are recall-limited
   by construction — fair across variants, but absolute F1 is depressed.

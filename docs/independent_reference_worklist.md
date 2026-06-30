@@ -1,6 +1,6 @@
 # Independent reference — human-verification worklist
 
-Drafted + adversarially verified from the raw RGB frames by two independent passes per scene (workflow `independent-reference-draft`). **This is a VLM draft and must be human-verified before any paper claim.** For each scene: open the 10 frames under `data/benchmark/tum_rgbd_paper_subset/<scene>/images/` and confirm/fix the multiset.
+Drafted + adversarially verified from the raw RGB frames by two independent passes per scene (workflow `independent-reference-draft`), then **HUMAN-VERIFIED on 2026-06-30** — the human pass removed ambiguous detections (window in room/desk/desk2; cup/bottle/picture in desk2; door/trash can in fr3). The verified multisets are in `configs/evaluation/independent_labels.json` (`label_source: vlm-drafted-human-verified`); the per-scene draft evidence below is retained as the provenance record.
 
 ## tum_rgbd_freiburg1_room
 _confidence: medium — frames are heavily motion-blurred; structural items and the two monitors/keyboards are clear, but the chair and the back-desk electronics cluster count are the weakest judgments._

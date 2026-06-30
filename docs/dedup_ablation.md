@@ -2,20 +2,21 @@
 
 Tuning + robustness for the post-fusion duplicate-instance merge (the positive contribution; see
 `phase1_results_independent.md`). Metric is `object_label_f1` macro-averaged over the 5 scenes vs the
-independent reference (same as the headline table). Raw: `results/benchmark_owlv2/dedup_ablation.txt`.
-Baseline `graph-fusion`: 0.505 / 0.505 / 0.490 / 0.458 (v3/v5/v8/v10).
+**human-verified** independent reference (same as the headline table). Raw:
+`results/benchmark_owlv2/dedup_ablation.txt`. Baseline `graph-fusion`: 0.513 / 0.504 / 0.469 / 0.432
+(v3/v5/v8/v10).
 
 ## IoU threshold sweep (the merge criterion: merge same-label nodes with 3D-box IoU > t)
 
 | IoU t | v3 | v5 | v8 | v10 | avg Δ vs graph-fusion |
 |---|---|---|---|---|---|
-| 0.0 (any overlap) | 0.576 | 0.586 | 0.653 | 0.626 | **+0.121** |
-| 0.05 | 0.568 | 0.582 | 0.630 | 0.608 | +0.107 |
-| **0.1 (default)** | **0.568** | **0.589** | **0.635** | **0.603** | **+0.109** |
-| 0.15 | 0.565 | 0.586 | 0.619 | 0.580 | +0.098 |
-| 0.2 | 0.555 | 0.574 | 0.603 | 0.571 | +0.086 |
-| 0.3 | 0.541 | 0.550 | 0.560 | 0.539 | +0.058 |
-| 0.5 | 0.516 | 0.524 | 0.524 | 0.498 | +0.026 |
+| 0.0 (any overlap) | 0.588 | 0.587 | 0.631 | 0.603 | **+0.123** |
+| 0.05 | 0.580 | 0.585 | 0.607 | 0.585 | +0.110 |
+| **0.1 (default)** | **0.580** | **0.592** | **0.614** | **0.581** | **+0.112** |
+| 0.15 | 0.577 | 0.589 | 0.597 | 0.558 | +0.100 |
+| 0.2 | 0.566 | 0.576 | 0.581 | 0.548 | +0.088 |
+| 0.3 | 0.552 | 0.551 | 0.537 | 0.516 | +0.060 |
+| 0.5 | 0.524 | 0.523 | 0.502 | 0.471 | +0.026 |
 
 **The win is robust** across the whole low-IoU range (avgΔ +0.086 → +0.121 for t ∈ [0, 0.2]); it only
 fades when the threshold gets strict enough to stop merging duplicates (t ≥ 0.5). `t = 0.1` (the wired

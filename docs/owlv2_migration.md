@@ -94,9 +94,9 @@ than boxes.
 
 ## Week 3 — independent re-eval (done)
 
-Built an independent 5-scene reference (draft + adversarial verify over raw frames; pending human
-verification), ran the full OWLv2 benchmark (5 scenes × {3,5,8,10} × 6 variants), and re-ran the
-variant comparison on real objects. **The rank-normalized uncertainty fusion does NOT beat the
+Built an independent 5-scene reference (draft + adversarial verify over raw frames, then
+**human-verified 2026-06-30**), ran the full OWLv2 benchmark (5 scenes × {3,5,8,10} × 6 variants),
+and re-ran the variant comparison on real objects. **The rank-normalized uncertainty fusion does NOT beat the
 no-uncertainty baseline or the control** — slightly worse at every view count, 5/5 scene losses at
 v5–v10, robust under 3 reference filterings and a weight sweep (0.1–0.8). The Phase-1 sparse-view
 "win" was a circular-reference artifact. The real win is the OWLv2 open-vocab system + the

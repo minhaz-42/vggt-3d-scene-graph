@@ -91,7 +91,7 @@ Legend: ✅ done · 🟡 in progress · ⬜ not started
 - [x] Extended `configs/evaluation/independent_labels.json` to all 5 scenes. Object multisets drafted
       + **adversarially verified** by two independent passes over the raw RGB frames (workflow
       `independent-reference-draft`). Provenance + corrections: `docs/independent_reference_worklist.md`.
-      Still `vlm-drafted-pending-human-verification`.
+      Now `vlm-drafted-human-verified` (human pass 2026-06-30).
 - [x] Built packets via `scripts/build_independent_reference.py` → `results/benchmark_owlv2/annotations/`.
 - [x] Ran the full OWLv2 benchmark — 5 scenes × {3,5,8,10} views × 6 variants — on cached geometry
       (`scripts/run_owlv2_benchmark.sh` → `results/benchmark_owlv2/`).
@@ -114,10 +114,11 @@ Legend: ✅ done · 🟡 in progress · ⬜ not started
   views. Targets the measured over-counting weakness — the opposite axis from the (failed) uncertainty
   gate. Wired as a variant in `graph_builder.py`/`run_pipeline.py`/`run_benchmark.py`. Numbers in
   `phase1_results_independent.md`; the system weakness it fixes is in `owlv2_system_characterization.md`.
-- **Active task: human-verify the independent reference** (top reviewer risk). Verification aid built
-  in `results/benchmark_owlv2/verification/` (per-scene contact sheets) + the verification Artifact;
-  checklist in `docs/independent_reference_worklist.md`. After corrections: edit
-  `configs/evaluation/independent_labels.json` → rebuild packets → re-run eval (result expected to hold).
+- **Reference human-verified (2026-06-30) ✅.** Done via the contact-sheet verification page; human
+  removed ambiguous detections (window in room/desk/desk2; cup/bottle/picture in desk2; door/trash can
+  in fr3). Re-ran the full eval on the verified GT: **both findings unchanged** — uncertainty still
+  loses (proposed − graph-fusion −0.014/−0.031/−0.056/−0.057), dedup still wins (+0.068/+0.089/+0.145/
+  +0.146, 4–5W/0L every view). The circular/unverified-GT reviewer risk is now closed.
 - If uncertainty is ever revisited: make it *prune/select* nodes or weight label confidence, not
   tighten the merge gate.
 
@@ -148,8 +149,8 @@ Legend: ✅ done · 🟡 in progress · ⬜ not started
 
 - Books are recall-limited (small/stacked) — may need a lower per-class threshold or it just
   caps `book` recall in the eval.
-- Independent GT is still VLM-drafted / unverified — **must be human-verified** before any paper
-  claim (top-reviewer risk; this is what sank the circular eval before).
+- ~~Independent GT must be human-verified~~ — **DONE (2026-06-30)**; findings unchanged. The
+  remaining GT risk is scale (n=5) → the ~30-scene expansion.
 - "stuff" classes (wall/floor/ceiling) are in the vocab and detectable but arguably not objects —
   decide whether to keep them as nodes or filter for the object-F1 metric.
 - Does the uncertainty-fusion win survive real labels? (The whole Phase-1 result was measured

@@ -1,91 +1,83 @@
 {
-  "label_source": "vlm-drafted-pending-human-verification",
-  "notes": "Per-scene object multiset enumerated by independently inspecting the 10 RGB frames of each scene (two independent passes: draft + adversarial verify), mapped to configs/label_vocab/indoor_open_vocab.json. Count = distinct physical instances visible across the 10 frames (an instance seen in multiple frames counts once). Independent of SAM/CLIP/VGGT/graph-fusion (breaks the circular pseudo-reference). Relations omitted (the pipeline's relations are geometric near/above/... heuristics, not independently annotatable). MUST be human-verified before paper use \u2014 evidence + corrections in docs/independent_reference_worklist.md.",
+  "label_source": "vlm-drafted-human-verified",
+  "notes": "Per-scene object multiset enumerated by independently inspecting the 10 RGB frames of each scene (two independent VLM passes: draft + adversarial verify), then HUMAN-VERIFIED against the frames (2026-06-30). Count = distinct physical instances visible across the 10 frames (an instance seen in multiple frames counts once). Independent of SAM/CLIP/VGGT/graph-fusion (breaks the circular pseudo-reference). Relations omitted (the pipeline's relations are geometric near/above/... heuristics, not independently annotatable). Human verification removed ambiguous/low-confidence detections (window in room/desk/desk2; cup/bottle/picture in desk2; door/trash can in fr3).",
   "scenes": {
     "tum_rgbd_freiburg1_room": {
       "objects": {
-        "wall": 1,
-        "floor": 1,
-        "desk": 1,
-        "door": 1,
-        "window": 1,
+        "unknown object": 4,
+        "keyboard": 2,
+        "monitor": 2,
+        "bag": 1,
+        "book": 1,
+        "box": 1,
         "cabinet": 1,
         "chair": 1,
-        "monitor": 2,
-        "keyboard": 2,
-        "book": 1,
         "cup": 1,
-        "box": 1,
-        "bag": 1,
-        "unknown object": 4
+        "desk": 1,
+        "door": 1,
+        "floor": 1,
+        "wall": 1
       },
       "relations": []
     },
     "tum_rgbd_freiburg1_desk": {
       "objects": {
-        "monitor": 3,
-        "keyboard": 1,
-        "desk": 1,
+        "unknown object": 4,
         "book": 3,
+        "monitor": 3,
+        "box": 2,
         "cup": 2,
         "chair": 1,
+        "desk": 1,
         "door": 1,
-        "window": 1,
-        "box": 2,
-        "wall": 1,
         "floor": 1,
-        "unknown object": 4
+        "keyboard": 1,
+        "wall": 1
       },
       "relations": []
     },
     "tum_rgbd_freiburg1_desk2": {
       "objects": {
-        "wall": 1,
-        "floor": 1,
-        "window": 1,
-        "door": 1,
+        "unknown object": 5,
+        "book": 3,
+        "monitor": 3,
+        "box": 2,
         "desk": 2,
         "chair": 1,
-        "lamp": 1,
-        "monitor": 3,
+        "door": 1,
+        "floor": 1,
         "keyboard": 1,
-        "book": 3,
-        "cup": 2,
-        "bottle": 1,
-        "box": 2,
-        "picture": 2,
-        "unknown object": 5
+        "lamp": 1,
+        "wall": 1
       },
       "relations": []
     },
     "tum_rgbd_freiburg2_xyz": {
       "objects": {
+        "unknown object": 9,
+        "book": 3,
+        "cup": 1,
         "desk": 1,
         "floor": 1,
-        "monitor": 1,
         "keyboard": 1,
-        "cup": 1,
-        "plant": 1,
-        "book": 3,
-        "unknown object": 9
+        "monitor": 1,
+        "plant": 1
       },
       "relations": []
     },
     "tum_rgbd_freiburg3_long_office_household": {
       "objects": {
-        "desk": 1,
-        "chair": 2,
-        "floor": 1,
-        "wall": 1,
-        "cabinet": 1,
-        "door": 1,
         "bottle": 6,
         "cup": 3,
+        "unknown object": 3,
+        "chair": 2,
+        "bag": 1,
         "book": 1,
         "box": 1,
-        "bag": 1,
-        "trash can": 1,
-        "unknown object": 3
+        "cabinet": 1,
+        "desk": 1,
+        "floor": 1,
+        "wall": 1
       },
       "relations": []
     }
