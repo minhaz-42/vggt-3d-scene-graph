@@ -21,14 +21,14 @@ Figure~\ref{fig:method_pipeline} summarizes the data flow.
   box/.style={draw, rounded corners=2pt, align=center, minimum height=10mm, minimum width=17mm, inner sep=3pt},
   frozen/.style={box, fill=blue!8},
   ours/.style={box, fill=orange!20, very thick},
-  out/.style={box, fill=green!10}]
+  result/.style={box, fill=green!10}]
   \node[box] (rgb) at (0,0) {Sparse RGB\\views};
   \node[frozen] (vggt) at (3.2,1.15) {VGGT geometry\\{\scriptsize world-point maps (frozen)}};
   \node[frozen] (owl) at (3.2,-1.15) {OWLv2 detector\\{\scriptsize labeled boxes (frozen)}};
   \node[box] (lift) at (6.8,0) {2D$\to$3D\\lifting};
   \node[box] (fuse) at (9.2,0) {cross-view\\fusion};
   \node[ours] (dedup) at (11.9,0) {duplicate-aware\\merge \textbf{(ours)}};
-  \node[out] (graph) at (14.7,0) {3D scene graph\\{\scriptsize objects + relations}};
+  \node[result] (graph) at (14.7,0) {3D scene graph\\{\scriptsize objects + relations}};
   \draw[->] (rgb) -- (vggt);
   \draw[->] (rgb) -- (owl);
   \draw[->] (vggt) -- (lift);

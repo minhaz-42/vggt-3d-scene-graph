@@ -45,3 +45,10 @@ results/**/vggt_geometry.json
 results/**/run.log
 results/**/benchmark_index.json
 results/**/annotations/
+# LaTeX build intermediates (keep paper/main.pdf tracked)
+paper/**/*.aux
+paper/**/*.log
+paper/**/*.bbl
+paper/**/*.blg
+paper/**/*.out
+paper/**/*.synctex.gz
