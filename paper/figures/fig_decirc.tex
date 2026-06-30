@@ -1,46 +1,56 @@
 \begin{figure}[t]
 \centering
+\resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[font=\small,
-   pbox/.style={fxbox, minimum width=26mm},
-   tiny/.style={font=\scriptsize}]
-% ================= LEFT: circular (prior) =================
+   pbox/.style={fxbox, minimum width=30mm, align=center},
+   tiny/.style={font=\scriptsize},
+   badge/.style={font=\scriptsize\bfseries, rounded corners=2pt, inner sep=3pt}]
+% ===================== LEFT: circular (prior) =====================
 \begin{scope}
-  \node[font=\footnotesize\bfseries, color=cWarn] (t1) at (0,2.45) {Prior pseudo-reference (circular)};
-  \node[pbox, draw=cWarn, fill=cWarnFill] (src1) at (0,1.45) {Model 10-view\\\textsc{graph-fusion} output};
-  \node[pbox, draw=cWarn, fill=cWarnFill, dashed] (ref1) at (0,0.05) {Pseudo-reference};
-  \node[pbox] (pred1) at (0,-1.45) {Variant predictions\\{\scriptsize 3 / 5 / 8 / 10 views}};
-  \node[circle, draw=cInk!70, fill=white, inner sep=1.4pt, font=\scriptsize] (cmp1) at (2.55,-0.70) {F1};
-  \draw[flow, draw=cWarn] (src1) -- node[right=1pt,tiny,color=cWarn]{copied as} (ref1);
+  \node[font=\footnotesize\bfseries, color=cWarn] at (0.3,2.75) {Prior protocol: \emph{circular}};
+  % source = model's own prediction, drawn as a tiny scene-graph glyph
+  \node[pbox, draw=cWarn, fill=cWarnFill, minimum height=11mm] (src1) at (0,1.55) {};
+  \node[tiny, align=center] at ([yshift=-3.0mm]src1.north) {model's 10-view};
+  \node[tiny, align=center] at ([yshift=-6.0mm]src1.north) {prediction (a graph)};
+  \begin{scope}[shift={([yshift=2.2mm]src1.south)}]
+    \foreach \p in {(-0.55,0),(0.0,0.16),(0.5,-0.05)} \fill[cWarn] \p circle (1.3pt);
+    \draw[cWarn,line width=0.5pt] (-0.55,0)--(0.0,0.16)--(0.5,-0.05);
+  \end{scope}
+  \node[pbox, draw=cWarn, fill=cWarnFill, densely dashed] (ref1) at (0,-0.05) {pseudo-reference};
+  \node[pbox] (pred1) at (0,-1.6) {variant predictions\\{\scriptsize 3 / 5 / 8 / 10 views}};
+  \node[circle, draw=cInk!70, fill=white, inner sep=1.5pt, font=\scriptsize] (cmp1) at (2.65,-0.8) {F1};
+  \draw[flow, draw=cWarn, line width=1pt] (src1) -- node[right=1pt,tiny,color=cWarn]{copied} (ref1);
   \draw[flow] (ref1.east) -| (cmp1.north);
   \draw[flow] (pred1.east) -| (cmp1.south);
-  % the loop: predictions come from the same model that defined the reference
-  \draw[draw=cWarn, densely dashed, -{Stealth[length=2mm]}, line width=0.7pt]
-       (pred1.west) to[out=180,in=180,looseness=1.5] node[left,tiny,color=cWarn,align=right]{same\\model} (src1.west);
-  \node[tiny, color=cWarn, align=center, text width=42mm] at (0.7,-2.7)
-    {\textbf{Inflated:} \textsc{graph-fusion}$=\!1.0$ at v10 \emph{by construction}; a variant that splits more is \emph{rewarded}};
+  % the self-grading loop
+  \draw[draw=cWarn, line width=1pt, -{Stealth[length=2.2mm]}]
+       (pred1.west) to[out=180,in=180,looseness=1.6] node[left,tiny,color=cWarn,align=right]{same\\model} (src1.west);
+  \node[badge, fill=cWarnFill, text=cWarn] at (0.4,-2.85) {F1 $=1.0$ at 10 views \,(inflated)};
 \end{scope}
 % divider
-\draw[gray!45, densely dashed] (3.95,2.7) -- (3.95,-3.2);
-% ================= RIGHT: independent (ours) =================
-\begin{scope}[xshift=6.2cm]
-  \node[font=\footnotesize\bfseries, color=cOk] (t2) at (0,2.45) {Independent reference (ours)};
-  \node[pbox, draw=cOk, fill=cOkFill] (src2) at (0,1.45) {Raw RGB frames\\$+$ human, 2-pass};
-  \node[pbox, draw=cOk, fill=cOkFill] (ref2) at (0,0.05) {Independent reference};
-  \node[pbox] (pred2) at (0,-1.45) {Variant predictions\\{\scriptsize 3 / 5 / 8 / 10 views}};
-  \node[circle, draw=cInk!70, fill=white, inner sep=1.4pt, font=\scriptsize] (cmp2) at (2.55,-0.70) {F1};
-  \draw[flow, draw=cOk] (src2) -- node[right=1pt,tiny,color=cOk]{authored from} (ref2);
+\draw[gray!45, densely dashed] (4.05,3.0) -- (4.05,-3.35);
+% ===================== RIGHT: independent (ours) =====================
+\begin{scope}[xshift=6.3cm]
+  \node[font=\footnotesize\bfseries, color=cOk] at (0.3,2.75) {Our protocol: \emph{independent}};
+  % source = raw RGB frames (real thumbnail) + human
+  \node[draw=cOk, fill=cOkFill, rounded corners=2pt, inner sep=1.6pt] (src2) at (0,1.68)
+       {\includegraphics[height=11mm]{thumb_rgb.png}};
+  \node[tiny, below=0.4mm of src2] {raw RGB frames $+$ human};
+  \node[pbox, draw=cOk, fill=cOkFill] (ref2) at (0,-0.05) {independent reference};
+  \node[pbox] (pred2) at (0,-1.6) {variant predictions\\{\scriptsize 3 / 5 / 8 / 10 views}};
+  \node[circle, draw=cInk!70, fill=white, inner sep=1.5pt, font=\scriptsize] (cmp2) at (2.65,-0.8) {F1};
+  \draw[flow, draw=cOk, line width=1pt] (src2) -- (ref2);
   \draw[flow] (ref2.east) -| (cmp2.north);
   \draw[flow] (pred2.east) -| (cmp2.south);
-  \node[tiny, color=cOk, align=center, text width=44mm] at (0.7,-2.7)
-    {\textbf{Honest:} object count fixed independently; over-splitting \emph{penalized} $\Rightarrow$ uncertainty reverses, dedup wins};
+  \node[badge, fill=cOkFill, text=cOk, align=center] at (0.4,-2.85) {object count fixed \,(honest)};
 \end{scope}
-\end{tikzpicture}
-\caption{De-circularizing the evaluation. \textbf{Left:} the earlier protocol seeded the reference
-from the model's own ten-view \textsc{graph-fusion} prediction, so that variant scores $1.0$ at ten
-views \emph{by construction}, and a variant that keeps more proposals unmerged (the uncertainty gate)
-is rewarded for reproducing the reference's own fragments---an apparent sparse-view win.
-\textbf{Right:} our reference is authored from the raw RGB frames, independently of any model output.
-The true object count is fixed, over-splitting is penalized, and both findings emerge: the uncertainty
-gate reverses to a loss and duplicate-aware fusion wins.}
+\end{tikzpicture}}
+\caption{De-circularizing the evaluation. \textbf{Left (prior):} the reference is \emph{copied} from the
+model's own ten-view prediction, so the model is graded against itself: it scores $1.0$ at ten views by
+construction, and a variant that splits more (the uncertainty gate) is rewarded for reproducing the
+reference's fragments. \textbf{Right (ours):} the reference is authored from the raw RGB frames,
+independent of any model output, so the object count is fixed and over-splitting is penalized. Both
+findings --- the uncertainty gate reversing to a loss, duplicate-aware fusion winning --- appear only
+under the independent reference.}
 \label{fig:decirc}
 \end{figure}

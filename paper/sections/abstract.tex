@@ -1,22 +1,18 @@
-We study how to build and---crucially---how to \emph{honestly evaluate} open-vocabulary
-3D scene graphs from a handful of casually captured RGB views. Our pipeline keeps every
-heavy model frozen and uses no per-scene optimization: feed-forward VGGT geometry
-\cite{wang2025vggt} turns sparse images into world-point maps, an open-vocabulary
-detector (OWLv2) \cite{minderer2023owlv2} proposes labeled object boxes, and these are
-lifted to 3D and fused across views into a labeled object--relation graph. We make three
-points. First, replacing the common class-agnostic-mask + per-patch CLIP
-\cite{kirillov2023segment,radford2021clip} front-end with a genuine open-vocabulary
-detector is what makes the labels real: on a desk scene the detector recovers the actual
-objects (keyboard, monitors, book) where the mask+CLIP pipeline returned room-scale
-category noise. Second, the dominant failure of the lifted system is \emph{over-counting}---one
-physical object survives as several fused nodes---and a simple duplicate-aware fusion step
-(merge same-label nodes whose 3D boxes overlap) fixes it, improving object-label F1 at every
-view count and winning on 22--27 of the 28 benchmark scenes ($p<0.001$).
-Third, a previously promising uncertainty-aware fusion
-gate gives \emph{no} benefit once labels are real, across a full parameter sweep---a negative
-result that a circular evaluation had masked. To ground these claims we contribute an
-independent sparse-view benchmark on 28 TUM RGB-D \cite{sturm2012tumrgbd} sequences (5
-human-verified, 23 two-pass VLM-drafted) whose reference is authored from the frames rather
-than seeded from the model's own predictions, and
-we document the circular-pseudo-reference pitfall that inflates scores. We hope the benchmark
-and the de-circularization protocol prove useful beyond this system.
+We study how to build and---crucially---how to \emph{honestly evaluate} open-vocabulary 3D scene
+graphs from a handful of casually captured RGB views. Our pipeline keeps every heavy model frozen and
+uses no per-scene optimization: feed-forward VGGT geometry~\cite{wang2025vggt} turns sparse images into
+world-point maps, an open-vocabulary detector (OWLv2)~\cite{minderer2023owlv2} proposes labeled object
+boxes, and these are lifted to 3D and fused across views into a labeled object--relation graph. Three
+findings follow once the labels are real and the evaluation is de-circularized. First, replacing the
+common class-agnostic-mask $+$ per-patch CLIP front-end~\cite{kirillov2023segment,radford2021clip} with
+a genuine detector is what makes the labels real: on a desk scene it recovers the actual objects where
+mask$+$CLIP returned room-scale category noise. Second, the dominant failure of the lifted system is
+then \emph{over-counting}---one physical object survives as several fused nodes---and a one-line
+duplicate-aware merge fixes it, improving object-label F1 at every view count and winning on $22$--$27$
+of the $28$ benchmark scenes ($p<0.001$). Third, a previously promising uncertainty-aware fusion gate
+gives \emph{no} benefit across a full weight sweep---a negative result that a circular evaluation had
+masked. To ground these claims we contribute an independent benchmark on 28 TUM
+RGB-D~\cite{sturm2012tumrgbd} sequences (5 human-verified, 23 two-pass VLM-drafted) whose reference is
+authored from the frames rather than seeded from the model's own predictions, and we document the
+circular-pseudo-reference pitfall that inflates scores. The benchmark and de-circularization protocol
+are dataset-agnostic, and we release them for reuse.

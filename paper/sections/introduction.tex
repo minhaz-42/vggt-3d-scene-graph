@@ -2,95 +2,52 @@
 
 \input{figures/fig_teaser}
 
-Reconstructing a scene and explaining a scene are related but different goals. Modern
-geometry pipelines can recover camera motion, depth, points, surfaces, or radiance
-fields, yet downstream applications often require object-level statements: which
-pixels across views depict the same object, where that object is in 3D, and how it is
-spatially related to other objects. A robot or mixed-reality system, for example,
-benefits more from a statement such as ``the monitor is on the desk'' than from an
-unlabeled collection of points. This need is especially acute when the input is small:
-a few casual RGB views rather than a calibrated RGB-D stream, dense video, or an
-already optimized map.
+Reconstructing a scene and explaining a scene are different goals. Feed-forward geometry models now
+recover camera motion, depth, and point maps directly from a few
+images~\cite{wang2024dust3r,leroy2024mast3r,wang2025vggt}, and 2D foundation models supply
+open-vocabulary detections, masks, and
+descriptors~\cite{minderer2023owlv2,radford2021clip,kirillov2023segment,oquab2023dinov2}. Yet
+downstream applications want object-level statements --- which pixels across views are the same object,
+where it is in 3D, and how it relates to others (``the monitor is on the desk'') --- and these
+components do not by themselves define such a graph, especially from a handful of casual RGB views
+rather than a calibrated RGB-D stream, dense video, or a prebuilt map.
 
-Classical structure-from-motion and SLAM systems remain powerful when overlap,
-calibration, and optimization time are available~\cite{schonberger2016sfm,campos2021orbslam3}.
-Recent feed-forward geometry models have changed the starting point by predicting
-camera parameters, depth, and point maps directly from one or more
-images~\cite{wang2024dust3r,leroy2024mast3r,wang2025vggt}. At the same time, 2D
-foundation models provide strong open-vocabulary detections, language-aligned
-embeddings, class-agnostic masks, and robust self-supervised descriptors through
-detectors such as OWL-ViT and OWLv2, and through CLIP, SAM, and
-DINOv2~\cite{minderer2022owlvit,minderer2023owlv2,radford2021clip,kirillov2023segment,oquab2023dinov2}.
-These components make sparse-view semantic 3D reasoning plausible, but they do not by
-themselves define an object-level graph. Per-image detections are local, repeated
-instances may have similar descriptors, and feed-forward geometry is least reliable
-near occlusions, thin structures, textureless regions, and large viewpoint changes.
+We construct the graph as evidence-preserving fusion over lifted 2D proposals, with all heavy models
+frozen and no per-scene optimization: VGGT world-point maps act as a 2D-to-3D lookup, an
+open-vocabulary detector proposes labeled boxes, and these are lifted and fused across views into a
+labeled object--relation graph (Figure~\ref{fig:teaser}). This keeps perception fixed while making the
+graph stage explicit and easy to ablate, and targets a lower-input regime than open-vocabulary 3D
+graph systems built on posed RGB-D video or dense
+maps~\cite{gu2024conceptgraphs,jatavallabhula2023conceptfusion}.
 
-We approach sparse-view scene graph construction as evidence-preserving fusion over
-lifted 2D object proposals, keeping all heavy perception models frozen and using no
-per-scene optimization. VGGT world-point maps serve as a 2D-to-3D lookup table; an
-open-vocabulary detector proposes labeled object boxes; these are lifted into candidate
-3D objects, merged across views into a labeled object-relation graph, and annotated
-with spatial predicates (Figure~\ref{fig:teaser}). This design keeps the expensive perception stage fixed while
-making the graph reasoning stage explicit, auditable, and easy to ablate. It also
-differs from open-vocabulary 3D graph systems that assume posed RGB-D video, a dense
-point cloud, or a prebuilt map~\cite{gu2024conceptgraphs,jatavallabhula2023conceptfusion}:
-our target is a lower-input regime of sparse RGB views processed by feed-forward
-geometry.
+A central lesson of this work is methodological. An earlier version of this system graded its graphs
+against a pseudo-reference \emph{seeded from the model's own dense-view output} --- a circular protocol
+under which a method that reproduces its dense graph scores $1.0$ by construction. Re-grading against an
+\emph{independently authored} reference, written from the frames, changes two conclusions. First, a
+mask-plus-CLIP front-end recovers almost none of the real objects (on a desk it returns
+``floor''/``curtain''/``bed'' rather than the monitors and keyboard present); a genuine
+open-vocabulary \emph{detector} (OWLv2) makes the labels real. Second, a previously promising
+uncertainty-aware fusion gate shows \emph{no} benefit once labels are real, across a full weight
+sweep --- exactly the kind of conclusion a de-circularized evaluation is meant to surface. With honest
+labels, the dominant remaining error is \emph{over-counting}: one physical object survives fusion as
+several same-label nodes (Figure~\ref{fig:dedup3d}). A one-line duplicate-aware merge of same-label
+nodes with overlapping 3D boxes fixes it, and is the only variant whose accuracy \emph{rises} with
+more views --- the opposite move from the uncertainty gate, which over-splits.
 
-A central lesson of this work is methodological. An earlier version of this system
-graded its predicted scene graphs against a pseudo-reference \emph{seeded from the
-model's own dense-view output}. That protocol is circular: a fusion method that simply
-reproduces its dense-view graph scores $1.0$ at the reference view by construction, and
-the apparent gains it reports need not survive an honest test. When we re-grade against
-an \emph{independently authored}, human-verified reference --- written from the frames
-rather than from any model prediction --- two things change. First, a front-end that
-labeled image patches with CLIP turns out to recover almost none of the real objects:
-on a desk scene it returns room-scale category noise (``floor'', ``curtain'', ``bed'')
-rather than the monitors, keyboard, and books that are actually present, and its
-headline label accuracy was an artifact of grading CLIP against CLIP. Replacing the
-patch-labeling front-end with a genuine open-vocabulary \emph{detector} (OWLv2) makes
-the labels real: the detector recovers the actual objects on every frame. Second, and
-more cautionary, a previously promising uncertainty-aware fusion gate --- which our
-earlier circular protocol reported as a sparse-view win --- shows \emph{no} benefit
-once labels are real, across a full weight sweep. We report this negative result as a
-feature, not a footnote: it is exactly the kind of conclusion a de-circularized
-evaluation is meant to surface.
-
-With honest labels in hand, the dominant remaining error is over-counting: one physical
-object survives cross-view fusion as several same-label nodes (Figure~\ref{fig:dedup3d}). The fix
-is deliberately simple --- a duplicate-aware merge of same-label nodes whose axis-aligned 3D boxes
-overlap. This step improves object-label F1 at every view count and is the only variant
-whose accuracy \emph{rises} with more views, precisely because it converts the recall
-that extra views provide into precision rather than into duplicates. Notably, this is
-the opposite move from the uncertainty gate (which tends to over-split), and it
-explains why merging helps where the gate does not.
-
-We evaluate on 28 public TUM RGB-D sequences under 3/5/8/10-view
-protocols~\cite{sturm2012tumrgbd}, against an independently authored reference (5 scenes
-human-verified, 23 drafted by two independent passes). The duplicate-aware variant improves
-object-label F1 over the no-uncertainty graph-fusion baseline by $+0.06$ to $+0.12$ across view
-counts and wins on $22$--$27$ of the $28$ scenes ($p<0.001$), while the recalibrated uncertainty
-gate is consistently \emph{worse} than the baseline and an uninformed control. The gain holds on
-the $5$ human-verified scenes alone and on both static and dynamic (moving-person) sequences.
-
-Our contributions are:
+On 28 TUM RGB-D sequences~\cite{sturm2012tumrgbd} under $3/5/8/10$ views, against an independent
+reference (5 human-verified, 23 two-pass drafted), duplicate-aware fusion improves object-label F1 over
+the graph-fusion baseline by $+0.06$ to $+0.12$ and wins on $22$--$27$ of $28$ scenes ($p<0.001$),
+while the uncertainty gate is consistently worse. Our contributions are:
 \begin{itemize}
-    \item \textbf{A detector-grounded open-vocabulary sparse-view 3D scene-graph system.}
-    An open-vocabulary detector (OWLv2) proposes labeled boxes, VGGT geometry lifts them
-    to 3D, and a cross-view fusion stage produces a labeled object-relation graph with
-    spatial predicates --- all models frozen, no per-scene optimization. Detector-grounded
-    labels recover real objects where a mask-plus-CLIP-patch front-end does not.
-    \item \textbf{Duplicate-aware cross-view fusion.} A post-fusion merge of same-label
-    nodes whose axis-aligned 3D boxes overlap ($\mathrm{IoU} > \tau$), targeting the
-    measured over-counting failure. It improves object-label F1 at every view count and
-    is the only variant whose accuracy rises with more views.
-    \item \textbf{An independent, human-verified sparse-view benchmark and a
-    de-circularization protocol on TUM RGB-D.} We document how a prediction-seeded
-    pseudo-reference inflates scores (graph fusion scores $1.0$ at the reference view by
-    construction) and show that an independently authored reference removes the artifact.
-    \item \textbf{A rigorous negative result on uncertainty-aware fusion.} Recalibrated
-    and swept over weights, the uncertainty gate does not improve object accuracy on real
-    labels; we analyze why (it lifts recall but over-splits, costing precision), which
-    also explains why the opposite move --- duplicate-aware merging --- works.
+  \item \textbf{A detector-grounded open-vocabulary sparse-view 3D scene-graph system} (OWLv2 $+$ VGGT,
+  all models frozen, no per-scene optimization), whose detector labels recover real objects where a
+  mask-plus-CLIP front-end does not.
+  \item \textbf{Duplicate-aware cross-view fusion}: a post-fusion merge of same-label nodes whose
+  axis-aligned 3D boxes overlap, targeting the measured over-counting failure; it is the only variant
+  whose accuracy rises with more views.
+  \item \textbf{An independent, de-circularized benchmark on TUM RGB-D}: we document how a
+  prediction-seeded reference inflates scores and show that an independently authored one removes the
+  artifact.
+  \item \textbf{A rigorous negative result on uncertainty-aware fusion}, with a mechanism analysis ---
+  it lifts recall but over-splits, costing precision --- that also explains why merging works.
 \end{itemize}

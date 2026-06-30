@@ -62,12 +62,14 @@ def main():
         if lb[i] in ("floor","wall") or not inb(cz[i]): continue
         p=D(cz[i][None,:])[0]
         axA.scatter([p[0]],[p[1]],[p[2]],s=26,c=LCOL.get(lb[i],"#555"),edgecolors="white",linewidths=0.5,depthshade=False,zorder=20,alpha=0.95)
-    for lab in ("monitor","desk"):
-        if cnt[lab]>=3:
-            ctr=D(np.mean([cz[i] for i in range(len(nodes)) if lb[i]==lab],axis=0)[None,:])[0]
-            off=0.50 if lab=="desk" else 0.20
-            axA.text(ctr[0],ctr[1],ctr[2]+off,f"{lab}$\\times${cnt[lab]}",fontsize=9,color=LCOL[lab],fontweight="bold",
-                     ha="center",zorder=22,bbox=dict(facecolor="white",edgecolor=LCOL[lab],linewidth=0.7,alpha=1.0,boxstyle="round,pad=0.28"))
+    # tidy corner legend of the over-counted classes (avoids clipping/overlap on the cloud)
+    overc=[(l,c) for l,c in cnt.most_common() if c>=2 and l not in ("floor","wall")][:4]
+    axA.text2D(0.015,0.91,"over-counted:",transform=axA.transAxes,fontsize=8.5,fontweight="bold",
+               va="top",ha="left",color="#333",zorder=30)
+    for i,(l,c) in enumerate(overc):
+        axA.text2D(0.04,0.83-0.075*i,f"{l} $\\times$ {c}",transform=axA.transAxes,fontsize=8.5,fontweight="bold",
+                   va="top",ha="left",color=LCOL.get(l,"#333"),zorder=30,
+                   bbox=dict(facecolor="white",edgecolor="none",alpha=0.85,pad=0.4))
     # RIGHT: after
     axB=fig.add_subplot(1,2,2,projection="3d"); setup(axB,f"+ duplicate-aware merge: {len(merged)} nodes")
     for lab,c in merged:
@@ -76,7 +78,11 @@ def main():
         axB.scatter([p[0]],[p[1]],[p[2]],s=54,c=col,edgecolors="white",linewidths=1.0,depthshade=False,zorder=20)
         axB.text(p[0],p[1],p[2]+0.08,lab,fontsize=7.2,color="#111",ha="center",zorder=21,
                  bbox=dict(facecolor="white",edgecolor=col,linewidth=0.5,alpha=1.0,boxstyle="round,pad=0.22"))
-    fig.tight_layout(w_pad=0.5); fig.savefig(a.out,dpi=300,bbox_inches="tight",pad_inches=0.02)
+    fig.tight_layout(w_pad=2.0)
+    from matplotlib.patches import FancyArrowPatch
+    ar=FancyArrowPatch((0.49,0.52),(0.55,0.52),transform=fig.transFigure,arrowstyle="-|>",mutation_scale=16,color="#444",lw=1.6)
+    fig.patches.append(ar); fig.text(0.52,0.585,"merge",ha="center",fontsize=8.5,color="#444",style="italic")
+    fig.savefig(a.out,dpi=300,bbox_inches="tight",pad_inches=0.02)
     print("wrote",a.out,"| before",len(nodes),dict(cnt.most_common(4)),"| after",len(merged))
 
 if __name__=="__main__": main()

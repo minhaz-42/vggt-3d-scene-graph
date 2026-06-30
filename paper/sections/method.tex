@@ -18,29 +18,17 @@ Figure~\ref{fig:method_pipeline} summarizes the data flow.
 
 \subsection{Overview}
 
-The pipeline has five stages, all built on frozen models. (i)~VGGT predicts camera
-parameters, depth maps, world-point maps, and confidence maps for the sparse
-views~\cite{wang2025vggt}. (ii)~An open-vocabulary \emph{detector} (OWLv2) proposes
-labeled object boxes from a text query set, so each proposal already carries a real
-object label~\cite{minderer2023owlv2}. (iii)~Each detection is lifted into the VGGT
-world-point map to form a 3D candidate fragment. (iv)~Candidates from different views
-are fused into object nodes, after which a duplicate-aware pass merges over-counted
-nodes that correspond to the same physical object. (v)~Fused nodes are connected by
-rule-based spatial relations. The exported graph keeps the predicted labels and
-relations alongside the evidence that produced them, so it can be inspected or turned
-into annotation-review packets.
+The pipeline has five frozen-model stages (Figure~\ref{fig:method_pipeline}): VGGT
+geometry~\cite{wang2025vggt}; open-vocabulary detection with OWLv2, so each proposal already carries a
+real object label~\cite{minderer2023owlv2}; 3D lifting of each detection into the world-point map;
+cross-view fusion into object nodes, followed by the duplicate-aware merge; and rule-based spatial
+relations. The exported graph keeps predicted labels and relations alongside the evidence that produced
+them, so it can be inspected or turned into annotation packets.
 
-A central design change relative to a common open-vocabulary recipe deserves emphasis
-up front. A widely used front-end pairs class-agnostic masks~\cite{kirillov2023segment}
-with per-region CLIP scoring~\cite{radford2021clip} to label regions
-post~hoc~\cite{jatavallabhula2023conceptfusion,gu2024conceptgraphs,takmaz2023openmask3d}.
-On blurry, low-resolution casual frames this front-end produced surface and background
-fragments that CLIP then labeled with room-scale categories, yielding labels
-disconnected from the actual objects (Section~\ref{sec:experiments}). We therefore
-replace it with a genuine open-vocabulary detector whose box \emph{is} the labeled
-object hypothesis. Everything downstream of the front-end --- lifting, fusion, and
-relations --- is kept unchanged, which lets us attribute the resulting accuracy change
-to the front-end rather than to a re-tuned geometry stack.
+Our one front-end change from the common open-vocabulary recipe is to replace mask-then-CLIP labeling
+(Section~\ref{sec:related_work}) with a genuine detector whose box \emph{is} the labeled object
+hypothesis. Everything downstream is unchanged, so the resulting accuracy change is attributable to the
+front-end rather than to a re-tuned geometry stack.
 
 \subsection{Sparse-View Geometry}
 \label{sec:geometry}
@@ -116,19 +104,12 @@ preserving the detection provenance needed for inspection and annotation.
 \subsection{Duplicate-Aware Fusion}
 \label{sec:dedup}
 
-Cross-view fusion alone leaves the dominant precision failure unaddressed.
-Characterizing the fused system against an independent reference
-(Section~\ref{sec:experiments}) shows that the precision loss is almost entirely
-\emph{over-counting of correctly found objects}, not mislabeling: as more views are
-added the detector finds more of the true objects (recall rises), but each physical
-object also accumulates more detections that fusion fails to collapse into a single
-node (precision falls). Two structural reasons make this expected. First, the detector
-over-fires, emitting several overlapping boxes per object per frame. Second, by design
-the association graph forbids same-view edges, so duplicate detections of one object
-within a frame can never be joined by cross-view fusion. The result is that a single
-desk or monitor survives as several fused nodes. Over-counting --- not the labels
-themselves --- is therefore the lever to pull, and the corrective move is \emph{merging},
-not splitting.
+Cross-view fusion alone leaves \emph{over-counting} unaddressed, and two structural reasons make it
+expected: the detector over-fires (several overlapping boxes per object per frame), and the
+association graph forbids same-view edges by design, so duplicate detections of one object within a
+frame are never joined by cross-view fusion. A single desk or monitor therefore survives as several
+fused nodes --- the dominant precision loss against the independent reference
+(Section~\ref{sec:results}). The corrective move is \emph{merging}, not splitting.
 
 We add a single post-fusion pass, \textsc{Dedup}, that merges fused nodes of the same
 label whose axis-aligned 3D boxes overlap. Let $\mathcal{O}$ be the fused nodes from

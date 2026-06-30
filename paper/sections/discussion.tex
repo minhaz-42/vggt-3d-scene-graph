@@ -1,153 +1,85 @@
 \section{Discussion}
 \label{sec:discussion}
 
-Three findings of this paper pull in the same direction, and it is worth stating
-plainly why. On an independent, human-verified reference, a one-line
-duplicate-aware merge improves open-vocabulary object-label F1 at every view
-count and on 22--27 of 28 scenes, while a recalibrated, fully swept uncertainty-aware
-fusion gate gives no improvement at all and in fact regresses. These two results
-are not coincidental: they are two sides of the same mechanism. This section
-explains that mechanism, draws the methodological lesson from the circular
-evaluation that previously hid it, and is candid about the limits of the present
-study.
+The paper's findings are two sides of one mechanism. The lifted system's dominant error is
+\emph{over-counting}: one physical object survives cross-view fusion as several same-label nodes
+(Table~\ref{tab:perclass_overall}). As views are added, recall rises but precision falls faster, so
+accuracy is best at the sparse end. Over-counting is an over-\emph{splitting} error, so the
+corrective move is to \emph{merge} --- and the move in the opposite direction, an uncertainty gate
+that \emph{tightens} merging, can only make it worse. This explains both empirical results at once.
 
-\subsection{Why duplicate-aware merging helps and uncertainty does not}
+\subsection{Why merging helps and the uncertainty gate does not}
 \label{sec:disc-mechanism}
 
-The dominant error of the lifted system is \emph{over-counting}: a single
-physical object survives cross-view fusion as several nodes. The per-class
-characterization makes this concrete. As the view count grows from three to ten,
-the system's recall rises (micro-averaged $0.671 \rightarrow 0.808$) but its
-precision falls in lockstep ($0.533 \rightarrow 0.322$), so net F1 is best at the
-sparse end and degrades with more frames. The classes that drive the precision
-collapse are exactly the ones that are \emph{always} found and then fragmented:
-\texttt{monitor}, \texttt{desk}, \texttt{keyboard}, and \texttt{wall} all reach
-recall $\approx 1.0$ while their precision falls toward $0.2$--$0.3$. More views
-supply more correct detections of the same instance, and 3D fusion fails to
-collapse them. The failure is over-segmentation of correct objects, not
-mislabeling.
-
-Read on this axis, the two interventions are opposites. Duplicate-aware fusion
-merges same-label nodes whose axis-aligned 3D boxes overlap; it is a
-\emph{merge}, and merging is the corrective move when the error is over-splitting.
-The per-class effect is exactly as predicted: at eight views, precision jumps from
-$0.38$ to $1.00$ on \texttt{monitor}, $0.19$ to $0.83$ on \texttt{desk}, and
-$0.31$ to $0.62$ on \texttt{keyboard}, with recall preserved for nearly every
-class. The net is a uniform F1 gain of $+0.068$, $+0.089$, $+0.145$, and $+0.146$
-over the strongest non-merging fusion baseline at three, five, eight, and ten
-views, and it is the only variant whose accuracy \emph{rises} as more views are
-added --- because each added view supplies redundancy that the merge can absorb
-rather than fragmentation that it cannot.
-
-The uncertainty-aware gate acts on the same axis but in the wrong direction. It
-\emph{tightens} the merge criterion for high-uncertainty pairs, i.e.\ it splits
-more readily exactly where the system already over-splits. Against the
-independent reference it never helps: across the entire weight sweep $w \in [0.1,
-0.8]$ no setting beats the non-gated baseline, and the wired setting regresses by
-$-0.033$, $-0.053$, $-0.082$, and $-0.096$ across the four view counts, losing on
-essentially all 28 scenes at five, eight, and ten views ($p<0.001$). This is not a tuning failure to be
-patched away; it is the predictable consequence of suppressing merges in a regime
-whose error is too few merges. We report it as a feature of the study, not an
-embarrassment: knowing which lever points the wrong way is what lets us identify
-the one that points the right way, and the contrast between the two variants is
-the clearest evidence for the over-counting diagnosis itself.
+Duplicate-aware fusion merges same-label nodes whose axis-aligned 3D boxes overlap, directly
+targeting the over-counting. It recovers precision on exactly the over-counted classes while
+preserving recall (Table~\ref{tab:dedup_mechanism}), and is the only variant whose accuracy
+\emph{rises} with more views --- each added view supplies redundancy the merge absorbs rather than
+fragmentation it cannot. The uncertainty-aware fusion gate acts on the same axis in the wrong
+direction: it tightens merging precisely where the system already over-splits. No weight in the
+sweep $w \in [0.1, 0.8]$ beats the non-gated baseline, and the default regresses by $-0.033$ to
+$-0.096$ across the four view counts (Table~\ref{tab:uncertainty_neg}). This is not a tuning failure
+but the predictable cost of suppressing merges in a regime whose error is too few merges; the
+contrast between the two variants is itself the clearest evidence for the over-counting diagnosis.
 
 \subsection{The circular-evaluation lesson}
 \label{sec:disc-circularity}
 
-This mechanism was invisible under the evaluation we --- like much of this
-literature --- started with. When the reference graph is seeded from the model's
-own dense-view prediction, the protocol is circular: a fusion method that simply
-reproduces its ten-view output scores $1.0$ at the reference view \emph{by
-construction}, and recall-raising behavior is rewarded regardless of whether it
-corresponds to real objects. Under that prediction-seeded reference the
-uncertainty gate appeared to be a sparse-view win ($+0.040$ and $+0.021$ at three
-and five views) and the over-counting precision sink was masked by the
-artificial dense-view ceiling. Re-grading the identical model outputs against an
-\emph{independently authored} human reference --- written from the frames, never
-from the predictions --- reverses the sign of the uncertainty result and removes
-the dense-view artifact, exposing the precision collapse and the merging fix
-underneath.
-
-The methodological takeaway generalizes beyond this system. A reference seeded
-from any single model's output does not measure recognition; it measures
-agreement with that model, and it silently grants a perfect score to whatever
-produced the seed. In sparse-view 3D scene understanding, where dense
-ground truth is expensive and the temptation to bootstrap labels from a strong
-model is real, this failure mode is easy to fall into and hard to notice, because
-the inflated numbers look like success. We therefore treat the independent,
-human-verified reference and the documentation of the circular-pseudo-reference
-pitfall as a first-class contribution, and we recommend that any prediction-seeded
-reference be reported alongside an independently authored one whenever the latter
-is feasible. Concerns about evaluation construction and reproducibility in 3D
-scene understanding have been raised before~\cite{gundersen2018reproducibility,kapoor2023leakage}; our point is the specific and easily
-overlooked case where the reference is derived from the system under test.
+This mechanism was invisible under a prediction-seeded reference. When the reference is seeded from
+the model's own dense-view output, a method that reproduces its ten-view graph scores $1.0$ at the
+reference view \emph{by construction}, and recall-raising behavior is rewarded whether or not it
+corresponds to real objects (Section~\ref{subsec:decirc}); the uncertainty gate then looked like a
+sparse-view win. Re-grading the identical outputs against an independently authored reference
+reverses that result and exposes the precision collapse underneath. The takeaway generalizes: a
+reference seeded from a model measures agreement with that model, not recognition, and silently
+awards a perfect score to whatever produced the seed --- an easy trap in sparse-view 3D, where dense
+ground truth is costly~\cite{gundersen2018reproducibility,kapoor2023leakage}. We therefore treat the
+independent reference and the documented pitfall as a first-class contribution, and recommend
+reporting any prediction-seeded reference alongside an independent one.
 
 \subsection{Limitations}
 \label{sec:disc-limitations}
 
-\paragraph{Evaluation scope and reference provenance.} The benchmark spans 28 TUM RGB-D
-sequences, of which 5 (the paper-subset gold core) are human-verified and 23 carry two-pass
-VLM-drafted references (draft~$+$~adversarial verify), pending human verification. Both main
-findings reach $p < 0.001$ over the 28 scenes and also hold on the 5 human-verified scenes alone
-($+0.068$ to $+0.146$ dedup gain), so they do not rest on the machine-drafted labels. Fully
-human-verifying the 23 drafted references is nonetheless the natural next step to remove any
-residual labeling bias, and the benchmark remains modest relative to large posed-RGB-D datasets.
+\paragraph{Reference provenance.} Of the 28 scenes, 5 are human-verified (the gold core) and 23
+carry two-pass VLM-drafted references pending human verification. Both findings reach $p<0.001$ over
+the 28 scenes and hold on the gold five alone (Section~\ref{subsec:dedup}), so they do not rest on
+the drafted labels; fully verifying the 23 is the natural next step, and the benchmark is small
+relative to large posed-RGB-D datasets.
 
-\paragraph{Closely-packed same-class instances.} Box-IoU merging cannot separate
-distinct instances of the same class whose axis-aligned 3D boxes overlap. A desk
-holding two or three monitors side by side is the failure case: the merge collapses
-them into one node, costing $-0.33$ recall on \texttt{monitor} and $-0.17$ on
-\texttt{desk} at eight views. The net effect is still strongly positive because
-the precision gain dwarfs the recall cost, but geometry alone is the wrong tool
-for telling two adjacent same-class objects apart, and this is the one place the
-merge does harm.
+\paragraph{Closely-packed same-class instances.} Box-IoU merging cannot separate distinct same-class
+objects whose axis-aligned 3D boxes overlap, such as two monitors on one desk. This is the merge's
+only recall cost --- $-0.04$ on \texttt{desk} and \texttt{bottle} at eight views, with other classes
+unchanged (Table~\ref{tab:dedup_mechanism}) --- and the precision gain dwarfs it.
 
-\paragraph{Static, ``thing''-centric, rule-based.} The pipeline assumes a static
-incoherently. ``Stuff'' classes such as \texttt{wall}, \texttt{floor}, and
-\texttt{ceiling} are treated as countable objects, which is a poor fit for amorphous
-surfaces and inflates the over-counting they exhibit; they could reasonably be
-reported separately or handled by a region rather than an instance model. Finally,
-the spatial relations are inferred from centroid and distance rules. These are
-inspectable and easy to audit, but they cannot express the support, containment,
-functional, or activity relations studied in richer 3D scene graph
-settings~\cite{armeni2019scenegraph,wald2020threedssg,gu2024conceptgraphs}.
+\paragraph{Static, ``thing''-centric, rule-based.} The pipeline assumes a static scene, so VGGT's
+multi-view geometry degrades on the dynamic (moving-person) sequences. ``Stuff'' classes
+(\texttt{wall}, \texttt{floor}, \texttt{ceiling}) are treated as countable objects, a poor fit for
+amorphous surfaces. And the spatial relations come from centroid/distance rules that are auditable
+but cannot express the support, containment, or functional relations of richer 3D scene
+graphs~\cite{armeni2019scenegraph,wald2020threedssg,gu2024conceptgraphs}.
 
 \subsection{Future work}
 \label{sec:disc-future}
 
-The cleanest next step follows directly from the merge's one failure mode.
-Box-IoU over-merges closely-packed same-class instances; appearance- or
-feature-based instance separation --- splitting a merged group back apart when its
-members are visually distinct --- is the natural remedy. This is also, notably,
-where the recall-oriented signal that the uncertainty gate tried and failed to add
-could finally pay off: not as a \emph{merge gate} that prevents fusion in the
-over-counting regime, but as a \emph{split decision} applied to an
-already-merged group, exactly the direction in which a recall signal helps rather
-than hurts. The negative uncertainty result thus does not retire the idea; it
-relocates it to the one operation where it is mechanistically appropriate. Beyond
-this, replacing the rule-based predicates with a learned relation module --- once
-the independently authored annotations provide sufficient object-relation
-supervision --- and reporting ``stuff'' classes under a region model are the
-obvious extensions.
+The merge's one failure mode points to the fix: appearance-based instance separation that splits a
+merged group when its members are visually distinct. This is also where the recall signal the
+uncertainty gate tried to add belongs --- not as a merge gate that blocks fusion in the
+over-counting regime, but as a \emph{split} decision on an already-merged group, the one operation
+where a recall signal helps rather than hurts. Replacing the rule-based predicates with a learned
+relation module, once the independent annotations supply enough supervision, is the other obvious
+extension.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-We presented a detector-grounded open-vocabulary 3D scene-graph system that turns
-a handful of casual RGB views into an inspectable, language-grounded
-object-relation graph with all heavy models frozen and no per-scene optimization:
-an open-vocabulary detector (OWLv2)~\cite{minderer2023owlv2} proposes labeled
-boxes, feed-forward VGGT~\cite{wang2025vggt} geometry lifts them to 3D, and a
-cross-view fusion step assembles the graph. On an independent, human-verified
-TUM RGB-D~\cite{sturm2012tumrgbd} benchmark we showed three things. The dominant
-error is over-counting, and a one-line duplicate-aware merge corrects it,
-improving object-label F1 by $+0.06$ to $+0.12$ at every view count and winning on
-$22$--$27$ of the $28$ scenes ($p<0.001$). A recalibrated, fully swept uncertainty-aware fusion gate --- the move in
-the opposite direction --- gives no benefit, a negative result that a circular,
-prediction-seeded reference had previously disguised as a win. And the
-de-circularized reference that exposed both, together with the documented pitfall
-that produced the original illusion, is the methodological core we most hope
-outlasts this particular system. What actually helps in sparse-view 3D scene
-graphs, on honest labels, turned out to be the simplest move pointed in the right
-direction.
+We presented a detector-grounded open-vocabulary 3D scene-graph system that turns a handful of casual
+RGB views into an inspectable object--relation graph with all heavy models frozen and no per-scene
+optimization: OWLv2~\cite{minderer2023owlv2} proposes labeled boxes, feed-forward
+VGGT~\cite{wang2025vggt} geometry lifts them to 3D, and cross-view fusion assembles the graph. On an
+independent TUM RGB-D~\cite{sturm2012tumrgbd} benchmark, the dominant error is over-counting, and a
+one-line duplicate-aware merge corrects it, improving object-label F1 by $+0.06$ to $+0.12$ at every
+view count and winning on $22$--$27$ of the $28$ scenes ($p<0.001$); a recalibrated, fully swept
+uncertainty-aware gate --- the opposite move --- gives no benefit, a negative result that a
+prediction-seeded reference had disguised as a win. The de-circularized reference and the documented
+pitfall are the methodological core; the benchmark and protocol are dataset-agnostic, and we release
+them for reuse.

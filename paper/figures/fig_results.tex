@@ -1,43 +1,52 @@
 \begin{figure}[t]
 \centering
 \begin{tikzpicture}
-\begin{axis}[
-  width=\linewidth, height=5.6cm,
-  xlabel={Number of input views $N$}, ylabel={Object-label F1},
+\begin{groupplot}[
+  group style={group size=2 by 1, horizontal sep=1.7cm},
+  width=0.46\linewidth, height=5.4cm,
   xtick={3,5,8,10}, xmin=2.4, xmax=10.6,
-  ymin=0.16, ymax=0.62, ytick={0.2,0.3,0.4,0.5,0.6},
-  ymajorgrids, grid style={gray!15},
   tick align=outside, axis line style={cInk!80},
-  label style={font=\small, color=cInk},
-  tick label style={font=\footnotesize, color=cInk},
-  legend style={font=\footnotesize, at={(0.5,-0.30)}, anchor=north,
-                legend columns=2, draw=gray!35, column sep=6pt},
+  label style={font=\footnotesize, color=cInk}, tick label style={font=\scriptsize, color=cInk},
+  title style={font=\footnotesize, color=cInk},
+  ymajorgrids, grid style={gray!15},
+  every axis plot/.append style={line width=1pt, mark size=2pt},
   legend cell align=left,
-  every axis plot/.append style={line width=1.05pt, mark size=2.2pt},
-  clip=false,
 ]
-% ours (dedup) -- the only line that rises
-\addplot[color=cOurs, mark=*] coordinates {(3,0.5696)(5,0.5723)(8,0.5860)(10,0.5725)};
+% ---- (a) accuracy ----
+\nextgroupplot[ylabel={Object-label F1}, xlabel={input views $N$}, ymin=0.16, ymax=0.63,
+  title={(a) accuracy vs.\ views},
+  legend style={font=\tiny, at={(0.5,-0.30)}, anchor=north, legend columns=2, draw=gray!35, column sep=4pt}]
+\addplot[cOurs, mark=*] coordinates {(3,0.5696)(5,0.5723)(8,0.5860)(10,0.5725)};
 \addlegendentry{graph-fusion-dedup (ours)}
-% baseline
-\addplot[color=cBase, mark=square*] coordinates {(3,0.5129)(5,0.4895)(8,0.4664)(10,0.4502)};
-\addlegendentry{graph-fusion (baseline)}
-% control
-\addplot[color=cCtrl, mark=triangle*, densely dashed] coordinates {(3,0.5048)(5,0.4715)(8,0.4448)(10,0.4189)};
+\addplot[cBase, mark=square*] coordinates {(3,0.5129)(5,0.4895)(8,0.4664)(10,0.4502)};
+\addlegendentry{graph-fusion}
+\addplot[cCtrl, mark=triangle*, densely dashed] coordinates {(3,0.5048)(5,0.4715)(8,0.4448)(10,0.4189)};
 \addlegendentry{fixed-shrink (control)}
-% uncertainty -- negative result
-\addplot[color=cUnc, mark=diamond*] coordinates {(3,0.4801)(5,0.4370)(8,0.3841)(10,0.3544)};
+\addplot[cUnc, mark=diamond*] coordinates {(3,0.4801)(5,0.4370)(8,0.3841)(10,0.3544)};
 \addlegendentry{proposed (uncertainty)}
-% annotation: ours rises
-\node[font=\scriptsize\itshape, color=cOurs, anchor=west, align=left]
-   at (axis cs:8.15,0.586) {rises with\\views};
-\end{axis}
+\node[font=\scriptsize\itshape, color=cOurs, anchor=south] at (axis cs:6.5,0.585) {only ours rises};
+% ---- (b) mechanism ----
+\nextgroupplot[ylabel={precision / recall}, xlabel={input views $N$}, ymin=0.36, ymax=0.80,
+  title={(b) precision recovered, recall kept},
+  legend style={font=\tiny, at={(0.5,-0.30)}, anchor=north, legend columns=2, draw=gray!35, column sep=4pt}]
+\addplot[cOurs, mark=*] coordinates {(3,0.713)(5,0.661)(8,0.622)(10,0.593)};
+\addlegendentry{precision, ours}
+\addplot[cBase, mark=square*] coordinates {(3,0.556)(5,0.494)(8,0.420)(10,0.399)};
+\addlegendentry{precision, baseline}
+\addplot[cOurs, mark=o, densely dashed, mark options={solid}] coordinates {(3,0.502)(5,0.529)(8,0.576)(10,0.581)};
+\addlegendentry{recall, ours}
+\addplot[cBase, mark=square, densely dashed, mark options={solid}] coordinates {(3,0.510)(5,0.540)(8,0.581)(10,0.587)};
+\addlegendentry{recall, baseline}
+\node[font=\scriptsize\itshape, color=cInk!70, anchor=north] at (axis cs:7.0,0.560) {recall (dashed) overlaps};
+\end{groupplot}
 \end{tikzpicture}
-\caption{Object-label F1 vs.\ number of input views on the independent 28-scene reference.
-Every prior cross-view fusion variant \emph{degrades} as views are added---more frames yield
-more un-collapsed duplicate detections, costing precision. Duplicate-aware fusion (ours, amber)
-is the only variant whose accuracy \emph{rises} toward the dense end and is best at every view
-count, while the uncertainty-aware gate (brick) sits below even the uninformed control. Values
-match Table~\ref{tab:variant_f1}.}
+\caption{Why duplicate-aware fusion wins, on the independent 28-scene reference.
+\textbf{(a)} Object-label F1 vs.\ number of input views: every prior cross-view fusion variant
+\emph{degrades} as views are added (more frames yield more un-collapsed duplicates), while
+duplicate-aware fusion (amber) is the only variant whose accuracy \emph{rises} and is best at every
+view count; the uncertainty gate (brick) sits below even the uninformed control.
+\textbf{(b)} The mechanism: dedup \emph{recovers precision} (solid amber far above the baseline,
+$0.71\!\to\!0.59$ vs.\ $0.56\!\to\!0.40$) while leaving \emph{recall essentially unchanged} (dashed
+lines overlap). Values match Table~\ref{tab:variant_f1}.}
 \label{fig:results}
 \end{figure}

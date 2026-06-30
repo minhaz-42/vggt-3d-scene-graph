@@ -1,32 +1,21 @@
 \section{Results}
 \label{sec:results}
 
-We evaluate on an independent sparse-view reference (Section~\ref{sec:experiments}): a per-scene
-object multiset enumerated directly from the RGB frames, authored independently of the SAM, CLIP,
-VGGT~\cite{wang2025vggt}, and fusion stages. The reference covers \textbf{28 TUM RGB-D}~\cite{sturm2012tumrgbd}
-sequences: the \textbf{5 paper-subset scenes are human-verified} (the gold core), and the remaining
-\textbf{23 are drafted by two independent passes} (draft + adversarial verification) over the frames,
-pending human verification. The primary metric is \emph{object-label F1} (\texttt{object\_label\_f1}):
-multiset precision/recall/F1 of fused-node labels against the reference multiset, reported as the mean
-over scenes at $3/5/8/10$ input views. All numbers are measured against this independent reference
-unless stated otherwise; the contrast with the earlier prediction-seeded pseudo-reference is in
+All numbers are object-label F1 against the independent 28-scene reference of
+Section~\ref{sec:experiments} (multiset precision/recall/F1 of fused-node labels, mean over scenes at
+$3/5/8/10$ input views). The contrast with the earlier prediction-seeded pseudo-reference is in
 Section~\ref{subsec:decirc}.
 
 \subsection{Variant comparison on the independent reference}
 \label{subsec:variants}
 
-Table~\ref{tab:variant_f1} compares seven variants: four lifting/fusion baselines (\textsc{2d-only},
-\textsc{geometry-only}, \textsc{semantic-lifting}, and the no-uncertainty \textsc{graph-fusion}), an
-uninformed \textsc{fixed-shrink} control that applies a constant merge-gate shrink with no per-node
-signal, the uncertainty-aware \textsc{proposed} variant (rank-normalized, weight $0.3$), and our
-duplicate-aware \textsc{graph-fusion-dedup}. On real, detector-grounded labels, \textsc{graph-fusion}
-is the strongest prior fusion variant, and object-label F1 \emph{falls} as views are added for every
-cross-view fusion variant (\textsc{semantic-lifting}, \textsc{fixed-shrink}, \textsc{graph-fusion},
-\textsc{proposed}); the non-fusion references (\textsc{2d-only}, \textsc{geometry-only}) plateau. More
-views supply more detections of the same physical object, which cross-view fusion does not collapse,
-so precision (and net F1) degrade against a fixed reference. \textsc{graph-fusion-dedup} is the only
-variant whose accuracy \emph{rises} toward the dense end and is best at every view count
-(Figure~\ref{fig:results}).
+Table~\ref{tab:variant_f1} compares the seven variants of Section~\ref{sec:exp_variants}. On real,
+detector-grounded labels \textsc{graph-fusion} is the strongest prior fusion variant, yet object-label
+F1 \emph{falls} as views are added for every cross-view fusion variant: more views supply more
+detections of the same physical object, which fusion does not collapse, so precision degrades against a
+fixed reference (the non-fusion references \textsc{2d-only} and \textsc{geometry-only} merely plateau).
+\textsc{graph-fusion-dedup} is the only variant whose accuracy \emph{rises} toward the dense end and is
+best at every view count (Figure~\ref{fig:results}).
 
 \begin{table}[t]
 \centering
@@ -130,13 +119,11 @@ was designed to do --- it lifts recall by declining to merge uncertain proposals
 mean over scenes: \textsc{proposed} $0.516/0.556/0.596/0.602$ vs.\ \textsc{graph-fusion}
 $0.510/0.540/0.581/0.587$) --- but the same behavior fragments correct objects and costs more precision
 than the recall it buys (precision: \textsc{proposed} $0.478/0.388/0.299/0.266$ vs.\ \textsc{graph-fusion}
-$0.556/0.495/0.420/0.399$). Against a fixed-count reference the net F1 is lower. Crucially, this is the
-\emph{opposite} axis to duplicate-aware fusion: the uncertainty gate \emph{tightens} merging and splits
-more, whereas the system's measured weakness (Section~\ref{subsec:perclass}) is over-counting, which
-calls for the opposite move --- merging more. The same per-class evidence explains why uncertainty fails
-and why dedup succeeds.
+$0.556/0.495/0.420/0.399$). Against a fixed-count reference the net F1 is lower --- the
+\emph{opposite} axis to duplicate-aware fusion, which merges \emph{more} where the system over-splits
+(we develop this contrast in Section~\ref{sec:discussion}).
 
-\subsection{Per-class characterization: precision-up, recall-down}
+\subsection{Per-class characterization: the over-counting signature}
 \label{subsec:perclass}
 
 Table~\ref{tab:perclass_overall} reports the micro-averaged precision/recall/F1 of \textsc{graph-fusion}
@@ -213,13 +200,11 @@ Class & \textsc{graph-fusion} P/R & dedup P/R & $\Delta$ recall \\
 \subsection{Robustness of the duplicate-aware merge}
 \label{subsec:dedup_robust}
 
-The dedup gain is robust to the IoU threshold. Table~\ref{tab:dedup_iou} sweeps
-$\tau \in \{0, 0.05, 0.1, 0.15, 0.2, 0.3, 0.5\}$: the improvement over \textsc{graph-fusion} stays in
-the $+0.075$ to $+0.118$ range (average $\Delta$) across the entire low-IoU band $\tau \in [0, 0.2]$ and
-only fades once the threshold is strict enough to stop merging duplicates ($\tau \ge 0.5$, $+0.030$).
-The wired default $\tau{=}0.1$ is within noise of the optimum and slightly more recall-conservative than
-``any overlap.'' Adding a centroid-distance OR-term on top of IoU does not help, so 3D-box IoU alone is
-the right and simplest criterion.
+The dedup gain is robust to the IoU threshold (Table~\ref{tab:dedup_iou}): the improvement over
+\textsc{graph-fusion} stays in the $+0.075$ to $+0.118$ range (average $\Delta$) across the low-IoU band
+$\tau \in [0, 0.2]$ and only fades once $\tau$ is strict enough to stop merging duplicates
+($\tau \ge 0.5$, $+0.030$). The default $\tau{=}0.1$ is within noise of the optimum; a
+centroid-distance OR-term does not help, so 3D-box IoU alone is the right and simplest criterion.
 
 \begin{table}[t]
 \centering
@@ -248,16 +233,13 @@ IoU $\tau$ & v3 & v5 & v8 & v10 & avg $\Delta$ \\
 \subsection{De-circularization: the earlier pseudo-reference was misleading}
 \label{subsec:decirc}
 
-The two findings above only become visible under an independent reference. The earlier evaluation of
-this system used a prediction-seeded pseudo-reference, drafted from the model's own ten-view
-\textsc{graph-fusion} output. Because that reference encoded \textsc{graph-fusion}'s own splitting
-pattern, two artifacts followed. First, \textsc{graph-fusion} scored $1.0$ at ten views \emph{by
-construction} --- the reference \emph{was} its own prediction, so the dense-view row measured reference
-construction rather than accuracy. Second, the uncertainty-aware \textsc{proposed} variant, which keeps
-more uncertain proposals unmerged and therefore splits more, reproduced more of the same fragments the
-circular reference contained, and so appeared to be a sparse-view \emph{win} ($+0.040$ at v3, $+0.021$
-at v5). The independent reference fixes the true object count: over-splitting is now correctly
-penalized, the uncertainty result reverses sign (Table~\ref{tab:uncertainty_neg}), and the dense-view
-$1.0$ artifact disappears (F1 instead falls with views, Table~\ref{tab:perclass_overall}). We document
-this pitfall because a prediction-seeded reference is an easy and silent way to inflate scores in 3D
-scene understanding, and because it is what masked both of this paper's main empirical findings.
+The two findings above are visible only under an independent reference. The earlier evaluation seeded
+the reference from the model's own ten-view \textsc{graph-fusion} output, producing two artifacts.
+\emph{(i)} \textsc{graph-fusion} scored $1.0$ at ten views \emph{by construction} --- the reference
+\emph{was} its own prediction. \emph{(ii)} The uncertainty-aware variant, which keeps more proposals
+unmerged and so splits more, reproduced more of the fragments that reference contained and appeared to
+be a sparse-view \emph{win} ($+0.040$/$+0.021$ at v3/v5). Fixing the true object count independently
+penalizes over-splitting: the uncertainty result reverses sign (Table~\ref{tab:uncertainty_neg}) and
+the dense-view $1.0$ artifact disappears (F1 falls with views, Table~\ref{tab:perclass_overall}). A
+prediction-seeded reference is an easy, silent way to inflate scores in sparse-view 3D, and it masked
+both of this paper's empirical findings.

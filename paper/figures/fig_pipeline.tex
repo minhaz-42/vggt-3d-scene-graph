@@ -2,45 +2,31 @@
 \centering
 \resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[font=\small,
-  thumb/.style={draw=gray!55, inner sep=0pt, line width=0.5pt},
-  flab/.style={font=\scriptsize, color=cInk!75}]
-  % input
-  \node[thumb] (rgb) at (0,0) {\includegraphics[height=12mm]{thumb_rgb.png}};
-  \node[flab, below=0.4mm of rgb] {sparse RGB views};
-  % frozen models
-  \node[frozen, minimum width=15mm] (vggt) at (2.9,1.15) {VGGT};
-  \node[frozen, minimum width=15mm] (owl)  at (2.9,-1.15) {OWLv2};
-  % outputs as real thumbnails
-  \node[thumb] (depth) at (5.6,1.15) {\includegraphics[height=11mm]{thumb_depth.png}};
-  \node[flab, below=0.4mm of depth] {depth / world points};
-  \node[thumb] (det) at (5.6,-1.15) {\includegraphics[height=11mm]{thumb_det.png}};
-  \node[flab, below=0.4mm of det] {labeled boxes};
-  % fusion stages
-  \node[stage, minimum width=16mm] (fuse) at (8.5,0) {lift $+$\\cross-view fuse};
-  \node[ours, minimum width=18mm]  (dedup) at (11.0,0) {duplicate-aware\\merge \textbf{(ours)}};
-  % output thumbnail
-  \node[thumb] (graph) at (13.8,0) {\includegraphics[height=13mm]{thumb_pc.png}};
-  \node[flab, below=0.4mm of graph] {3D scene graph};
-  % arrows
-  \draw[flow] (rgb) -- (vggt);
-  \draw[flow] (rgb) -- (owl);
-  \draw[flow] (vggt) -- (depth);
-  \draw[flow] (owl)  -- (det);
+  thumb/.style={draw=gray!55, inner sep=0pt, line width=0.6pt},
+  flab/.style={font=\footnotesize, color=cInk!80},
+  alab/.style={font=\footnotesize, color=cFrozen, fill=white, inner sep=1.5pt}]
+  \node[thumb] (rgb) at (0,0) {\includegraphics[height=24mm]{thumb_rgb.png}};
+  \node[flab, below=0.6mm of rgb] {sparse RGB views};
+  \node[thumb] (depth) at (3.7,1.75) {\includegraphics[height=21mm]{thumb_depth.png}};
+  \node[flab, below=0.4mm of depth] {world points / depth};
+  \node[thumb] (det) at (3.7,-1.75) {\includegraphics[height=21mm]{thumb_det.png}};
+  \node[flab, below=0.4mm of det] {open-vocab boxes};
+  \node[stage, minimum width=18mm, minimum height=12mm] (fuse) at (6.9,0) {lift $+$\\cross-view\\fusion};
+  \node[ours, minimum width=22mm, minimum height=12mm] (dedup) at (9.5,0) {duplicate-aware\\merge \textbf{(ours)}};
+  \node[thumb] (graph) at (12.6,0) {\includegraphics[height=27mm]{thumb_pc.png}};
+  \node[flab, below=0.6mm of graph] {3D scene graph};
+  \draw[flow] (rgb) -- node[alab, above, sloped]{VGGT (frozen)} (depth);
+  \draw[flow] (rgb) -- node[alab, below, sloped]{OWLv2 (frozen)} (det);
   \draw[flow] (depth) -| (fuse);
   \draw[flow] (det)   -| (fuse);
   \draw[flow] (fuse) -- (dedup);
   \draw[flow] (dedup) -- (graph);
-  % frozen bracket
-  \begin{scope}[on background layer]
-    \node[draw=cFrozen!60, densely dashed, rounded corners=3pt, inner sep=4pt, fit=(vggt)(owl)] (fz) {};
-  \end{scope}
-  \node[flab, color=cFrozen] at (fz.north) [yshift=2.4mm] {frozen foundation models};
 \end{tikzpicture}}
 \caption{The pipeline, on a real office scene. Sparse RGB views feed two \emph{frozen} foundation
 models: VGGT produces world-point geometry (depth shown) and OWLv2 proposes open-vocabulary labeled
-boxes. Detections are lifted into the world-point map, fused across views into object nodes, and ---
-our one addition --- passed through a \emph{duplicate-aware merge} (amber) that collapses same-label
-overlapping nodes, yielding the labeled 3D object--relation graph at right. All models are frozen; no
+boxes. Detections are lifted into the world-point map and fused across views into object nodes; our one
+addition is a \emph{duplicate-aware merge} (amber) that collapses same-label overlapping nodes,
+yielding the labeled 3D object--relation graph at right. No model is fine-tuned and there is no
 per-scene optimization.}
 \label{fig:method_pipeline}
 \end{figure}
