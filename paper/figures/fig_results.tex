@@ -1,0 +1,43 @@
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=\linewidth, height=5.6cm,
+  xlabel={Number of input views $N$}, ylabel={Object-label F1},
+  xtick={3,5,8,10}, xmin=2.4, xmax=10.6,
+  ymin=0.16, ymax=0.62, ytick={0.2,0.3,0.4,0.5,0.6},
+  ymajorgrids, grid style={gray!15},
+  tick align=outside, axis line style={cInk!80},
+  label style={font=\small, color=cInk},
+  tick label style={font=\footnotesize, color=cInk},
+  legend style={font=\footnotesize, at={(0.5,-0.30)}, anchor=north,
+                legend columns=2, draw=gray!35, column sep=6pt},
+  legend cell align=left,
+  every axis plot/.append style={line width=1.05pt, mark size=2.2pt},
+  clip=false,
+]
+% ours (dedup) -- the only line that rises
+\addplot[color=cOurs, mark=*] coordinates {(3,0.5696)(5,0.5723)(8,0.5860)(10,0.5725)};
+\addlegendentry{graph-fusion-dedup (ours)}
+% baseline
+\addplot[color=cBase, mark=square*] coordinates {(3,0.5129)(5,0.4895)(8,0.4664)(10,0.4502)};
+\addlegendentry{graph-fusion (baseline)}
+% control
+\addplot[color=cCtrl, mark=triangle*, densely dashed] coordinates {(3,0.5048)(5,0.4715)(8,0.4448)(10,0.4189)};
+\addlegendentry{fixed-shrink (control)}
+% uncertainty -- negative result
+\addplot[color=cUnc, mark=diamond*] coordinates {(3,0.4801)(5,0.4370)(8,0.3841)(10,0.3544)};
+\addlegendentry{proposed (uncertainty)}
+% annotation: ours rises
+\node[font=\scriptsize\itshape, color=cOurs, anchor=west, align=left]
+   at (axis cs:8.15,0.586) {rises with\\views};
+\end{axis}
+\end{tikzpicture}
+\caption{Object-label F1 vs.\ number of input views on the independent 28-scene reference.
+Every prior cross-view fusion variant \emph{degrades} as views are added---more frames yield
+more un-collapsed duplicate detections, costing precision. Duplicate-aware fusion (ours, amber)
+is the only variant whose accuracy \emph{rises} toward the dense end and is best at every view
+count, while the uncertainty-aware gate (brick) sits below even the uninformed control. Values
+match Table~\ref{tab:variant_f1}.}
+\label{fig:results}
+\end{figure}

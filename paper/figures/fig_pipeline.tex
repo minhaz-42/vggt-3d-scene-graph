@@ -1,0 +1,41 @@
+\begin{figure}[t]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[font=\small]
+  \node[fxbox, minimum width=15mm] (rgb) at (0,0) {Sparse\\RGB views};
+  \node[frozen, minimum width=24mm] (vggt) at (3.4,1.05) {VGGT geometry\\{\scriptsize world-point maps}};
+  \node[frozen, minimum width=24mm] (owl)  at (3.4,-1.05) {OWLv2 detector\\{\scriptsize labeled object boxes}};
+  \node[stage, minimum width=14mm]  (lift) at (6.9,0) {2D$\to$3D\\lift};
+  \node[stage, minimum width=14mm]  (fuse) at (9.0,0) {cross-view\\fusion};
+  \node[ours,  minimum width=20mm]  (dedup)at (11.55,0) {duplicate-aware\\merge \textbf{(ours)}};
+  \node[result,minimum width=16mm]  (graph)at (14.3,0) {3D scene graph\\{\scriptsize objects $+$ relations}};
+  \draw[flow] (rgb) -- (vggt);
+  \draw[flow] (rgb) -- (owl);
+  \draw[flow] (vggt) -| (lift);
+  \draw[flow] (owl)  -| (lift);
+  \draw[flow] (lift) -- (fuse);
+  \draw[flow] (fuse) -- (dedup);
+  \draw[flow] (dedup) -- (graph);
+  % "frozen foundation models" bracket behind VGGT + OWLv2
+  \begin{scope}[on background layer]
+    \node[draw=cFrozen!60, densely dashed, rounded corners=3pt, inner sep=5pt,
+          fit=(vggt)(owl)] (fz) {};
+  \end{scope}
+  \node[font=\scriptsize, color=cFrozen] at (fz.north) [yshift=2.6mm] {frozen foundation models --- no per-scene optimization};
+  % over-count -> merge schematic under the dedup box
+  \begin{scope}[shift={(11.55,-1.7)}, scale=0.85, every node/.style={font=\scriptsize}]
+    \draw[cBase, line width=0.6pt] (-0.95,-0.16) rectangle ++(0.42,0.42);
+    \draw[cBase, line width=0.6pt] (-0.78,-0.02) rectangle ++(0.42,0.42);
+    \draw[cBase, line width=0.6pt] (-0.61,0.10)  rectangle ++(0.42,0.42);
+    \node[cInk!70] at (0.18,0.18) {$\Rightarrow$};
+    \draw[cOurs, line width=1pt, fill=cOursFill] (0.5,0.0) rectangle ++(0.46,0.46);
+    \node[cInk!75, anchor=west] at (1.08,0.22) {one node per object};
+  \end{scope}
+\end{tikzpicture}}
+\caption{The pipeline. Sparse RGB views feed two \emph{frozen} foundation models---VGGT for
+world-point geometry and OWLv2 for open-vocabulary labeled boxes. Detections are lifted to 3D,
+fused across views into object nodes, and annotated with spatial relations. Our one addition is a
+post-fusion \emph{duplicate-aware merge} (amber): same-label nodes whose 3D boxes overlap are
+collapsed into a single object, correcting the over-counting that cross-view fusion leaves behind.}
+\label{fig:method_pipeline}
+\end{figure}

@@ -16,10 +16,18 @@
 \usepackage{amssymb}
 \usepackage{multirow}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots}
+\usepackage{xcolor}
 \usepackage[hidelinks]{hyperref}
 
-% Placeholder marker for results pending the ~30-scene expansion run.
+% Shared figure palette + block-diagram styles (see paper/figures/palette.tex).
+\input{figures/palette}
+\graphicspath{{figures/}}
+
+% Placeholder marker (no longer used; kept harmless).
 \newcommand{\todo}[1]{\textbf{[TODO: #1]}}
 
 \begin{document}

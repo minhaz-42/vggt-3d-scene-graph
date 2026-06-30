@@ -25,7 +25,8 @@ cross-view fusion variant (\textsc{semantic-lifting}, \textsc{fixed-shrink}, \te
 \textsc{proposed}); the non-fusion references (\textsc{2d-only}, \textsc{geometry-only}) plateau. More
 views supply more detections of the same physical object, which cross-view fusion does not collapse,
 so precision (and net F1) degrade against a fixed reference. \textsc{graph-fusion-dedup} is the only
-variant whose accuracy \emph{rises} toward the dense end and is best at every view count.
+variant whose accuracy \emph{rises} toward the dense end and is best at every view count
+(Figure~\ref{fig:results}).
 
 \begin{table}[t]
 \centering
@@ -52,6 +53,8 @@ Variant & v3 & v5 & v8 & v10 \\
 \end{tabular}
 }
 \end{table}
+
+\input{figures/fig_results}
 
 \subsection{Duplicate-aware fusion: the positive result}
 \label{subsec:dedup}
@@ -147,7 +150,6 @@ true objects with more frames but emits more duplicate detections, and the preci
 end. The precision loss is over-counting of correctly-found objects, not mislabeling.}
 \label{tab:perclass_overall}
 \small
-\resizebox{\linewidth}{!}{%
 \begin{tabular}{rrrr}
 \toprule
 Views & Precision & Recall & F1 \\
@@ -158,7 +160,6 @@ Views & Precision & Recall & F1 \\
 10 & 0.331 & 0.802 & 0.468 \\
 \bottomrule
 \end{tabular}
-}
 \end{table}
 
 Per class (at v8), this splits into three behaviors. A group is \emph{found reliably but over-counted}
@@ -170,7 +171,9 @@ precision and recall (\texttt{book}, \texttt{bottle}, \texttt{picture}, \texttt{
 distinct, well-separated objects that fuse correctly. A third group is \emph{under-detected}:
 \texttt{cabinet} (recall $0.27$), where the detector under-fires on blurry, low-resolution TUM frames.
 The dominant error is thus over-counting of correctly-found objects, not mislabeling --- precisely what
-duplicate-aware fusion targets.
+duplicate-aware fusion targets (Figure~\ref{fig:perclass}).
+
+\input{figures/fig_perclass}
 
 Table~\ref{tab:dedup_mechanism} confirms the mechanism at v8: dedup sharply raises precision on the
 over-counted classes (\texttt{desk} $0.15 \to 0.45$, \texttt{floor} $0.27 \to 0.71$, \texttt{monitor}
@@ -188,7 +191,6 @@ recovers precision on the over-counted classes while preserving recall for almos
 recall cost is on closely-packed same-class instances (\texttt{desk}, \texttt{bottle}).}
 \label{tab:dedup_mechanism}
 \small
-\resizebox{\linewidth}{!}{%
 \begin{tabular}{lccc}
 \toprule
 Class & \textsc{graph-fusion} P/R & dedup P/R & $\Delta$ recall \\
@@ -204,7 +206,6 @@ Class & \textsc{graph-fusion} P/R & dedup P/R & $\Delta$ recall \\
 \texttt{bottle}   & 0.70 / 0.76 & 0.78 / 0.72 & $-0.04$ \\
 \bottomrule
 \end{tabular}
-}
 \end{table}
 
 \subsection{Robustness of the duplicate-aware merge}

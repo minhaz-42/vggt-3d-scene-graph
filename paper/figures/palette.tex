@@ -1,0 +1,26 @@
+% Shared figure palette + tikz styles.
+% \input in the preamble AFTER xcolor/tikz/pgfplots are loaded.
+\definecolor{cInk}{HTML}{222433}
+\definecolor{cOurs}{HTML}{D9822B}     % ours / duplicate-aware dedup (amber)
+\definecolor{cOursFill}{HTML}{FBE3CC}
+\definecolor{cBase}{HTML}{3D5A80}     % graph-fusion baseline (steel blue)
+\definecolor{cBaseFill}{HTML}{E3EAF3}
+\definecolor{cUnc}{HTML}{C0392B}      % uncertainty / negative result (brick)
+\definecolor{cCtrl}{HTML}{9AA0A6}     % uninformed control (grey)
+\definecolor{cFrozen}{HTML}{6B82A8}   % frozen foundation models
+\definecolor{cFrozenFill}{HTML}{E8EEF6}
+\definecolor{cOk}{HTML}{2E7D5B}       % independent / honest (green)
+\definecolor{cOkFill}{HTML}{DCEEE4}
+\definecolor{cWarn}{HTML}{B5532A}     % circular / inflated (warn)
+\definecolor{cWarnFill}{HTML}{F6E1D6}
+
+% --- shared tikz node styles for the block diagrams ---
+\tikzset{
+  fxbox/.style={draw=cInk!70, rounded corners=2pt, align=center, font=\small,
+                minimum height=8.5mm, inner sep=3.2pt, line width=0.6pt},
+  frozen/.style={fxbox, draw=cFrozen, fill=cFrozenFill},
+  stage/.style={fxbox, fill=gray!6},
+  ours/.style={fxbox, draw=cOurs, fill=cOursFill, line width=1.1pt},
+  result/.style={fxbox, draw=cOk, fill=cOkFill},
+  flow/.style={-{Stealth[length=2.2mm]}, line width=0.7pt, draw=cInk!75},
+}

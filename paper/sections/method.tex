@@ -14,38 +14,7 @@ labeled object proposals from frozen feed-forward models, lifts the proposals to
 common 3D frame, and fuses them into objects with no per-scene optimization.
 Figure~\ref{fig:method_pipeline} summarizes the data flow.
 
-\begin{figure}[t]
-\centering
-\resizebox{\textwidth}{!}{%
-\begin{tikzpicture}[>=Latex, font=\small,
-  box/.style={draw, rounded corners=2pt, align=center, minimum height=10mm, minimum width=17mm, inner sep=3pt},
-  frozen/.style={box, fill=blue!8},
-  ours/.style={box, fill=orange!20, very thick},
-  result/.style={box, fill=green!10}]
-  \node[box] (rgb) at (0,0) {Sparse RGB\\views};
-  \node[frozen] (vggt) at (3.2,1.15) {VGGT geometry\\{\scriptsize world-point maps (frozen)}};
-  \node[frozen] (owl) at (3.2,-1.15) {OWLv2 detector\\{\scriptsize labeled boxes (frozen)}};
-  \node[box] (lift) at (6.8,0) {2D$\to$3D\\lifting};
-  \node[box] (fuse) at (9.2,0) {cross-view\\fusion};
-  \node[ours] (dedup) at (11.9,0) {duplicate-aware\\merge \textbf{(ours)}};
-  \node[result] (graph) at (14.7,0) {3D scene graph\\{\scriptsize objects + relations}};
-  \draw[->] (rgb) -- (vggt);
-  \draw[->] (rgb) -- (owl);
-  \draw[->] (vggt) -- (lift);
-  \draw[->] (owl) -- (lift);
-  \draw[->] (lift) -- (fuse);
-  \draw[->] (fuse) -- (dedup);
-  \draw[->] (dedup) -- (graph);
-\end{tikzpicture}}
-\caption{Architecture of the detector-grounded sparse-view 3D scene graph system.
-Sparse RGB frames pass through frozen VGGT (camera/depth/world-point/confidence maps)
-and a frozen open-vocabulary detector (OWLv2), which proposes labeled object boxes.
-Each detection is lifted into the VGGT world-point map, candidates are fused across
-views into object nodes, a \emph{duplicate-aware fusion} pass merges over-counted nodes
-of the same physical object, and rule-based spatial relations complete the exported
-graph $\mathcal{G}=(\mathcal{O},\mathcal{R})$.}
-\label{fig:method_pipeline}
-\end{figure}
+\input{figures/fig_pipeline}
 
 \subsection{Overview}
 

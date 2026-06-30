@@ -1,5 +1,7 @@
 \section{Introduction}
 
+\input{figures/fig_qual}
+
 Reconstructing a scene and explaining a scene are related but different goals. Modern
 geometry pipelines can recover camera motion, depth, points, surfaces, or radiance
 fields, yet downstream applications often require object-level statements: which
@@ -56,8 +58,8 @@ feature, not a footnote: it is exactly the kind of conclusion a de-circularized
 evaluation is meant to surface.
 
 With honest labels in hand, the dominant remaining error is over-counting: one physical
-object survives cross-view fusion as several same-label nodes. The fix is deliberately
-simple --- a duplicate-aware merge of same-label nodes whose axis-aligned 3D boxes
+object survives cross-view fusion as several same-label nodes (Figure~\ref{fig:qual}). The fix
+is deliberately simple --- a duplicate-aware merge of same-label nodes whose axis-aligned 3D boxes
 overlap. This step improves object-label F1 at every view count and is the only variant
 whose accuracy \emph{rises} with more views, precisely because it converts the recall
 that extra views provide into precision rather than into duplicates. Notably, this is

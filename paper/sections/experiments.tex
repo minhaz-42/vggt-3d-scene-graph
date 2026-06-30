@@ -37,6 +37,8 @@ behavior of each variant directly, rather than a single dense-view number.
 \subsection{An Independently-Authored Reference}
 \label{sec:exp_reference}
 
+\input{figures/fig_decirc}
+
 The central evaluation problem in this setting is that there is no
 ground-truth open-vocabulary object inventory for TUM RGB-D scenes, so a
 reference must be constructed. The tempting shortcut --- and the one the
@@ -47,7 +49,7 @@ it. We argue this is unsound and replace it with a reference authored
 
 \paragraph{Why the prediction-seeded reference is circular.}
 If the reference object multiset is initialized from a variant's own 10-view
-output, that variant scores precision~$=$~recall~$=$~$1.0$ at the 10-view
+output (Figure~\ref{fig:decirc}, left), that variant scores precision~$=$~recall~$=$~$1.0$ at the 10-view
 ``reference'' point \emph{by construction}, and every sparser run is graded for
 how faithfully it reproduces the same variant's splitting and labeling pattern
 rather than for agreement with the scene. A method that keeps more uncertain
