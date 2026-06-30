@@ -1,6 +1,6 @@
 \section{Introduction}
 
-\input{figures/fig_qual}
+\input{figures/fig_teaser}
 
 Reconstructing a scene and explaining a scene are related but different goals. Modern
 geometry pipelines can recover camera motion, depth, points, surfaces, or radiance
@@ -31,7 +31,7 @@ lifted 2D object proposals, keeping all heavy perception models frozen and using
 per-scene optimization. VGGT world-point maps serve as a 2D-to-3D lookup table; an
 open-vocabulary detector proposes labeled object boxes; these are lifted into candidate
 3D objects, merged across views into a labeled object-relation graph, and annotated
-with spatial predicates. This design keeps the expensive perception stage fixed while
+with spatial predicates (Figure~\ref{fig:teaser}). This design keeps the expensive perception stage fixed while
 making the graph reasoning stage explicit, auditable, and easy to ablate. It also
 differs from open-vocabulary 3D graph systems that assume posed RGB-D video, a dense
 point cloud, or a prebuilt map~\cite{gu2024conceptgraphs,jatavallabhula2023conceptfusion}:
