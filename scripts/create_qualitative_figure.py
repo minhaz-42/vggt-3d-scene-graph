@@ -17,7 +17,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--variant",
         default="graph-fusion",
-        choices=["2d-only", "geometry-only", "semantic-lifting", "graph-fusion", "proposed", "fixed-shrink"],
+        choices=["2d-only", "geometry-only", "semantic-lifting", "graph-fusion", "graph-fusion-dedup", "proposed", "fixed-shrink"],
         help="Fusion variant whose scene_graph.png to render. Non-default variants live under variants/<variant>/.",
     )
     parser.add_argument("--scene-id", action="append", default=[], help="Scene id to include. Repeat as needed.")
