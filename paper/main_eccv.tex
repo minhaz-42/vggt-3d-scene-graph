@@ -1,0 +1,53 @@
+% =====================================================================
+% OpenSUN3D @ ECCV 2026 — archival proceedings track (8 pages, double-blind).
+% SCAFFOLD ONLY. For the real submission, open the OFFICIAL ECCV 2026 author kit
+% on Overleaf and paste these sections in (the kit sets the exact font + review
+% line numbers; using another template risks desk-rejection):
+%   https://www.overleaf.com/latex/templates/template-and-author-guidelines-for-eccv-submission/gycdswmdkkyv
+% This file uses the LNCS base class (what ECCV is built on) so the content is
+% structured correctly; it still needs (a) the official kit, (b) trimming to 8
+% pages per docs/opensun3d_submission_plan.md, and (c) the n~=30 numbers + figures.
+% =====================================================================
+\documentclass[runningheads]{llncs}
+
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multirow}
+\usepackage[hidelinks]{hyperref}
+
+% Placeholder marker for results pending the ~30-scene expansion run.
+\newcommand{\todo}[1]{\textbf{[TODO: #1]}}
+
+\begin{document}
+
+\title{Open-Vocabulary 3D Scene Graphs from Sparse RGB Views:\\
+Duplicate-Aware Fusion and a De-Circularized Benchmark}
+
+% Double-blind: no authors / affiliations / repo links in the submitted version.
+\author{Anonymous}
+\institute{Anonymous}
+
+\maketitle
+
+\begin{abstract}
+\input{sections/abstract}
+\keywords{3D scene graphs \and sparse views \and open-vocabulary detection \and
+evaluation methodology \and benchmark \and duplicate-aware fusion}
+\end{abstract}
+
+% NOTE: trim each \input to hit 8 pages (excl. references). Move the full IoU sweep,
+% the full per-class table, and the weight-sweep table to an appendix/supplementary;
+% consolidate the five result tables to two in the main body (see submission plan).
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/method}
+\input{sections/experiments}
+\input{sections/results}
+\input{sections/discussion}
+
+\bibliographystyle{splncs04}
+\bibliography{references}
+
+\end{document}
