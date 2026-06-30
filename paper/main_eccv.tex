@@ -1,12 +1,12 @@
 % =====================================================================
-% OpenSUN3D @ ECCV 2026 — archival proceedings track (8 pages, double-blind).
-% SCAFFOLD ONLY. For the real submission, open the OFFICIAL ECCV 2026 author kit
-% on Overleaf and paste these sections in (the kit sets the exact font + review
-% line numbers; using another template risks desk-rejection):
-%   https://www.overleaf.com/latex/templates/template-and-author-guidelines-for-eccv-submission/gycdswmdkkyv
-% This file uses the LNCS base class (what ECCV is built on) so the content is
-% structured correctly; it still needs (a) the official kit, (b) trimming to 8
-% pages per docs/opensun3d_submission_plan.md, and (c) the n~=30 numbers + figures.
+% PRIMARY TARGET: ACCV 2026 (deadline Jul 5, 2026). Springer LNCS, **14 pages**
+% incl. figures/tables (references unlimited), double-blind, supplementary allowed.
+% FALLBACK: OpenSUN3D @ ECCV 2026 (Aug 1) — same LNCS family but 8 pages, so for that
+% target trim + move the sweeps to supplementary (see docs/opensun3d_submission_plan.md).
+% For final submission use the OFFICIAL ACCV 2026 LNCS author kit on Overleaf
+% (accv2026.org/submissions/author-guidelines/) — drop these sections in; this file
+% uses the LNCS base class so structure is correct. Still needs: the official kit,
+% the n~=28 numbers + figures, and a 14-page fit check (compile on Overleaf).
 % =====================================================================
 \documentclass[runningheads]{llncs}
 
@@ -15,6 +15,8 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{multirow}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
 \usepackage[hidelinks]{hyperref}
 
 % Placeholder marker for results pending the ~30-scene expansion run.
@@ -37,9 +39,9 @@ Duplicate-Aware Fusion and a De-Circularized Benchmark}
 evaluation methodology \and benchmark \and duplicate-aware fusion}
 \end{abstract}
 
-% NOTE: trim each \input to hit 8 pages (excl. references). Move the full IoU sweep,
-% the full per-class table, and the weight-sweep table to an appendix/supplementary;
-% consolidate the five result tables to two in the main body (see submission plan).
+% ACCV gives 14 pages, so the reframed sections fit with light editing. Keep the main
+% results tables in the body; move the full IoU sweep + full per-class table + weight
+% sweep to supplementary (ACCV allows it). For the 8-page OpenSUN3D fallback, trim harder.
 \input{sections/introduction}
 \input{sections/related_work}
 \input{sections/method}
