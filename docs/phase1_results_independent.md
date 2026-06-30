@@ -105,9 +105,11 @@ boxes have IoU > 0.1 and re-fuse each group (`merge_duplicate_instances` in `gra
 - **The gain grows with views** (+0.06 at v3 → +0.14 at v8/v10), and dedup is the **only** variant
   whose F1 rises rather than falls with more views — it removes the duplicate detections that
   accumulate as views are added. Precision is restored (desk v10 multiset: monitor 10→4, desk 9→1).
-- Recall is essentially preserved (genuinely distinct same-class objects have non-overlapping boxes,
-  so they are not merged). IoU threshold swept {0.1, 0.3, 0.5} — 0.1 (most aggressive overlap merge)
-  is best; adding a centroid-distance term did not beat IoU alone.
+- Recall is essentially preserved for almost every class; precision jumps on the over-counted classes
+  (monitor 0.38→1.00, desk 0.19→0.83, keyboard 0.31→0.62 at v8). The win is robust across IoU ∈ [0, 0.2]
+  and under all 3 reference filterings; 3D-box IoU alone beats adding a centroid term. The one honest
+  cost: closely-packed same-class instances (2–3 monitors on a desk) over-merge (monitor recall −0.33,
+  desk −0.17). Full sweep + per-class table + limitation: **`docs/dedup_ablation.md`**.
 - This is the **opposite axis** from the uncertainty gate (which *tightened* merging → more splitting
   → worse precision), which is why uncertainty failed and dedup succeeds. It is a clean candidate for
   the paper's positive method contribution.
