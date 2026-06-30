@@ -26,7 +26,18 @@ def load(npz, conf_pct, maxpts, seed=0):
     r=np.random.default_rng(seed)
     if len(P)>maxpts: i=r.choice(len(P),maxpts,replace=False); P,C=P[i],C[i]
     Pd=np.column_stack([P[:,0],P[:,2],-P[:,1]])
-    return Pd, np.clip(C,0,1), np.transpose(d["images"][0],(0,2,3,1))
+    return Pd, np.clip(C,0,1), np.transpose(d["images"][0],(0,2,3,1)), d
+
+def draw_frustums(ax, d, scale, color="#5A6E96"):
+    extr=d["camera_extrinsics"][0]; intr=d["camera_intrinsics"][0]
+    H,W=d["world_points"][0].shape[1], d["world_points"][0].shape[2]; depth=0.13*scale
+    def D(P): return np.column_stack([P[:,0],P[:,2],-P[:,1]])
+    for v in np.unique(np.linspace(0,extr.shape[0]-1,min(6,extr.shape[0])).astype(int)):
+        R=extr[v,:,:3]; t=extr[v,:,3]; Ki=np.linalg.inv(intr[v]); C=-R.T@t
+        cs=[R.T@((Ki@np.array([u,w,1.0]))*depth-t) for (u,w) in [(0,0),(W,0),(W,H),(0,H)]]
+        pts=D(np.array([C]+cs)); c0=pts[0]
+        for cc in pts[1:]: ax.plot([c0[0],cc[0]],[c0[1],cc[1]],[c0[2],cc[2]],color=color,lw=0.5,alpha=0.7,zorder=12)
+        sq=pts[1:][[0,1,2,3,0]]; ax.plot(sq[:,0],sq[:,1],sq[:,2],color=color,lw=0.5,alpha=0.7,zorder=12)
 
 def main():
     ap=argparse.ArgumentParser()
@@ -34,9 +45,9 @@ def main():
     ap.add_argument("--out", default="paper/figures/fig_teaser.pdf")
     ap.add_argument("--elev", type=float, default=26); ap.add_argument("--azim", type=float, default=-115)
     ap.add_argument("--frames", default="0,4,8")
-    ap.add_argument("--conf-pct", type=float, default=48); ap.add_argument("--maxpts", type=int, default=95000)
+    ap.add_argument("--conf-pct", type=float, default=60); ap.add_argument("--maxpts", type=int, default=155000)
     a=ap.parse_args()
-    P,C,imgs = load(a.npz, a.conf_pct, a.maxpts)
+    P,C,imgs,geom = load(a.npz, a.conf_pct, a.maxpts)
     plt.rcParams.update({"font.family":"serif"})
     fig=plt.figure(figsize=(7.2,3.4))
     gs=gridspec.GridSpec(3,3,width_ratios=[1.0,0.12,3.2],height_ratios=[1,1,1],wspace=0.02,hspace=0.08)
@@ -54,12 +65,13 @@ def main():
 
     # right: 3D reconstruction + scene graph labels
     ax=fig.add_subplot(gs[:,2], projection="3d")
-    ax.scatter(P[:,0],P[:,1],P[:,2],c=C,s=2.0,marker=".",depthshade=False,edgecolors="none",linewidths=0)
+    ax.scatter(P[:,0],P[:,1],P[:,2],c=C,s=3.2,marker=".",depthshade=False,edgecolors="none",linewidths=0,rasterized=True)
     ax.view_init(elev=a.elev,azim=a.azim); ax.set_axis_off()
     ax.set_box_aspect((np.ptp(P[:,0]),np.ptp(P[:,1]),np.ptp(P[:,2])))
     for L,fn in (("x",ax.set_xlim),("y",ax.set_ylim),("z",ax.set_zlim)):
         pass
     ax.set_xlim(np.percentile(P[:,0],[1,99])); ax.set_ylim(np.percentile(P[:,1],[1,99])); ax.set_zlim(np.percentile(P[:,2],[1,99]))
+    draw_frustums(ax, geom, float(np.mean([np.ptp(P[:,i]) for i in range(3)])))
     ax.set_title("open-vocabulary 3D scene graph", fontsize=8.5, color="#222", y=0.98)
 
     g=json.load(open(a.graph)); nodes=g["nodes"]

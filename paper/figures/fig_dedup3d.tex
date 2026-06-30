@@ -1,0 +1,11 @@
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig_dedup3d.png}
+\caption{Duplicate-aware fusion on the real \texttt{freiburg1\_desk} point cloud (ten views; the cloud
+is desaturated so the object nodes stand out). \textbf{Left:} cross-view \textsc{graph-fusion} leaves
+the single monitor as ten nodes and the desk as nine --- the over-counting that dominates the precision
+loss. \textbf{Right:} the duplicate-aware merge collapses same-label overlapping nodes into one object
+each ($34\!\to\!13$ nodes), recovering a clean labeled scene graph. (Merging is shown by 3D proximity
+for this illustration; the benchmark metric uses 3D-box IoU, Section~\ref{sec:exp_variants}.)}
+\label{fig:dedup3d}
+\end{figure}
