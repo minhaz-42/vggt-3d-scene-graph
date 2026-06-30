@@ -64,14 +64,13 @@ that extra views provide into precision rather than into duplicates. Notably, th
 the opposite move from the uncertainty gate (which tends to over-split), and it
 explains why merging helps where the gate does not.
 
-We evaluate on five public TUM RGB-D sequences under 3/5/8/10-view
-protocols~\cite{sturm2012tumrgbd}, against the independently authored human-verified
-reference. The duplicate-aware variant improves object-label F1 over the no-uncertainty
-graph-fusion baseline by $+0.07$ to $+0.15$ across view counts and wins on every scene
-at the denser settings, while the recalibrated uncertainty gate is consistently no
-better than the baseline or an uninformed control. A larger corroboration run is in
-progress \todo{report $\sim$30-scene corroboration numbers once the expansion run
-completes}.
+We evaluate on 28 public TUM RGB-D sequences under 3/5/8/10-view
+protocols~\cite{sturm2012tumrgbd}, against an independently authored reference (5 scenes
+human-verified, 23 drafted by two independent passes). The duplicate-aware variant improves
+object-label F1 over the no-uncertainty graph-fusion baseline by $+0.06$ to $+0.12$ across view
+counts and wins on $22$--$27$ of the $28$ scenes ($p<0.001$), while the recalibrated uncertainty
+gate is consistently \emph{worse} than the baseline and an uninformed control. The gain holds on
+the $5$ human-verified scenes alone and on both static and dynamic (moving-person) sequences.
 
 Our contributions are:
 \begin{itemize}

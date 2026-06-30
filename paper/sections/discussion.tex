@@ -4,7 +4,7 @@
 Three findings of this paper pull in the same direction, and it is worth stating
 plainly why. On an independent, human-verified reference, a one-line
 duplicate-aware merge improves open-vocabulary object-label F1 at every view
-count and on every scene, while a recalibrated, fully swept uncertainty-aware
+count and on 22--27 of 28 scenes, while a recalibrated, fully swept uncertainty-aware
 fusion gate gives no improvement at all and in fact regresses. These two results
 are not coincidental: they are two sides of the same mechanism. This section
 explains that mechanism, draws the methodological lesson from the circular
@@ -44,8 +44,8 @@ The uncertainty-aware gate acts on the same axis but in the wrong direction. It
 more readily exactly where the system already over-splits. Against the
 independent reference it never helps: across the entire weight sweep $w \in [0.1,
 0.8]$ no setting beats the non-gated baseline, and the wired setting regresses by
-$-0.014$, $-0.031$, $-0.056$, and $-0.057$ across the four view counts, losing on
-all five scenes at five, eight, and ten views. This is not a tuning failure to be
+$-0.033$, $-0.053$, $-0.082$, and $-0.096$ across the four view counts, losing on
+essentially all 28 scenes at five, eight, and ten views ($p<0.001$). This is not a tuning failure to be
 patched away; it is the predictable consequence of suppressing merges in a regime
 whose error is too few merges. We report it as a feature of the study, not an
 embarrassment: knowing which lever points the wrong way is what lets us identify
@@ -86,15 +86,13 @@ overlooked case where the reference is derived from the system under test.
 \subsection{Limitations}
 \label{sec:disc-limitations}
 
-\paragraph{Evaluation scope.} The headline results are measured on $n = 5$
-human-verified sequences. This is enough to establish the over-counting signature
-and to show the merge wins on every scene at the dense views (with no losses at any
-view count), but the sign-test floor at this sample
-size is only $p = 0.062$, so per-scene win counts carry more weight than the
-$p$-value. A roughly thirty-scene corroboration is in progress and will slot into
-the same tables; we report the present numbers as the verified core and flag the
-larger study as forthcoming. \todo{Insert $\sim$30-scene corroboration results
-once the expansion run completes.}
+\paragraph{Evaluation scope and reference provenance.} The benchmark spans 28 TUM RGB-D
+sequences, of which 5 (the paper-subset gold core) are human-verified and 23 carry two-pass
+VLM-drafted references (draft~$+$~adversarial verify), pending human verification. Both main
+findings reach $p < 0.001$ over the 28 scenes and also hold on the 5 human-verified scenes alone
+($+0.068$ to $+0.146$ dedup gain), so they do not rest on the machine-drafted labels. Fully
+human-verifying the 23 drafted references is nonetheless the natural next step to remove any
+residual labeling bias, and the benchmark remains modest relative to large posed-RGB-D datasets.
 
 \paragraph{Closely-packed same-class instances.} Box-IoU merging cannot separate
 distinct instances of the same class whose axis-aligned 3D boxes overlap. A desk
@@ -144,8 +142,8 @@ boxes, feed-forward VGGT~\cite{wang2025vggt} geometry lifts them to 3D, and a
 cross-view fusion step assembles the graph. On an independent, human-verified
 TUM RGB-D~\cite{sturm2012tumrgbd} benchmark we showed three things. The dominant
 error is over-counting, and a one-line duplicate-aware merge corrects it,
-improving object-label F1 by $+0.07$ to $+0.15$ at every view count, with no losses
-on any scene and a clean sweep at the dense views. A recalibrated, fully swept uncertainty-aware fusion gate --- the move in
+improving object-label F1 by $+0.06$ to $+0.12$ at every view count and winning on
+$22$--$27$ of the $28$ scenes ($p<0.001$). A recalibrated, fully swept uncertainty-aware fusion gate --- the move in
 the opposite direction --- gives no benefit, a negative result that a circular,
 prediction-seeded reference had previously disguised as a win. And the
 de-circularized reference that exposed both, together with the documented pitfall

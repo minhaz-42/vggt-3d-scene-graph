@@ -11,11 +11,12 @@ objects (keyboard, monitors, book) where the mask+CLIP pipeline returned room-sc
 category noise. Second, the dominant failure of the lifted system is \emph{over-counting}---one
 physical object survives as several fused nodes---and a simple duplicate-aware fusion step
 (merge same-label nodes whose 3D boxes overlap) fixes it, improving object-label F1 at every
-view count with no losses on any scene and a clean five-of-five sweep at the denser views.
+view count and winning on 22--27 of the 28 benchmark scenes ($p<0.001$).
 Third, a previously promising uncertainty-aware fusion
 gate gives \emph{no} benefit once labels are real, across a full parameter sweep---a negative
 result that a circular evaluation had masked. To ground these claims we contribute an
-independent, human-verified sparse-view benchmark on TUM RGB-D \cite{sturm2012tumrgbd} whose
-reference is authored from the frames rather than seeded from the model's own predictions, and
+independent sparse-view benchmark on 28 TUM RGB-D \cite{sturm2012tumrgbd} sequences (5
+human-verified, 23 two-pass VLM-drafted) whose reference is authored from the frames rather
+than seeded from the model's own predictions, and
 we document the circular-pseudo-reference pitfall that inflates scores. We hope the benchmark
 and the de-circularization protocol prove useful beyond this system.

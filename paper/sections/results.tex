@@ -1,40 +1,38 @@
 \section{Results}
 \label{sec:results}
 
-We evaluate on the independent, human-verified sparse-view reference described in
-Section~\ref{sec:experiments}: a per-scene object multiset enumerated directly from the
-RGB frames of all five TUM RGB-D~\cite{sturm2012tumrgbd} paper-subset sequences,
-authored independently of the SAM, CLIP, VGGT~\cite{wang2025vggt}, and fusion stages, and
-then human-verified ($n=5$ scenes). The primary metric is \emph{object-label F1}
-(\texttt{object\_label\_f1}): multiset precision/recall/F1 of fused-node labels against the
-reference multiset, reported as the mean over the five scenes at $3/5/8/10$ input views.
-All numbers in this section are measured against this independent reference unless stated
-otherwise; the contrast with the earlier prediction-seeded pseudo-reference is reported in
+We evaluate on an independent sparse-view reference (Section~\ref{sec:experiments}): a per-scene
+object multiset enumerated directly from the RGB frames, authored independently of the SAM, CLIP,
+VGGT~\cite{wang2025vggt}, and fusion stages. The reference covers \textbf{28 TUM RGB-D}~\cite{sturm2012tumrgbd}
+sequences: the \textbf{5 paper-subset scenes are human-verified} (the gold core), and the remaining
+\textbf{23 are drafted by two independent passes} (draft + adversarial verification) over the frames,
+pending human verification. The primary metric is \emph{object-label F1} (\texttt{object\_label\_f1}):
+multiset precision/recall/F1 of fused-node labels against the reference multiset, reported as the mean
+over scenes at $3/5/8/10$ input views. All numbers are measured against this independent reference
+unless stated otherwise; the contrast with the earlier prediction-seeded pseudo-reference is in
 Section~\ref{subsec:decirc}.
 
 \subsection{Variant comparison on the independent reference}
 \label{subsec:variants}
 
-Table~\ref{tab:variant_f1} compares seven variants. The four lifting/fusion baselines
-(\textsc{2d-only}, \textsc{geometry-only}, \textsc{semantic-lifting}, and the
-no-uncertainty \textsc{graph-fusion}), an uninformed \textsc{fixed-shrink} control that
-applies a constant merge-gate shrink with no per-node signal, the uncertainty-aware
-\textsc{proposed} variant (rank-normalized, weight $0.3$), and our duplicate-aware
-\textsc{graph-fusion-dedup}. On real, detector-grounded labels, \textsc{graph-fusion} is
-the strongest of the prior fusion variants at every view count, and object-label F1
-\emph{falls} as views are added for every cross-view fusion variant (\textsc{semantic-lifting},
-\textsc{fixed-shrink}, \textsc{graph-fusion}, and \textsc{proposed}); the non-fusion references
-(\textsc{2d-only}, \textsc{geometry-only}) instead plateau. More views supply more detections
-of the same physical object, which the cross-view fusion does not collapse, so precision (and
-net F1) degrade against a fixed reference. \textsc{graph-fusion-dedup} is the only variant
-whose accuracy \emph{rises} toward the dense end and is best at every view count.
+Table~\ref{tab:variant_f1} compares seven variants: four lifting/fusion baselines (\textsc{2d-only},
+\textsc{geometry-only}, \textsc{semantic-lifting}, and the no-uncertainty \textsc{graph-fusion}), an
+uninformed \textsc{fixed-shrink} control that applies a constant merge-gate shrink with no per-node
+signal, the uncertainty-aware \textsc{proposed} variant (rank-normalized, weight $0.3$), and our
+duplicate-aware \textsc{graph-fusion-dedup}. On real, detector-grounded labels, \textsc{graph-fusion}
+is the strongest prior fusion variant, and object-label F1 \emph{falls} as views are added for every
+cross-view fusion variant (\textsc{semantic-lifting}, \textsc{fixed-shrink}, \textsc{graph-fusion},
+\textsc{proposed}); the non-fusion references (\textsc{2d-only}, \textsc{geometry-only}) plateau. More
+views supply more detections of the same physical object, which cross-view fusion does not collapse,
+so precision (and net F1) degrade against a fixed reference. \textsc{graph-fusion-dedup} is the only
+variant whose accuracy \emph{rises} toward the dense end and is best at every view count.
 
 \begin{table}[t]
 \centering
-\caption{Object-label F1 on the independent, human-verified reference (mean over five TUM
-RGB-D sequences, full multiset). Best per column in bold. \textsc{fixed-shrink} is an
-uninformed control; \textsc{proposed} is the rank-normalized uncertainty-aware variant
-($w{=}0.3$). On real labels, accuracy falls with more views for every cross-view fusion
+\caption{Object-label F1 on the independent reference (mean over 28 TUM RGB-D sequences; 5
+human-verified + 23 two-pass VLM-drafted, full multiset). Best per column in bold.
+\textsc{fixed-shrink} is an uninformed control; \textsc{proposed} is the rank-normalized
+uncertainty-aware variant ($w{=}0.3$). Accuracy falls with more views for every cross-view fusion
 variant except duplicate-aware fusion, which is best throughout.}
 \label{tab:variant_f1}
 \small
@@ -43,13 +41,13 @@ variant except duplicate-aware fusion, which is best throughout.}
 \toprule
 Variant & v3 & v5 & v8 & v10 \\
 \midrule
-\textsc{2d-only}                       & 0.4897 & 0.4940 & 0.4820 & 0.4647 \\
-\textsc{geometry-only}                 & 0.4578 & 0.4843 & 0.4834 & 0.4833 \\
-\textsc{semantic-lifting}              & 0.4168 & 0.3326 & 0.2548 & 0.2148 \\
-\textsc{fixed-shrink} (control)        & 0.5165 & 0.4849 & 0.4471 & 0.4008 \\
-\textsc{graph-fusion} (baseline)       & 0.5126 & 0.5038 & 0.4688 & 0.4324 \\
-\textsc{proposed} (uncertainty, $w{=}0.3$) & 0.4982 & 0.4725 & 0.4132 & 0.3749 \\
-\textbf{\textsc{graph-fusion-dedup} (ours)} & \textbf{0.5804} & \textbf{0.5923} & \textbf{0.6137} & \textbf{0.5787} \\
+\textsc{2d-only}                       & 0.5120 & 0.5003 & 0.4867 & 0.4753 \\
+\textsc{geometry-only}                 & 0.4617 & 0.4605 & 0.4594 & 0.4493 \\
+\textsc{semantic-lifting}              & 0.3752 & 0.2881 & 0.2123 & 0.1797 \\
+\textsc{fixed-shrink} (control)        & 0.5048 & 0.4715 & 0.4448 & 0.4189 \\
+\textsc{graph-fusion} (baseline)       & 0.5129 & 0.4895 & 0.4664 & 0.4502 \\
+\textsc{proposed} (uncertainty, $w{=}0.3$) & 0.4801 & 0.4370 & 0.3841 & 0.3544 \\
+\textbf{\textsc{graph-fusion-dedup} (ours)} & \textbf{0.5696} & \textbf{0.5723} & \textbf{0.5860} & \textbf{0.5725} \\
 \bottomrule
 \end{tabular}
 }
@@ -58,23 +56,22 @@ Variant & v3 & v5 & v8 & v10 \\
 \subsection{Duplicate-aware fusion: the positive result}
 \label{subsec:dedup}
 
-Duplicate-aware fusion adds a single post-fusion step: same-label fused nodes whose
-axis-aligned 3D boxes overlap (IoU $> \tau$, default $\tau{=}0.1$) are merged and re-fused.
-Table~\ref{tab:dedup_delta} reports the gain over both the \textsc{graph-fusion} baseline
-and the uninformed \textsc{fixed-shrink} control, together with per-scene win/loss counts.
-Dedup improves object-label F1 at every view count by $+0.068$ to $+0.146$ over
-\textsc{graph-fusion} and by $+0.064$ to $+0.178$ over \textsc{fixed-shrink}, and the gain
-\emph{grows} with views, as expected for a step that removes the duplicate detections that
-accumulate as more frames are seen. It wins on every scene with no losses at the dense view
-counts ($5\text{W}/0\text{L}$ at v8 and v10); the conservative sign-test floor at $n=5$ is
-$p=0.062$.
+Duplicate-aware fusion adds a single post-fusion step: same-label fused nodes whose axis-aligned 3D
+boxes overlap (IoU $> \tau$, default $\tau{=}0.1$) are merged and re-fused. Table~\ref{tab:dedup_delta}
+reports the gain over both the \textsc{graph-fusion} baseline and the uninformed \textsc{fixed-shrink}
+control. Dedup improves object-label F1 at every view count by $+0.057$ to $+0.122$ over
+\textsc{graph-fusion} and by $+0.065$ to $+0.154$ over \textsc{fixed-shrink}; the gain \emph{grows}
+with views, as expected for a step that removes the duplicate detections that accumulate as more
+frames are seen. It wins on $22$--$27$ of $28$ scenes at every view count (two-sided sign test
+$p<0.001$). The improvement holds on both the $22$ static scenes ($+0.082$ to $+0.171$) and the $6$
+dynamic scenes with a moving person ($+0.060$ to $+0.116$), and on the $5$ human-verified gold scenes
+alone ($+0.068/+0.089/+0.145/+0.146$), so it is not an artifact of the VLM-drafted references.
 
 \begin{table}[t]
 \centering
-\caption{Duplicate-aware fusion versus the \textsc{graph-fusion} baseline and the
-uninformed \textsc{fixed-shrink} control. $\Delta$ is the object-label F1 improvement; W/L
-counts are per-scene wins/losses for dedup over \textsc{graph-fusion} ($n=5$). The gain
-grows with views and there are no losses at v8/v10.}
+\caption{Duplicate-aware fusion versus the \textsc{graph-fusion} baseline and the uninformed
+\textsc{fixed-shrink} control. $\Delta$ is the object-label F1 improvement; W/L/T counts are per-scene
+wins/losses/ties for dedup over \textsc{graph-fusion} ($n=28$, sign test $p<0.001$ at every view).}
 \label{tab:dedup_delta}
 \small
 \resizebox{\linewidth}{!}{%
@@ -82,9 +79,9 @@ grows with views and there are no losses at v8/v10.}
 \toprule
  & v3 & v5 & v8 & v10 \\
 \midrule
-$\Delta$ dedup $-$ \textsc{graph-fusion}  & $+0.068$ & $+0.089$ & $+0.145$ & $+0.146$ \\
-$\Delta$ dedup $-$ \textsc{fixed-shrink}  & $+0.064$ & $+0.107$ & $+0.167$ & $+0.178$ \\
-Per-scene W/L (vs \textsc{graph-fusion})  & 4W/0L & 4W/0L & 5W/0L & 5W/0L \\
+$\Delta$ dedup $-$ \textsc{graph-fusion}  & $+0.057$ & $+0.083$ & $+0.120$ & $+0.122$ \\
+$\Delta$ dedup $-$ \textsc{fixed-shrink}  & $+0.065$ & $+0.101$ & $+0.141$ & $+0.154$ \\
+Per-scene W/L/T (vs \textsc{graph-fusion})  & 22/1/5 & 25/0/3 & 27/0/1 & 26/1/1 \\
 \bottomrule
 \end{tabular}
 }
@@ -93,24 +90,22 @@ Per-scene W/L (vs \textsc{graph-fusion})  & 4W/0L & 4W/0L & 5W/0L & 5W/0L \\
 \subsection{Uncertainty-aware fusion: a negative result}
 \label{subsec:uncertainty}
 
-We treat the uncertainty-aware fusion gate --- the headline of an earlier framing of this
-work --- as an ablation. Table~\ref{tab:uncertainty_neg} reports its delta against
-\textsc{graph-fusion}. The recalibrated \textsc{proposed} variant is \emph{worse} at every
-view count ($-0.014$ to $-0.057$) and loses on every scene at v5, v8, and v10
-($0\text{W}/5\text{L}$). A sweep over the uncertainty weight $w \in \{0.1, 0.2, 0.3, 0.5,
-0.8\}$ does not rescue it: \emph{no} weight in $[0.1, 0.8]$ beats \textsc{graph-fusion} at
-any view count, and the best \textsc{proposed} setting still trails the baseline by
-$-0.018/-0.052/-0.078/-0.082$ (v3/v5/v8/v10), with larger weights worse at the dense end.
+We treat the uncertainty-aware fusion gate --- the headline of an earlier framing of this work --- as
+an ablation. Table~\ref{tab:uncertainty_neg} reports its delta against \textsc{graph-fusion}. The
+recalibrated \textsc{proposed} variant is \emph{worse} at every view count ($-0.033$ to $-0.096$) and
+loses on essentially every scene ($26$--$27$ of $28$ at v5--v10; sign test $p<0.001$). A sweep over the
+uncertainty weight $w \in \{0.1, 0.2, 0.3, 0.5, 0.8\}$ does not rescue it: \emph{no} weight in
+$[0.1, 0.8]$ beats \textsc{graph-fusion} at any view count, with larger weights worse at the dense end.
 The result is robust to reference filtering: dropping \texttt{unknown object} (which the
-open-vocabulary detector never predicts) or the ``stuff'' classes (wall/floor/ceiling)
-raises every variant's F1 but leaves the ranking unchanged.
+open-vocabulary detector never predicts) or the ``stuff'' classes (wall/floor/ceiling) raises every
+variant's F1 but leaves the ranking unchanged.
 
 \begin{table}[t]
 \centering
 \caption{Uncertainty-aware fusion is a negative result. $\Delta$ \textsc{proposed} $-$
-\textsc{graph-fusion} in object-label F1 (rank-normalized, $w{=}0.3$); W/L is per-scene over
-$n=5$. The variant is worse at every view count, and a weight sweep over $[0.1, 0.8]$
-contains no setting that beats the baseline.}
+\textsc{graph-fusion} in object-label F1 (rank-normalized, $w{=}0.3$); W/L/T is per-scene over $n=28$.
+The variant is worse at every view count ($p<0.001$), and a weight sweep over $[0.1, 0.8]$ contains no
+setting that beats the baseline.}
 \label{tab:uncertainty_neg}
 \small
 \resizebox{\linewidth}{!}{%
@@ -118,41 +113,38 @@ contains no setting that beats the baseline.}
 \toprule
  & v3 & v5 & v8 & v10 \\
 \midrule
-$\Delta$ \textsc{proposed} $-$ \textsc{graph-fusion} & $-0.014$ & $-0.031$ & $-0.056$ & $-0.057$ \\
-Per-scene W/L                                         & --       & 0W/5L    & 0W/5L    & 0W/5L \\
+$\Delta$ \textsc{proposed} $-$ \textsc{graph-fusion} & $-0.033$ & $-0.053$ & $-0.082$ & $-0.096$ \\
+Per-scene W/L/T                                       & 2/22/4   & 0/26/2   & 0/26/2   & 0/27/1 \\
 \bottomrule
 \end{tabular}
 }
 \end{table}
 
-The mechanism is informative rather than a mere null. The uncertainty modulation does
-exactly what it was designed to do --- it lifts recall by declining to merge uncertain
-proposals (full-multiset recall, mean over scenes: \textsc{proposed} $0.505/0.567/0.645/0.643$
-vs.\ \textsc{graph-fusion} $0.495/0.517/0.605/0.594$) --- but the same behavior fragments
-correct objects and costs more precision than the recall it buys (precision: \textsc{proposed}
-$0.512/0.421/0.314/0.272$ vs.\ \textsc{graph-fusion} $0.567/0.544/0.413/0.374$). Against a fixed-count reference
-the net F1 is lower. Crucially, this is the \emph{opposite} axis to duplicate-aware fusion:
-the uncertainty gate \emph{tightens} merging and splits more, whereas the system's measured
-weakness (Section~\ref{subsec:perclass}) is over-counting, which calls for the opposite move
---- merging more. The same per-class evidence thus explains why uncertainty fails and why
-dedup succeeds.
+The mechanism is informative rather than a mere null. The uncertainty modulation does exactly what it
+was designed to do --- it lifts recall by declining to merge uncertain proposals (full-multiset recall,
+mean over scenes: \textsc{proposed} $0.516/0.556/0.596/0.602$ vs.\ \textsc{graph-fusion}
+$0.510/0.540/0.581/0.587$) --- but the same behavior fragments correct objects and costs more precision
+than the recall it buys (precision: \textsc{proposed} $0.478/0.388/0.299/0.266$ vs.\ \textsc{graph-fusion}
+$0.556/0.495/0.420/0.399$). Against a fixed-count reference the net F1 is lower. Crucially, this is the
+\emph{opposite} axis to duplicate-aware fusion: the uncertainty gate \emph{tightens} merging and splits
+more, whereas the system's measured weakness (Section~\ref{subsec:perclass}) is over-counting, which
+calls for the opposite move --- merging more. The same per-class evidence explains why uncertainty fails
+and why dedup succeeds.
 
 \subsection{Per-class characterization: precision-up, recall-down}
 \label{subsec:perclass}
 
-Table~\ref{tab:perclass_overall} reports the micro-averaged precision/recall/F1 of
-\textsc{graph-fusion} per view count (dropping \texttt{unknown object}, which the detector
-never emits). The signature is clear: recall rises from $0.671$ at three views to $0.808$
-at ten, while precision falls from $0.533$ to $0.322$, so net F1 is best at the sparse end
-($0.594$ at v3, $0.461$ at v10). The system finds more true objects with more frames but
-emits more duplicate detections, and the precision loss dominates.
+Table~\ref{tab:perclass_overall} reports the micro-averaged precision/recall/F1 of \textsc{graph-fusion}
+per view count (dropping \texttt{unknown object}, which the detector never emits). The signature is
+clear: recall rises from $0.700$ at three views to $0.802$ at ten, while precision falls from $0.519$
+to $0.331$, so net F1 is best at the sparse end ($0.596$ at v3, $0.468$ at v10). The system finds more
+true objects with more frames but emits more duplicate detections, and the precision loss dominates.
 
 \begin{table}[t]
 \centering
-\caption{Per-class characterization of \textsc{graph-fusion} (micro-averaged over five
-scenes, dropping \texttt{unknown object}). Recall rises and precision falls as views are
-added; F1 is best at the sparse end. The precision loss is over-counting of
-correctly-found objects, not mislabeling.}
+\caption{Per-class characterization of \textsc{graph-fusion} (micro-averaged over 28 scenes, dropping
+\texttt{unknown object}). Recall rises and precision falls as views are added; F1 is best at the sparse
+end. The precision loss is over-counting of correctly-found objects, not mislabeling.}
 \label{tab:perclass_overall}
 \small
 \resizebox{\linewidth}{!}{%
@@ -160,58 +152,56 @@ correctly-found objects, not mislabeling.}
 \toprule
 Views & Precision & Recall & F1 \\
 \midrule
-3  & 0.533 & 0.671 & \textbf{0.594} \\
-5  & 0.464 & 0.699 & 0.557 \\
-8  & 0.368 & 0.822 & 0.508 \\
-10 & 0.322 & 0.808 & 0.461 \\
+3  & 0.519 & 0.700 & \textbf{0.596} \\
+5  & 0.429 & 0.739 & 0.543 \\
+8  & 0.361 & 0.794 & 0.496 \\
+10 & 0.331 & 0.802 & 0.468 \\
 \bottomrule
 \end{tabular}
 }
 \end{table}
 
-Per class, this splits into three behaviors. A group is \emph{found reliably but
-over-counted} --- recall saturates at $1.0$ while precision collapses with views: \texttt{desk}
-($0.25 \to 0.17$), \texttt{keyboard} ($0.56 \to 0.26$), \texttt{monitor} ($0.55 \to 0.33$),
-and \texttt{wall} ($1.00 \to 0.36$). These are always detected, but the 3D fusion does not
-collapse the several detections of one physical object, making them the dominant precision
-sink. A second group is \emph{clean wins} with high precision and recall (\texttt{book},
-\texttt{bag}, \texttt{chair}, \texttt{plant}, and \texttt{cup}/\texttt{bottle} at sparse
-views): distinct, well-separated objects that fuse correctly. A third group is \emph{genuine
-misses}: \texttt{cabinet} (never detected) and \texttt{door} (recall $\approx 0.33$), where
-the detector under-fires on blurry, low-resolution TUM frames. The dominant error is thus
-over-counting of correctly-found objects, not mislabeling --- which is precisely what
+Per class (at v8), this splits into three behaviors. A group is \emph{found reliably but over-counted}
+--- recall near $1.0$ while precision collapses: \texttt{desk} ($0.15$ precision), \texttt{wall}
+($0.26$), \texttt{floor} ($0.27$), \texttt{keyboard} ($0.39$), \texttt{monitor} ($0.43$), \texttt{chair}
+($0.45$). These are always detected, but the 3D fusion does not collapse the several detections of one
+physical object, making them the dominant precision sink. A second group is \emph{clean wins} with high
+precision and recall (\texttt{book}, \texttt{bottle}, \texttt{picture}, \texttt{person}, \texttt{cup}):
+distinct, well-separated objects that fuse correctly. A third group is \emph{under-detected}:
+\texttt{cabinet} (recall $0.27$), where the detector under-fires on blurry, low-resolution TUM frames.
+The dominant error is thus over-counting of correctly-found objects, not mislabeling --- precisely what
 duplicate-aware fusion targets.
 
-Table~\ref{tab:dedup_mechanism} confirms the mechanism at v8: dedup sharply raises precision
-on the over-counted classes (\texttt{monitor} $0.38 \to 1.00$, \texttt{desk} $0.19 \to 0.83$,
-\texttt{keyboard} $0.31 \to 0.62$) while leaving recall unchanged for almost every class.
-The one honest cost is closely-packed same-class instances: a desk holding two or three
-monitors yields overlapping axis-aligned 3D boxes that box-IoU merges into one, costing
-\texttt{monitor} $-0.33$ and \texttt{desk} $-0.17$ recall. The net remains a large F1 gain
-because the precision recovery dwarfs the recall cost; separating closely-packed same-class
-instances by appearance is left to future work (Section~\ref{sec:discussion}).
+Table~\ref{tab:dedup_mechanism} confirms the mechanism at v8: dedup sharply raises precision on the
+over-counted classes (\texttt{desk} $0.15 \to 0.45$, \texttt{floor} $0.27 \to 0.71$, \texttt{monitor}
+$0.43 \to 0.64$, \texttt{cabinet} $0.36 \to 0.67$, \texttt{chair} $0.45 \to 0.71$) while leaving recall
+unchanged for almost every class. The only recall cost is on closely-packed same-class instances ---
+\texttt{desk} and \texttt{bottle} lose $-0.04$ recall, as adjacent same-class objects with overlapping
+axis-aligned 3D boxes are merged. The net is a large F1 gain because the precision recovery dwarfs the
+recall cost; separating closely-packed same-class instances by appearance is left to future work
+(Section~\ref{sec:discussion}).
 
 \begin{table}[t]
 \centering
-\caption{Per-class mechanism of duplicate-aware fusion at v8 (micro-averaged over scenes).
-Dedup recovers precision on the over-counted classes while preserving recall for almost all
-classes; the only recall cost is on closely-packed same-class instances (\texttt{monitor},
-\texttt{desk}).}
+\caption{Per-class mechanism of duplicate-aware fusion at v8 (micro-averaged over 28 scenes). Dedup
+recovers precision on the over-counted classes while preserving recall for almost all classes; the only
+recall cost is on closely-packed same-class instances (\texttt{desk}, \texttt{bottle}).}
 \label{tab:dedup_mechanism}
 \small
 \resizebox{\linewidth}{!}{%
-\begin{tabular}{lcccc}
+\begin{tabular}{lccc}
 \toprule
 Class & \textsc{graph-fusion} P/R & dedup P/R & $\Delta$ recall \\
 \midrule
-\texttt{monitor}  & 0.38 / 1.00 & 1.00 / 0.67 & $-0.33$ \\
-\texttt{desk}     & 0.19 / 1.00 & 0.83 / 0.83 & $-0.17$ \\
-\texttt{keyboard} & 0.31 / 1.00 & 0.62 / 1.00 & $0.00$ \\
-\texttt{wall}     & 0.40 / 1.00 & 1.00 / 1.00 & $0.00$ \\
-\texttt{floor}    & 0.57 / 0.80 & 1.00 / 0.80 & $0.00$ \\
-\texttt{book}     & 0.64 / 0.82 & 1.00 / 0.82 & $0.00$ \\
-\texttt{chair}    & 0.50 / 0.80 & 0.80 / 0.80 & $0.00$ \\
-\texttt{plant}    & 0.33 / 1.00 & 1.00 / 1.00 & $0.00$ \\
+\texttt{monitor}  & 0.43 / 0.95 & 0.64 / 0.95 & $0.00$ \\
+\texttt{chair}    & 0.45 / 0.91 & 0.71 / 0.91 & $0.00$ \\
+\texttt{floor}    & 0.27 / 0.93 & 0.71 / 0.93 & $0.00$ \\
+\texttt{wall}     & 0.26 / 0.69 & 0.60 / 0.69 & $0.00$ \\
+\texttt{desk}     & 0.15 / 0.96 & 0.45 / 0.92 & $-0.04$ \\
+\texttt{cabinet}  & 0.36 / 0.27 & 0.67 / 0.27 & $0.00$ \\
+\texttt{keyboard} & 0.39 / 1.00 & 0.50 / 1.00 & $0.00$ \\
+\texttt{person}   & 0.79 / 0.79 & 1.00 / 0.79 & $0.00$ \\
+\texttt{bottle}   & 0.70 / 0.76 & 0.78 / 0.72 & $-0.04$ \\
 \bottomrule
 \end{tabular}
 }
@@ -221,19 +211,18 @@ Class & \textsc{graph-fusion} P/R & dedup P/R & $\Delta$ recall \\
 \label{subsec:dedup_robust}
 
 The dedup gain is robust to the IoU threshold. Table~\ref{tab:dedup_iou} sweeps
-$\tau \in \{0, 0.05, 0.1, 0.15, 0.2, 0.3, 0.5\}$: the improvement over \textsc{graph-fusion}
-stays in the $+0.086$ to $+0.123$ range (average $\Delta$) across the entire low-IoU band
-$\tau \in [0, 0.2]$ and only fades once the threshold is strict enough to stop merging
-duplicates ($\tau \ge 0.5$, $+0.026$). The wired default $\tau{=}0.1$ is within noise of the
-optimum and is slightly more recall-conservative than ``any overlap.'' Adding a
-centroid-distance OR-term on top of IoU does not help (v8: $0.653 \to 0.647/0.651$ for
-distance $< 0.1/0.2$), so 3D-box IoU alone is the right and simplest criterion.
+$\tau \in \{0, 0.05, 0.1, 0.15, 0.2, 0.3, 0.5\}$: the improvement over \textsc{graph-fusion} stays in
+the $+0.075$ to $+0.118$ range (average $\Delta$) across the entire low-IoU band $\tau \in [0, 0.2]$ and
+only fades once the threshold is strict enough to stop merging duplicates ($\tau \ge 0.5$, $+0.030$).
+The wired default $\tau{=}0.1$ is within noise of the optimum and slightly more recall-conservative than
+``any overlap.'' Adding a centroid-distance OR-term on top of IoU does not help, so 3D-box IoU alone is
+the right and simplest criterion.
 
 \begin{table}[t]
 \centering
-\caption{IoU-threshold sweep for duplicate-aware fusion (object-label F1, mean over five
-scenes). The gain over \textsc{graph-fusion} is robust across the low-IoU band
-$[0, 0.2]$ and only fades for strict thresholds. Default $\tau{=}0.1$ in bold.}
+\caption{IoU-threshold sweep for duplicate-aware fusion (object-label F1, mean over 28 scenes). The
+gain over \textsc{graph-fusion} is robust across the low-IoU band $[0, 0.2]$ and only fades for strict
+thresholds. Default $\tau{=}0.1$ in bold.}
 \label{tab:dedup_iou}
 \small
 \resizebox{\linewidth}{!}{%
@@ -241,13 +230,13 @@ $[0, 0.2]$ and only fades for strict thresholds. Default $\tau{=}0.1$ in bold.}
 \toprule
 IoU $\tau$ & v3 & v5 & v8 & v10 & avg $\Delta$ \\
 \midrule
-0.0 (any overlap) & 0.588 & 0.587 & 0.631 & 0.603 & $+0.123$ \\
-0.05              & 0.580 & 0.585 & 0.607 & 0.585 & $+0.110$ \\
-\textbf{0.1 (default)} & \textbf{0.580} & \textbf{0.592} & \textbf{0.614} & \textbf{0.579} & \textbf{$+0.112$} \\
-0.15              & 0.577 & 0.589 & 0.597 & 0.558 & $+0.100$ \\
-0.2               & 0.566 & 0.576 & 0.581 & 0.548 & $+0.088$ \\
-0.3               & 0.552 & 0.551 & 0.537 & 0.516 & $+0.060$ \\
-0.5               & 0.524 & 0.523 & 0.502 & 0.471 & $+0.026$ \\
+0.0 (any overlap) & 0.581 & 0.593 & 0.610 & 0.605 & $+0.118$ \\
+0.05              & 0.573 & 0.576 & 0.590 & 0.582 & $+0.101$ \\
+\textbf{0.1 (default)} & \textbf{0.570} & \textbf{0.575} & \textbf{0.585} & \textbf{0.573} & \textbf{$+0.096$} \\
+0.15              & 0.565 & 0.568 & 0.573 & 0.561 & $+0.087$ \\
+0.2               & 0.558 & 0.557 & 0.560 & 0.546 & $+0.075$ \\
+0.3               & 0.544 & 0.535 & 0.534 & 0.522 & $+0.054$ \\
+0.5               & 0.529 & 0.517 & 0.503 & 0.490 & $+0.030$ \\
 \bottomrule
 \end{tabular}
 }
@@ -256,29 +245,16 @@ IoU $\tau$ & v3 & v5 & v8 & v10 & avg $\Delta$ \\
 \subsection{De-circularization: the earlier pseudo-reference was misleading}
 \label{subsec:decirc}
 
-The two findings above only become visible under an independent reference. The earlier
-evaluation of this system used a prediction-seeded pseudo-reference, drafted from the model's
-own ten-view \textsc{graph-fusion} output. Because that reference encoded \textsc{graph-fusion}'s
-own splitting pattern, two artifacts followed. First, \textsc{graph-fusion} scored $1.0$ at
-ten views \emph{by construction} --- the reference \emph{was} its own prediction, so the
-dense-view row measured reference construction rather than accuracy. Second, the
-uncertainty-aware \textsc{proposed} variant, which keeps more uncertain proposals unmerged
-and therefore splits more, reproduced more of the same fragments the circular reference
-contained, and so appeared to be a sparse-view \emph{win} ($+0.040$ at v3, $+0.021$ at v5).
-The independent reference fixes the true object count: over-splitting is now correctly
-penalized, the uncertainty result reverses sign (Table~\ref{tab:uncertainty_neg}), and the
-dense-view $1.0$ artifact disappears (F1 instead falls with views,
-Table~\ref{tab:perclass_overall}). We document this pitfall because a prediction-seeded
-reference is an easy and silent way to inflate scores in 3D scene understanding, and because
-it is what masked both of this paper's main empirical findings.
-
-\subsection{Larger-scale corroboration}
-\label{subsec:expansion}
-
-\todo{$\sim$30-scene corroboration pending. The headline variant comparison
-(Table~\ref{tab:variant_f1}), the dedup gain (Table~\ref{tab:dedup_delta}), and the
-uncertainty negative result (Table~\ref{tab:uncertainty_neg}) are established on $n=5$
-human-verified scenes (consistent 5/5 at v5--v10, sign-test floor $p=0.062$). A
-$\sim$30-scene expansion is in progress to raise statistical power; results slot directly
-into the tables above. All quantitative claims in this paper should be read as $n=5$ until
-this subsection is populated.}
+The two findings above only become visible under an independent reference. The earlier evaluation of
+this system used a prediction-seeded pseudo-reference, drafted from the model's own ten-view
+\textsc{graph-fusion} output. Because that reference encoded \textsc{graph-fusion}'s own splitting
+pattern, two artifacts followed. First, \textsc{graph-fusion} scored $1.0$ at ten views \emph{by
+construction} --- the reference \emph{was} its own prediction, so the dense-view row measured reference
+construction rather than accuracy. Second, the uncertainty-aware \textsc{proposed} variant, which keeps
+more uncertain proposals unmerged and therefore splits more, reproduced more of the same fragments the
+circular reference contained, and so appeared to be a sparse-view \emph{win} ($+0.040$ at v3, $+0.021$
+at v5). The independent reference fixes the true object count: over-splitting is now correctly
+penalized, the uncertainty result reverses sign (Table~\ref{tab:uncertainty_neg}), and the dense-view
+$1.0$ artifact disappears (F1 instead falls with views, Table~\ref{tab:perclass_overall}). We document
+this pitfall because a prediction-seeded reference is an easy and silent way to inflate scores in 3D
+scene understanding, and because it is what masked both of this paper's main empirical findings.

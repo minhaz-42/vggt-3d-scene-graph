@@ -37,3 +37,11 @@ results/**/views_*/scene_graph.png
 # Keep lightweight result artifacts under version control:
 #   scene_graph(_labeled).json, scene_graph.png, *.csv, benchmark_index.json,
 #   sparse_view_splits.json, annotation packets.
+# Expanded 28-scene benchmark: frames + per-run graphs/features are large & regenerable.
+data/benchmark/tum_rgbd_expanded/
+results/benchmark_owlv2_expanded/*/
+results/benchmark_owlv2_expanded/annotations/
+results/**/vggt_geometry.json
+results/**/run.log
+results/**/benchmark_index.json
+results/**/annotations/

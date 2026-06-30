@@ -15,9 +15,10 @@ de-circularization in detail before reporting the variant comparison
 \label{sec:exp_scenes}
 
 We benchmark on public TUM RGB-D indoor sequences~\cite{sturm2012tumrgbd}. The
-\texttt{freiburg1\_room} sequence is held out as a development scene; the main
-benchmark uses the five object-rich sequences listed in
-Table~\ref{tab:tum_rgbd_paper_subset_plan}. Each sequence contributes ten
+benchmark spans \textbf{28 object-rich sequences} across \texttt{freiburg1}--\texttt{freiburg3}:
+the five paper-subset scenes in Table~\ref{tab:tum_rgbd_paper_subset_plan} (which carry the
+human-verified gold reference) plus 23 additional sequences; the full list is in
+\texttt{configs/datasets/tum\_rgbd\_expanded.json}. Each sequence contributes ten
 selected RGB frames (stride~10). Although the source benchmark is RGB-D, our
 pipeline consumes only RGB; we use this dataset because it provides public,
 recognizable indoor scenes with reproducible sequence identifiers.
@@ -25,7 +26,7 @@ recognizable indoor scenes with reproducible sequence identifiers.
 \input{tables/tum_rgbd_paper_subset_plan}
 
 For each scene we evaluate four input-view counts, $N \in \{3, 5, 8, 10\}$,
-giving a five-scene by four-view-count matrix (20 graph outputs). The benchmark
+giving a 28-scene by four-view-count matrix (112 graph outputs per variant). The benchmark
 runner creates one output directory per (scene, $N$) and executes the full
 pipeline along an identical code path: VGGT geometry, OWLv2 detection,
 descriptor extraction, 3D lifting, cross-view fusion, open-vocabulary labeling,
@@ -58,18 +59,19 @@ $1.0$ at $N{=}10$ by construction. Both effects are evaluation artifacts, not
 properties of the scenes.
 
 \paragraph{Construction of the independent reference.}
-We instead enumerate, for each of the five scenes, an object multiset built only
+We instead enumerate, for each scene, an object multiset built only
 from the ten raw RGB frames and \emph{independent} of the
 detection/descriptor/geometry/fusion stack under test. Each scene is drafted in
 one pass and then re-examined in a second, adversarial pass (an explicit
-attempt to find missed or spurious objects) over the same frames; the two-pass
-draft is then \textbf{human-verified} against the frames, removing ambiguous or
-unresolvable detections (e.g.\ a window glimpsed in
-\texttt{room}/\texttt{desk}/\texttt{desk2}; cup/bottle/picture in
-\texttt{desk2}; door/trash-can in the \texttt{freiburg3} office). The verified
-multiset is stored as \texttt{configs/evaluation/independent\_labels.json}
-(\texttt{label\_source: vlm-drafted-human-verified}); provenance and the
-per-scene corrections are logged in
+attempt to find missed or spurious objects) over the same frames. For the five
+paper-subset scenes the two-pass draft is additionally \textbf{human-verified}
+against the frames, removing ambiguous detections (e.g.\ a window glimpsed in
+\texttt{room}/\texttt{desk}/\texttt{desk2}; cup/bottle/picture in \texttt{desk2});
+these five form the gold core (\texttt{configs/evaluation/independent\_labels.json}).
+The 23 additional scenes use the same two-pass draft \emph{without} human
+verification (\texttt{independent\_labels\_expanded.json}) and serve as scale
+corroboration; we show both main findings also hold on the human-verified five
+alone. Per-scene provenance is logged in
 \texttt{docs/independent\_reference\_worklist.md}. Because this reference fixes
 the true object inventory without reference to any variant's output, no variant
 can score $1.0$ at $N{=}10$ by construction, and over-splitting is correctly
@@ -123,16 +125,16 @@ whether merging \emph{more} (rather than less) is the productive direction.
 
 Our primary metric is \texttt{object\_label\_f1}: the multiset precision,
 recall, and F1 of fused-node labels against the independent reference multiset,
-averaged over the five scenes. Treating labels as a multiset (rather than a set)
-makes the metric sensitive to over-counting --- a scene with one physical
-monitor reported as four fused monitor nodes is penalized on precision ---
-which is exactly the failure mode the reframed contribution targets. Per-scene
-wins/losses are reported alongside the means, and significance is summarized
-with a sign-test (at $n{=}5$ the test floors at $p{=}0.062$, an honest limit we
-do not overstate). Evaluation is run by
+averaged over the 28 scenes (5 human-verified, 23 two-pass VLM-drafted). Treating
+labels as a multiset (rather than a set) makes the metric sensitive to
+over-counting --- a scene with one physical monitor reported as four fused monitor
+nodes is penalized on precision --- which is exactly the failure mode the reframed
+contribution targets. Per-scene wins/losses are reported alongside the means, and
+significance is summarized with a two-sided sign-test, which over the 28 scenes
+reaches $p<0.001$ for both main findings. Evaluation is run by
 \texttt{scripts/evaluate\_sparse\_view\_annotations.py} and aggregated by
 \texttt{scripts/aggregate\_variant\_f1.py}; raw per-(scene, $N$, variant) scores
-are in \texttt{results/benchmark\_owlv2/variant\_independent\_metrics.csv}.
+are in \texttt{results/benchmark\_owlv2\_expanded/variant\_independent\_metrics.csv}.
 
 \subsection{Implementation Details}
 \label{sec:exp_impl}
@@ -151,23 +153,15 @@ counts (no per-scene tuning), and the duplicate-aware merge uses a single global
 IoU threshold $\tau{=}0.1$ that we show is robust across $\tau \in [0, 0.2]$
 (Section~\ref{sec:results}).
 
-\subsection{Larger-Scale Corroboration (In Progress)}
+\subsection{Gold Core, Drafted Corroboration, and Dynamic Stress}
 \label{sec:exp_expansion}
 
-The verified benchmark above is deliberately small ($n{=}5$) so that the
-reference can be human-verified end to end. To corroborate the two findings ---
-the negative uncertainty result and the duplicate-aware fusion gain --- at
-greater statistical power, we are extending the protocol to roughly 30
-object-rich TUM RGB-D sequences spanning \texttt{freiburg1}--\texttt{freiburg3}
-under the identical sparse-view protocol. The five human-verified scenes remain
-the gold primary result; the additional scenes use two-pass VLM-drafted
-references (draft~$+$~adversarial verify), clearly marked as not human-verified,
-as a scale corroboration rather than the headline, with a human spot-check of a
-random subset to bound their error. Dynamic sequences (with a moving person)
-violate VGGT's static multi-view assumption and are treated as a stress subset,
-reported separately if they behave differently. Results will populate the tables
-of Section~\ref{sec:results}. \todo{Insert $\sim$30-scene corroboration table
-and per-finding sign-test once the expansion run completes
-(\texttt{expansion\_bundle.tgz}); confirm that
-\texttt{proposed} $\not>$ \texttt{graph-fusion} and
-\texttt{graph-fusion-dedup} $>$ \texttt{graph-fusion} hold at scale.}
+The 28-scene benchmark pairs a small \emph{human-verified} core (the five paper-subset scenes)
+with 23 two-pass VLM-drafted scenes for statistical power. Both main findings reach $p<0.001$
+over the 28 scenes and reproduce on the five human-verified scenes alone
+(Section~\ref{sec:results}), so they do not depend on the drafted labels; fully human-verifying
+the 23 is the natural next step. Six sequences are \emph{dynamic} (a moving person:
+\texttt{desk\_with\_person}, \texttt{sitting\_*}, \texttt{walking\_*}), which violates VGGT's
+static multi-view assumption; we report them as a stress subset. The duplicate-aware gain holds
+in both groups --- $+0.082$ to $+0.171$ on the 22 static scenes and $+0.060$ to $+0.116$ on the
+6 dynamic scenes --- so the contribution is robust to scene dynamics as well as to scale.

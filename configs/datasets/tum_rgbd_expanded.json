@@ -1,0 +1,695 @@
+{
+  "name": "tum_rgbd_expanded",
+  "version": "0.1",
+  "root": ".",
+  "sparse_view_counts": [
+    3,
+    5,
+    8,
+    10
+  ],
+  "metadata": {
+    "stage": "expansion",
+    "dataset": "TUM_RGBD",
+    "source": "official_cvg_tum",
+    "dataset_root": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded",
+    "sample_mode": "stride",
+    "start_index": 0,
+    "frame_stride": 10,
+    "num_frames_per_scene": 10
+  },
+  "scenes": [
+    {
+      "scene_id": "tum_rgbd_freiburg1_desk",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg1_desk/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg1_desk",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg1_desk2",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg1_desk2/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg1_desk2",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg1_room",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg1_room/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg1_room",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg1_360",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg1_360/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg1_360",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg1_xyz",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg1_xyz/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg1_xyz",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg1_rpy",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg1_rpy/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg1_rpy",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg1_plant",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg1_plant/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg1_plant",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg1_teddy",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg1_teddy/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg1_teddy",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg2_desk",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg2_desk/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg2_desk",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg2_desk_with_person",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg2_desk_with_person/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg2_desk_with_person",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg2_xyz",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg2_xyz/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg2_xyz",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg2_coke",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg2_coke/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg2_coke",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg2_dishes",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg2_dishes/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg2_dishes",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg2_flowerbouquet",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg2_flowerbouquet/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg2_flowerbouquet",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg2_metallic_sphere",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg2_metallic_sphere/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg2_metallic_sphere",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg2_360_hemisphere",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg2_360_hemisphere/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg2_360_hemisphere",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg2_large_no_loop",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg2_large_no_loop/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg2_large_no_loop",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg2_large_with_loop",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg2_large_with_loop/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg2_large_with_loop",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg3_long_office_household",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg3_long_office_household/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg3_long_office_household",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg3_long_office_household_validation",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg3_long_office_household_validation/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg3_long_office_household_validation",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg3_cabinet",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg3_cabinet/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg3_cabinet",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg3_large_cabinet",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg3_large_cabinet/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg3_large_cabinet",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg3_teddy",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg3_teddy/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg3_teddy",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg3_sitting_static",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg3_sitting_static/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg3_sitting_static",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg3_sitting_xyz",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg3_sitting_xyz/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg3_sitting_xyz",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg3_sitting_halfsphere",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg3_sitting_halfsphere/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg3_sitting_halfsphere",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg3_walking_xyz",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg3_walking_xyz/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg3_walking_xyz",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    },
+    {
+      "scene_id": "tum_rgbd_freiburg3_walking_static",
+      "split": "val",
+      "scene_dir": "/content/vggt-3d-scene-graph/data/benchmark/tum_rgbd_expanded/tum_rgbd_freiburg3_walking_static/images",
+      "images": [
+        "frame_000001.png",
+        "frame_000002.png",
+        "frame_000003.png",
+        "frame_000004.png",
+        "frame_000005.png",
+        "frame_000006.png",
+        "frame_000007.png",
+        "frame_000008.png",
+        "frame_000009.png",
+        "frame_000010.png"
+      ],
+      "metadata": {
+        "dataset": "TUM_RGBD",
+        "sequence": "rgbd_dataset_freiburg3_walking_static",
+        "source": "official_cvg_tum",
+        "has_ground_truth_instances": false,
+        "has_scene_graph_labels": false
+      }
+    }
+  ]
+}
