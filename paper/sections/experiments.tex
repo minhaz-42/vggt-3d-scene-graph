@@ -1,62 +1,173 @@
 \section{Experiments}
 \label{sec:experiments}
 
-\subsection{Datasets}
+We evaluate two questions that the reframed thesis turns on: (i) what actually
+helps when building open-vocabulary 3D scene graphs from a handful of RGB views,
+and (ii) how to measure that honestly. The second question is not incidental.
+The system we study was originally reported as a sparse-view win for
+uncertainty-aware fusion; that conclusion was an artifact of a circular
+evaluation, and exposing it required first building a reference that the system
+could not grade itself against. We therefore describe the benchmark and its
+de-circularization in detail before reporting the variant comparison
+(Section~\ref{sec:results}).
 
-We evaluate on public TUM RGB-D indoor sequences~\cite{sturm2012tumrgbd}. The
-\texttt{freiburg1\_room} sequence is used as a development validation scene, and the
-main benchmark uses the five sequences listed in
-Table~\ref{tab:tum_rgbd_paper_subset_plan}. Each sequence contributes 10 selected RGB
-frames. Although the source benchmark includes depth, our pipeline consumes only RGB
-frames; the RGB-D benchmark is used because it provides public, recognizable indoor
-scenes and reproducible sequence identifiers. For every scene, we store the selected
-view lists, VGGT geometry outputs, SAM proposal files, CLIP+DINOv2 descriptors, graph
-outputs, generated figures, and checked prediction-seeded object and relation
-references.
+\subsection{Benchmark Scenes and Sparse-View Protocol}
+\label{sec:exp_scenes}
+
+We benchmark on public TUM RGB-D indoor sequences~\cite{sturm2012tumrgbd}. The
+\texttt{freiburg1\_room} sequence is held out as a development scene; the main
+benchmark uses the five object-rich sequences listed in
+Table~\ref{tab:tum_rgbd_paper_subset_plan}. Each sequence contributes ten
+selected RGB frames (stride~10). Although the source benchmark is RGB-D, our
+pipeline consumes only RGB; we use this dataset because it provides public,
+recognizable indoor scenes with reproducible sequence identifiers.
 
 \input{tables/tum_rgbd_paper_subset_plan}
 
-\subsection{Sparse-View Protocol}
+For each scene we evaluate four input-view counts, $N \in \{3, 5, 8, 10\}$,
+giving a five-scene by four-view-count matrix (20 graph outputs). The benchmark
+runner creates one output directory per (scene, $N$) and executes the full
+pipeline along an identical code path: VGGT geometry, OWLv2 detection,
+descriptor extraction, 3D lifting, cross-view fusion, open-vocabulary labeling,
+and metric export. The driver is \texttt{scripts/run\_owlv2\_benchmark.sh}.
+Reporting accuracy as a function of $N$ lets us read off the sparse-view
+behavior of each variant directly, rather than a single dense-view number.
 
-For each benchmark scene, we evaluate 3, 5, 8, and 10 input views. The benchmark runner
-creates one output directory per scene and view count, then executes geometry
-extraction, proposal generation, descriptor extraction, graph construction,
-open-vocabulary labeling, metric export, and figure generation. The same code path is
-used for single-scene validation and multi-scene experiments. Figure~\ref{fig:evaluation_protocol}
-shows two complementary evaluation paths: structural summaries from all 20 sparse-view
-runs, and a review path that turns the 10-view predictions into checked references for
-object-label and relation-triplet consistency.
+\subsection{An Independently-Authored Reference}
+\label{sec:exp_reference}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.98\textwidth]{figures/evaluation_protocol}
-\caption{Benchmark and annotation protocol. Panel (a) lays out the full five-scene by
-four-view-count matrix, with each cell representing one graph output and its object and
-relation counts; these 20 outputs feed the sparse-view table and view-count metric
-curve. Panel (b) shows how each 10-view graph becomes a prediction-seeded draft,
-annotation review packet, checked CSV/JSON files, reviewed label and relation
-decisions, and reference-consistency object-label and relation-triplet metrics.}
-\label{fig:evaluation_protocol}
-\end{figure}
+The central evaluation problem in this setting is that there is no
+ground-truth open-vocabulary object inventory for TUM RGB-D scenes, so a
+reference must be constructed. The tempting shortcut --- and the one the
+original version of this work took --- is to seed the reference from the
+system's own dense-view prediction (the 10-view graph) and then lightly check
+it. We argue this is unsound and replace it with a reference authored
+\emph{from the frames}.
 
-\subsection{Comparison Scope}
+\paragraph{Why the prediction-seeded reference is circular.}
+If the reference object multiset is initialized from a variant's own 10-view
+output, that variant scores precision~$=$~recall~$=$~$1.0$ at the 10-view
+``reference'' point \emph{by construction}, and every sparser run is graded for
+how faithfully it reproduces the same variant's splitting and labeling pattern
+rather than for agreement with the scene. A method that keeps more uncertain
+proposals unmerged then looks better simply because it reproduces more of the
+fragments the reference inherited from the seeding variant. Under exactly this
+prediction-seeded reference, the uncertainty-aware variant appeared to be a
+sparse-view win ($+0.040$/$+0.021$ at $N{=}3$/$5$) and the fusion baseline hit
+$1.0$ at $N{=}10$ by construction. Both effects are evaluation artifacts, not
+properties of the scenes.
 
-The main benchmark reports the full VGGT+SAM+CLIP+DINOv2 pipeline under a controlled
-sparse-view protocol. We also include a local component ablation on the development
-scene to separate the effects of proposal source and descriptor choice. Direct external
-comparison is nontrivial because many open-vocabulary 3D scene graph systems assume
-posed RGB-D streams, dense point clouds, or reconstructed maps. We therefore position
-the benchmark as a reproducible sparse-RGB graph construction baseline and report the
-input assumptions explicitly.
+\paragraph{Construction of the independent reference.}
+We instead enumerate, for each of the five scenes, an object multiset built only
+from the ten raw RGB frames and \emph{independent} of the
+detection/descriptor/geometry/fusion stack under test. Each scene is drafted in
+one pass and then re-examined in a second, adversarial pass (an explicit
+attempt to find missed or spurious objects) over the same frames; the two-pass
+draft is then \textbf{human-verified} against the frames, removing ambiguous or
+unresolvable detections (e.g.\ a window glimpsed in
+\texttt{room}/\texttt{desk}/\texttt{desk2}; cup/bottle/picture in
+\texttt{desk2}; door/trash-can in the \texttt{freiburg3} office). The verified
+multiset is stored as \texttt{configs/evaluation/independent\_labels.json}
+(\texttt{label\_source: vlm-drafted-human-verified}); provenance and the
+per-scene corrections are logged in
+\texttt{docs/independent\_reference\_worklist.md}. Because this reference fixes
+the true object inventory without reference to any variant's output, no variant
+can score $1.0$ at $N{=}10$ by construction, and over-splitting is correctly
+penalized rather than rewarded. The reference is a scene-level multiset over the
+ten frames; sparse-view predictions are recall-limited against it by
+construction, which depresses absolute F1 but applies uniformly across variants
+and so leaves the comparison fair.
 
-\subsection{Metrics}
+\subsection{Variants Compared}
+\label{sec:exp_variants}
 
-For every run, we report structural and reliability-oriented summaries: object count,
-relation count, multi-view object count, multi-view ratio, mean uncertainty, and
-relation density. For the five-scene benchmark, we also report object-label precision,
-recall, and F1, plus labeled relation-triplet precision, recall, and F1 against checked
-prediction-seeded reference sets. Because each reference set is initialized from the
-10-view graph for the same scene, these scores measure checked sparse-view recovery
-consistency rather than independent full-scene accuracy. The 10-view row is therefore a
-reference construction check; the substantive comparison is the 3/5/8-view recovery
-curve against the checked 10-view reference.
+We hold the front-end (OWLv2 detections lifted by VGGT geometry) and the
+reference fixed, and compare seven variants that differ only in how per-view
+detections become 3D nodes and how those nodes are fused across views:
+
+\begin{itemize}
+  \item \textbf{2d-only} --- per-view OWLv2 labels pooled without 3D lifting or
+        cross-view fusion (an image-level upper reference on labels alone).
+  \item \textbf{geometry-only} --- detections lifted to 3D via VGGT and pooled,
+        with no semantic cross-view association.
+  \item \textbf{semantic-lifting} --- detections lifted and associated by
+        appearance descriptors without the geometric fusion gate.
+  \item \textbf{fixed-shrink (uninformed control)} --- the fusion gate is
+        modulated by a fixed, scene-agnostic shrink factor; an
+        uncertainty-blind control that isolates whether the
+        \emph{uncertainty signal}, rather than merely the act of tightening the
+        gate, carries any benefit.
+  \item \textbf{graph-fusion (baseline)} --- the standard cross-view fusion of
+        Section~\ref{sec:method} with no uncertainty modulation and no
+        duplicate handling.
+  \item \textbf{proposed (uncertainty)} --- graph-fusion with the
+        rank-normalized uncertainty-aware merge gate (default weight
+        $w{=}0.3$); evaluated as an ablation rather than the headline method,
+        and additionally swept over $w \in \{0.1, 0.2, 0.3, 0.5, 0.8\}$.
+  \item \textbf{graph-fusion-dedup (ours)} --- graph-fusion followed by a single
+        post-fusion duplicate-instance merge: same-label fused nodes whose
+        axis-aligned 3D boxes overlap (IoU~$>\tau$, default $\tau{=}0.1$) are
+        unioned and re-fused (\texttt{merge\_duplicate\_instances} in
+        \texttt{graph\_builder.py}). This targets the measured over-counting
+        failure (Section~\ref{sec:results}) and is the opposite move from the
+        uncertainty gate, which \emph{tightens} merging.
+\end{itemize}
+
+The pairing is deliberate: \emph{fixed-shrink} versus \emph{proposed} asks
+whether the uncertainty signal is informative beyond an uninformed gate
+adjustment, and \emph{graph-fusion} versus \emph{graph-fusion-dedup} asks
+whether merging \emph{more} (rather than less) is the productive direction.
+
+\subsection{Metric}
+\label{sec:exp_metric}
+
+Our primary metric is \texttt{object\_label\_f1}: the multiset precision,
+recall, and F1 of fused-node labels against the independent reference multiset,
+averaged over the five scenes. Treating labels as a multiset (rather than a set)
+makes the metric sensitive to over-counting --- a scene with one physical
+monitor reported as four fused monitor nodes is penalized on precision ---
+which is exactly the failure mode the reframed contribution targets. Per-scene
+wins/losses are reported alongside the means, and significance is summarized
+with a sign-test (at $n{=}5$ the test floors at $p{=}0.062$, an honest limit we
+do not overstate). Evaluation is run by
+\texttt{scripts/evaluate\_sparse\_view\_annotations.py} and aggregated by
+\texttt{scripts/aggregate\_variant\_f1.py}; raw per-(scene, $N$, variant) scores
+are in \texttt{results/benchmark\_owlv2/variant\_independent\_metrics.csv}.
+
+\subsection{Implementation Details}
+\label{sec:exp_impl}
+
+All heavy models are frozen and run off-the-shelf; there is no per-scene
+optimization or fine-tuning. The open-vocabulary detector is OWLv2
+(\texttt{google/owlv2-base-patch16-ensemble})~\cite{minderer2023owlv2}, the
+successor to OWL-ViT~\cite{minderer2022owlvit}, with a detection score threshold
+of $0.2$ and per-class non-maximum suppression at IoU~$0.5$; detection boxes
+prompt SAM~\cite{kirillov2023segment} for masks. 3D geometry is the feed-forward
+VGGT transformer~\cite{wang2025vggt}, consuming RGB frames only. Appearance
+descriptors for cross-view association use CLIP~\cite{radford2021clip} and
+DINOv2~\cite{oquab2023dinov2}. VGGT geometry runs on GPU; detection, lifting,
+fusion, and evaluation run on CPU. We fix all thresholds across scenes and view
+counts (no per-scene tuning), and the duplicate-aware merge uses a single global
+IoU threshold $\tau{=}0.1$ that we show is robust across $\tau \in [0, 0.2]$
+(Section~\ref{sec:results}).
+
+\subsection{Larger-Scale Corroboration (In Progress)}
+\label{sec:exp_expansion}
+
+The verified benchmark above is deliberately small ($n{=}5$) so that the
+reference can be human-verified end to end. To corroborate the two findings ---
+the negative uncertainty result and the duplicate-aware fusion gain --- at
+greater statistical power, we are extending the protocol to roughly 30
+object-rich TUM RGB-D sequences spanning \texttt{freiburg1}--\texttt{freiburg3}
+under the identical sparse-view protocol. The five human-verified scenes remain
+the gold primary result; the additional scenes use two-pass VLM-drafted
+references (draft~$+$~adversarial verify), clearly marked as not human-verified,
+as a scale corroboration rather than the headline, with a human spot-check of a
+random subset to bound their error. Dynamic sequences (with a moving person)
+violate VGGT's static multi-view assumption and are treated as a stress subset,
+reported separately if they behave differently. Results will populate the tables
+of Section~\ref{sec:results}. \todo{Insert $\sim$30-scene corroboration table
+and per-finding sign-test once the expansion run completes
+(\texttt{expansion\_bundle.tgz}); confirm that
+\texttt{proposed} $\not>$ \texttt{graph-fusion} and
+\texttt{graph-fusion-dedup} $>$ \texttt{graph-fusion} hold at scale.}

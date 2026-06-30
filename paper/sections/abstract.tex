@@ -1,21 +1,21 @@
-We present a sparse-view pipeline for constructing language-grounded 3D scene graphs
-from casually captured RGB images. Feed-forward geometry models can now predict
-cameras, depth, and world-point maps without per-scene optimization, while 2D
-foundation models provide class-agnostic masks and open-vocabulary descriptors.
-However, these outputs remain view-local: they do not directly identify persistent
-objects, expose uncertain geometric evidence, or produce relation-bearing scene
-structure. Our method bridges this gap by lifting SAM proposals into VGGT world-point
-maps, attaching CLIP and DINOv2 descriptors, scoring lifted candidates with confidence
-and compactness uncertainty, fusing cross-view candidates into object nodes, and
-exporting open-vocabulary labels and spatial relations. The graph representation keeps
-symbolic predictions together with source views, proposal support, 3D point samples,
-and uncertainty values, making the output inspectable and reviewable. We evaluate the
-pipeline on a five-sequence TUM RGB-D sparse-view benchmark with 20 runs across 3, 5,
-8, and 10 input views. Averaged over scenes, moving from 3 to 10 views increases lifted
-proposals from 54.0 to 173.6, fused objects from 31.8 to 72.2, multi-view objects from
-11.8 to 28.2, and inferred relations from 585.2 to 2104.0. Against checked references
-initialized from the 10-view graphs, non-reference object-label F1 improves from 0.622
-to 0.914 and relation-triplet F1 from 0.434 to 0.799 between 3 and 8 views. These
-reference-consistency scores measure sparse-view recovery rather than dense-scene
-recognition accuracy, establishing a reproducible graph construction baseline and a
-concrete path from predicted graphs to object-relation review.
+We study how to build and---crucially---how to \emph{honestly evaluate} open-vocabulary
+3D scene graphs from a handful of casually captured RGB views. Our pipeline keeps every
+heavy model frozen and uses no per-scene optimization: feed-forward VGGT geometry
+\cite{wang2025vggt} turns sparse images into world-point maps, an open-vocabulary
+detector (OWLv2) \cite{minderer2023owlv2} proposes labeled object boxes, and these are
+lifted to 3D and fused across views into a labeled object--relation graph. We make three
+points. First, replacing the common class-agnostic-mask + per-patch CLIP
+\cite{kirillov2023segment,radford2021clip} front-end with a genuine open-vocabulary
+detector is what makes the labels real: on a desk scene the detector recovers the actual
+objects (keyboard, monitors, book) where the mask+CLIP pipeline returned room-scale
+category noise. Second, the dominant failure of the lifted system is \emph{over-counting}---one
+physical object survives as several fused nodes---and a simple duplicate-aware fusion step
+(merge same-label nodes whose 3D boxes overlap) fixes it, improving object-label F1 at every
+view count with no losses on any scene and a clean five-of-five sweep at the denser views.
+Third, a previously promising uncertainty-aware fusion
+gate gives \emph{no} benefit once labels are real, across a full parameter sweep---a negative
+result that a circular evaluation had masked. To ground these claims we contribute an
+independent, human-verified sparse-view benchmark on TUM RGB-D \cite{sturm2012tumrgbd} whose
+reference is authored from the frames rather than seeded from the model's own predictions, and
+we document the circular-pseudo-reference pitfall that inflates scores. We hope the benchmark
+and the de-circularization protocol prove useful beyond this system.
